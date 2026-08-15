@@ -1,9 +1,7 @@
-"""Multi-turn conversation memory manager for ContractIQ."""
-
 import uuid
 
 import structlog
-from sqlalchemy import desc, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from contractiq.db.models import QueryLog

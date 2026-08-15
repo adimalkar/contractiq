@@ -17,10 +17,16 @@ from contractiq.pipeline.embedder import EmbeddingService
 @pytest.fixture(scope="session")
 def test_settings() -> Settings:
     """Provide isolated configuration for test runs."""
+    import os
+
+    db_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://aditya@localhost:5432/contractiq_test")
+    db_sync = os.getenv("DATABASE_URL_SYNC", db_url.replace("+asyncpg", ""))
+    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/1")
+
     return Settings(
-        DATABASE_URL="postgresql+asyncpg://aditya@localhost:5432/contractiq_test",
-        DATABASE_URL_SYNC="postgresql://aditya@localhost:5432/contractiq_test",
-        REDIS_URL="redis://localhost:6379/1",
+        DATABASE_URL=db_url,
+        DATABASE_URL_SYNC=db_sync,
+        REDIS_URL=redis_url,
         LLM_PROVIDER="mock",
         OPENAI_API_KEY="test-mock-key",
         APP_ENV="test",
