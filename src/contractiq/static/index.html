@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ContractIQ — Enterprise AI Contract Intelligence</title>
-  <meta name="description" content="Production RAG platform with citation-grounded generation, hybrid search, and hallucination guardrails.">
+  <meta name="description" content="Production-grade AI contract intelligence platform with hybrid RAG, LangGraph agents, clause diffing, and responsible AI guardrails.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/styles.css">
   <!-- Chart.js for interactive analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -19,7 +19,7 @@
     <aside class="sidebar">
       <div class="brand">
         <div class="brand-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -28,57 +28,89 @@
           </svg>
         </div>
         <div class="brand-info">
-          <h1>Contract<span>IQ</span></h1>
-          <span class="badge badge-subtle">Production RAG</span>
+          <div class="brand-title-row">
+            <h1>Contract<span>IQ</span></h1>
+            <span class="version-badge">v0.2</span>
+          </div>
+          <p class="brand-tagline">Legal Intelligence Studio</p>
         </div>
       </div>
 
+      <!-- Main Navigation -->
+      <div class="nav-section-title">WORKSPACE</div>
       <nav class="nav-menu">
         <button class="nav-item active" data-view="chat" id="nav-chat">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
-          <span>Contract Analysis</span>
+          <span>Contract Studio</span>
         </button>
 
         <button class="nav-item" data-view="compare" id="nav-compare">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="16 3 21 3 21 8"></polyline>
-            <line x1="4" y1="20" x2="21" y2="3"></line>
-            <polyline points="21 16 21 21 16 21"></polyline>
-            <line x1="15" y1="15" x2="21" y2="21"></line>
-            <line x1="4" y1="4" x2="9" y2="9"></line>
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+            <path d="M4 20h16"></path>
           </svg>
-          <span>Clause Comparison</span>
+          <span>Clause Redline & Diff</span>
         </button>
 
         <button class="nav-item" data-view="documents" id="nav-documents">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
-          <span>Documents & Chunks</span>
+          <span>Document Vault</span>
           <span class="doc-count-pill" id="sidebar-doc-count">0</span>
         </button>
 
         <button class="nav-item" data-view="analytics" id="nav-analytics">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m4.93 4.93 4.24 4.24"></path>
+            <path d="m14.83 9.17 4.24-4.24"></path>
+            <path d="m14.83 14.83 4.24 4.24"></path>
+            <path d="m9.17 14.83-4.24 4.24"></path>
           </svg>
-          <span>RAG Analytics & Safety</span>
+          <span>Observability & Safety</span>
         </button>
       </nav>
 
+      <!-- Knowledge Base Scope Quick-List -->
+      <div class="nav-section-title" style="margin-top: 1.5rem;">INDEXED VAULT</div>
+      <div class="sidebar-vault-list" id="sidebar-vault-list">
+        <div class="vault-item" data-doc="sample_msa.pdf">
+          <span class="type-tag tag-msa">MSA</span>
+          <span class="vault-item-name">sample_msa.pdf</span>
+        </div>
+        <div class="vault-item" data-doc="sample_sow.pdf">
+          <span class="type-tag tag-sow">SOW</span>
+          <span class="vault-item-name">sample_sow.pdf</span>
+        </div>
+        <div class="vault-item" data-doc="sample_nda.pdf">
+          <span class="type-tag tag-nda">NDA</span>
+          <span class="vault-item-name">sample_nda.pdf</span>
+        </div>
+        <div class="vault-item" data-doc="sample_vendor.pdf">
+          <span class="type-tag tag-vendor">VENDOR</span>
+          <span class="vault-item-name">sample_vendor.pdf</span>
+        </div>
+        <div class="vault-item" data-doc="sample_lease.pdf">
+          <span class="type-tag tag-lease">LEASE</span>
+          <span class="vault-item-name">sample_lease.pdf</span>
+        </div>
+      </div>
+
+      <!-- Footer System Status -->
       <div class="sidebar-footer">
         <div class="system-status-pill">
           <span class="status-indicator online"></span>
-          <span class="status-text" id="system-status-label">System Healthy</span>
+          <span class="status-text" id="system-status-label">pgvector • Celery Ready</span>
         </div>
         <div class="author-credits">
           <span>Engineered by <strong>Aditya Malkar</strong></span>
-          <span class="version-tag">v0.2.0 • LangGraph + pgvector</span>
+          <span class="version-tag">Production RAG Architecture</span>
         </div>
       </div>
     </aside>
@@ -88,16 +120,26 @@
       
       <!-- Top Header Bar -->
       <header class="top-header">
-        <div class="header-title">
+        <div class="header-left">
+          <div class="breadcrumbs">
+            <span class="breadcrumb-item">ContractIQ</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-item active" id="view-breadcrumb">Contract Studio</span>
+          </div>
           <h2 id="view-title">Contract Analysis & Q&A</h2>
-          <p id="view-subtitle">Ask questions backed by citation-grounded retrieval, HyDE expansion, and guardrails</p>
         </div>
         <div class="header-actions">
+          <div class="scope-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span id="header-scope-label">Scope: All Contracts (5)</span>
+          </div>
           <div class="engine-badge">
             <span class="dot"></span>
-            <span>Hybrid (Dense + BM25 RRF)</span>
+            <span>Hybrid RRF (Dense + BM25)</span>
           </div>
-          <button class="btn btn-secondary btn-sm" id="btn-refresh-status" title="Refresh Engine Status">
+          <button class="btn btn-secondary btn-sm" id="btn-refresh-status" title="Refresh Engine Telemetry">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="23 4 23 10 17 10"></polyline>
               <polyline points="1 20 1 14 7 14"></polyline>
@@ -113,62 +155,125 @@
           
           <!-- Message history stream -->
           <div class="chat-messages" id="chat-messages">
-            <!-- Welcome state -->
+            <!-- Studio Overview State -->
             <div class="welcome-card" id="welcome-message">
-              <div class="welcome-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#accent-grad)" stroke-width="2">
-                  <defs>
-                    <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#7c5cfc" />
-                      <stop offset="100%" stop-color="#5b8def" />
-                    </linearGradient>
-                  </defs>
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                </svg>
-              </div>
-              <h3>Grounded Enterprise Contract Intelligence</h3>
-              <p>Ask complex questions about your legal agreements, payment terms, liability caps, indemnification, or renewal clauses. Every response is verified through hybrid retrieval and citation guardrails.</p>
               
-              <div class="quick-prompts">
-                <span class="prompt-label">Try asking:</span>
-                <div class="prompt-chips">
-                  <button class="chip" data-prompt="What is the liability cap amount and what exclusions apply?">💰 What is the liability cap amount?</button>
-                  <button class="chip" data-prompt="What are the invoice payment terms and late fee penalties?">📅 What are the payment terms?</button>
-                  <button class="chip" data-prompt="What are the auto-renewal and termination notice requirements?">🔄 What are the termination clauses?</button>
-                  <button class="chip" data-prompt="Summarize all parties and effective dates in the uploaded contracts.">📋 Summarize contracting parties</button>
+              <div class="studio-header">
+                <div class="studio-badge">
+                  <span class="pulse-dot"></span>
+                  <span>ENTERPRISE CONTRACT INTELLIGENCE</span>
+                </div>
+                <h3>Grounded Legal Analysis Workbench</h3>
+                <p>Execute multi-contract inquiries with dense semantic retrieval, BM25Okapi keyword matching, LangGraph reasoning graphs, and factual entailment guardrails.</p>
+              </div>
+
+              <!-- Compact Metric Strip -->
+              <div class="studio-metrics-strip">
+                <div class="metric-chip">
+                  <span class="metric-num" id="studio-stat-docs">5</span>
+                  <span class="metric-lbl">Indexed Contracts</span>
+                </div>
+                <div class="metric-chip">
+                  <span class="metric-num" id="studio-stat-chunks">42</span>
+                  <span class="metric-lbl">Semantic Chunks</span>
+                </div>
+                <div class="metric-chip">
+                  <span class="metric-num">k=60</span>
+                  <span class="metric-lbl">RRF Fusion Constant</span>
+                </div>
+                <div class="metric-chip">
+                  <span class="metric-num text-success">100%</span>
+                  <span class="metric-lbl">Entailment Audit</span>
                 </div>
               </div>
+
+              <!-- Curated Legal Inquiries (2x2 Grid) -->
+              <div class="studio-deck-section">
+                <div class="deck-title">CURATED CONTRACT AUDIT WORKFLOWS</div>
+                <div class="deck-grid">
+                  <div class="deck-card chip" data-prompt="What are the aggregate liability caps, consequential damage exclusions, and indemnity obligations across the agreements?">
+                    <div class="deck-card-icon icon-blue">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                      </svg>
+                    </div>
+                    <div class="deck-card-content">
+                      <h4>Liability & Indemnification</h4>
+                      <p>Analyze liability cap thresholds, exclusions, and indemnity triggers.</p>
+                    </div>
+                  </div>
+
+                  <div class="deck-card chip" data-prompt="What are the invoice payment schedules, Net payment windows, and late fee interest penalties?">
+                    <div class="deck-card-icon icon-emerald">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                      </svg>
+                    </div>
+                    <div class="deck-card-content">
+                      <h4>Fees & Payment Schedules</h4>
+                      <p>Extract Net terms, milestone invoicing, and late interest rates.</p>
+                    </div>
+                  </div>
+
+                  <div class="deck-card chip" data-prompt="What are the notice periods required for contract non-renewal, expiration, and termination for cause?">
+                    <div class="deck-card-icon icon-amber">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 14 14"></polyline>
+                      </svg>
+                    </div>
+                    <div class="deck-card-content">
+                      <h4>Termination & Auto-Renewal</h4>
+                      <p>Audit cancellation notice windows, breach cure periods, and survival terms.</p>
+                    </div>
+                  </div>
+
+                  <div class="deck-card chip" data-prompt="Summarize all contracting parties, effective start dates, and dispute jurisdiction across all agreements.">
+                    <div class="deck-card-icon icon-purple">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div class="deck-card-content">
+                      <h4>Scope, Parties & Jurisdiction</h4>
+                      <p>Map signing entities, effective dates, and governing law clauses.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          <!-- Chat Input Bar -->
+          <!-- Chat Command Input Bar -->
           <div class="chat-input-wrapper">
             <form class="chat-form" id="chat-form">
               <div class="input-container">
                 <textarea 
                   id="query-input" 
                   rows="1" 
-                  placeholder="Ask a question about your uploaded contracts (e.g. 'What are the SLA penalty terms?')..." 
+                  placeholder="Ask a question about your uploaded contracts (e.g. 'What is the liability cap and termination notice period in the MSA?')..." 
                   required
                 ></textarea>
                 <div class="input-controls">
                   <button type="button" class="btn-icon" id="btn-clear-chat" title="Clear Chat History">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                     </svg>
                   </button>
                   <button type="submit" class="btn btn-primary" id="btn-send-query">
                     <span>Analyze</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="22" y1="2" x2="11" y2="13"></line>
-                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
+                    <kbd class="key-hint">↵</kbd>
                   </button>
                 </div>
               </div>
               <div class="input-footer">
-                <span>⚡ Grounded RAG with <strong>pgvector + BM25 RRF</strong>, LangGraph Agents & Entailment Guardrails</span>
+                <span>Grounded RAG with <strong>pgvector + BM25Okapi RRF</strong> • LangGraph Agents • Entailment Guardrails</span>
                 <span id="char-counter">0 / 2000</span>
               </div>
             </form>
@@ -182,28 +287,28 @@
         <div class="compare-container">
           <div class="glass-card compare-selector-card">
             <div class="card-header">
-              <h3>Side-by-Side Contract Comparison</h3>
-              <p>Select two indexed agreements to align corresponding clauses and inspect inline redline diffs.</p>
+              <div>
+                <h3>Side-by-Side Clause Redline & Comparison</h3>
+                <p>Select two indexed agreements to align corresponding clauses via embedding cosine similarity and inspect word-level diffs.</p>
+              </div>
             </div>
             <div class="selector-grid">
               <div class="select-wrapper">
-                <label for="compare-doc-a">Base Agreement (Doc A):</label>
+                <label for="compare-doc-a">Base Agreement (Document A):</label>
                 <select id="compare-doc-a" class="custom-select"></select>
               </div>
               <div class="select-wrapper">
-                <label for="compare-doc-b">Target Agreement (Doc B):</label>
+                <label for="compare-doc-b">Target Agreement (Document B):</label>
                 <select id="compare-doc-b" class="custom-select"></select>
               </div>
               <div class="select-action">
                 <button class="btn btn-primary" id="btn-run-compare">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="16 3 21 3 21 8"></polyline>
-                    <line x1="4" y1="20" x2="21" y2="3"></line>
-                    <polyline points="21 16 21 21 16 21"></polyline>
-                    <line x1="15" y1="15" x2="21" y2="21"></line>
-                    <line x1="4" y1="4" x2="9" y2="9"></line>
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
                   </svg>
-                  <span>Run Side-by-Side Comparison</span>
+                  <span>Execute Redline Alignment</span>
                 </button>
               </div>
             </div>
@@ -214,7 +319,7 @@
             <!-- Comparison KPI Summary -->
             <div class="kpi-grid compare-kpis">
               <div class="kpi-card glass-card">
-                <div class="kpi-title">Overall Agreement Similarity</div>
+                <div class="kpi-title">Agreement Similarity</div>
                 <div class="kpi-value" id="stat-overall-similarity">0%</div>
               </div>
               <div class="kpi-card glass-card">
@@ -263,7 +368,7 @@
               <input type="file" id="file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
               <div class="drop-zone-content">
                 <div class="upload-icon-pulse">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>

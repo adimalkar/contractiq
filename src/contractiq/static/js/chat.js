@@ -1,5 +1,5 @@
 /**
- * ContractIQ — Chat & Streaming Q&A Logic
+ * ContractIQ — Chat & Grounded Studio Q&A Logic
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,10 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ──── Quick prompt chips ────
-  document.querySelectorAll('.chip').forEach((chip) => {
+  // ──── Curated deck and prompt chip clicks ────
+  document.querySelectorAll('.chip, .deck-card').forEach((chip) => {
     chip.addEventListener('click', () => {
-      queryInput.value = chip.dataset.prompt;
+      const prompt = chip.dataset.prompt;
+      if (!prompt) return;
+      queryInput.value = prompt;
       queryInput.dispatchEvent(new Event('input'));
       chatForm.dispatchEvent(new Event('submit'));
     });
@@ -60,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Append User Message
-    appendMessage('user', query);
+    appendMessage('user', escapeHtml(query));
     queryInput.value = '';
     queryInput.style.height = 'auto';
     charCounter.textContent = '0 / 2000';
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       assistantBubble.innerHTML = `
         <div style="color: var(--color-error);">
-          <strong>Analysis Error:</strong> ${err.message || 'Failed to process contract query.'}
+          <strong>Analysis Error:</strong> ${escapeHtml(err.message || 'Failed to process contract query.')}
         </div>
       `;
     } finally {
@@ -94,13 +96,45 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSend.style.opacity = generating ? '0.6' : '1';
   }
 
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function formatMarkdown(text) {
+    let html = escapeHtml(text);
+
+    // Bold **text** -> <strong>text</strong>
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Bullet lists
+    html = html.replace(/^\s*[\-\*]\s+(.*)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+    // Section headers
+    html = html.replace(/^### (.*$)/gim, '<h4 style="margin: 10px 0 4px 0; color: #fff;">$1</h4>');
+    html = html.replace(/^## (.*$)/gim, '<h3 style="margin: 12px 0 6px 0; color: #fff;">$1</h3>');
+
+    // Line breaks
+    html = html.replace(/\n\n/g, '<br><br>');
+
+    // Replace [Source N] with clickable pills
+    html = html.replace(/\[Source\s+(\d+)\]/gi, (match, p1) => {
+      const sourceNum = parseInt(p1);
+      return `<button class="citation-badge" data-source-num="${sourceNum}">[Source ${sourceNum}]</button>`;
+    });
+
+    return html;
+  }
+
   function appendMessage(role, initialHtml) {
     const row = document.createElement('div');
     row.className = `message-row ${role}`;
 
     const avatarIcon = role === 'user' 
-      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`
-      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+      ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`
+      : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
 
     row.innerHTML = `
       <div class="message-avatar">${avatarIcon}</div>
@@ -115,17 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderAssistantResponse(bubbleElement, data) {
-    // Format citations in text: replace [Source N] with clickable tags
-    let formattedAnswer = data.answer;
-
-    // Convert markdown bold **text** to <strong>text</strong>
-    formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    // Replace [Source N] with clickable pills
-    formattedAnswer = formattedAnswer.replace(/\[Source\s+(\d+)\]/gi, (match, p1) => {
-      const sourceNum = parseInt(p1);
-      return `<button class="citation-badge" data-source-num="${sourceNum}">[Source ${sourceNum}]</button>`;
-    });
+    const formattedAnswer = formatMarkdown(data.answer);
 
     let citationsHtml = '';
     if (data.citations && data.citations.length > 0) {
@@ -151,8 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="audit-meta-row">
         <span class="audit-tag success">⚡ ${data.latency_ms}ms</span>
         <span class="audit-tag">🎯 ${confScore}% Confidence</span>
-        <span class="audit-tag">🛡️ ${faithScore}% Faithfulness</span>
-        ${data.pii_redacted ? '<span class="audit-tag warning">🔒 PII Redacted</span>' : ''}
+        <span class="audit-tag">🛡️ ${faithScore}% Entailed</span>
+        ${data.pii_redacted ? '<span class="audit-tag warning">🔒 PII Sanitized</span>' : ''}
+        <button class="btn-icon" style="margin-left: auto; width: 24px; height: 24px;" title="Copy Answer" onclick="navigator.clipboard.writeText(\`${data.answer.replace(/`/g, '\\`')}\`); showToast('Answer copied to clipboard', 'info');">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
       </div>
     `;
 

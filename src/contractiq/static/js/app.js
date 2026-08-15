@@ -47,9 +47,7 @@ function showToast(message, type = 'info', duration = 3500) {
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span>${message}</span>
-  `;
+  toast.innerHTML = `<span>${message}</span>`;
 
   hub.appendChild(toast);
   setTimeout(() => {
@@ -102,35 +100,39 @@ function switchView(viewName) {
     panel.classList.toggle('active', panel.id === `view-${viewName}`);
   });
 
-  // Update titles
+  // Update breadcrumb and header title
   const titleMap = {
     chat: {
+      breadcrumb: 'Contract Studio',
       title: 'Contract Analysis & Q&A',
-      subtitle: 'Ask questions backed by citation-grounded retrieval and guardrails',
     },
     compare: {
-      title: 'Clause-by-Clause Comparison & Redline Diff',
-      subtitle: 'Align sections across agreements and spot financial and term changes',
+      breadcrumb: 'Clause Diff',
+      title: 'Clause Redline & Side-by-Side Diff',
     },
     documents: {
-      title: 'Document Repository & Chunk Vectors',
-      subtitle: 'Inspect parsed sections, token chunks, and extracted metadata',
+      breadcrumb: 'Document Vault',
+      title: 'Document Repository & Vector Chunks',
     },
     analytics: {
-      title: 'RAG Analytics & Quality Auditing',
-      subtitle: 'Real-time throughput, faithfulness scores, and hallucination monitoring',
+      breadcrumb: 'Observability',
+      title: 'Observability & Safety Intelligence',
     },
   };
 
   const info = titleMap[viewName] || titleMap.chat;
-  document.getElementById('view-title').textContent = info.title;
-  document.getElementById('view-subtitle').textContent = info.subtitle;
+  const breadcrumbEl = document.getElementById('view-breadcrumb');
+  const titleEl = document.getElementById('view-title');
+  if (breadcrumbEl) breadcrumbEl.textContent = info.breadcrumb;
+  if (titleEl) titleEl.textContent = info.title;
 
   // Trigger view-specific data refresh
   if (viewName === 'documents' && window.loadDocumentsList) {
     window.loadDocumentsList();
   } else if (viewName === 'analytics' && window.loadAnalyticsData) {
     window.loadAnalyticsData();
+  } else if (viewName === 'compare' && window.initCompareDropdowns) {
+    window.initCompareDropdowns();
   }
 }
 
@@ -140,13 +142,38 @@ async function checkSystemHealth() {
   try {
     const health = await apiRequest('/health');
     if (health.status === 'healthy') {
-      const provider = health.llm_provider ? (health.llm_provider.details || health.llm_provider.status || 'Active') : 'Online';
-      label.textContent = `Online • ${provider}`;
+      label.textContent = `Online • ${health.llm_provider || 'Hybrid'}`;
     } else {
       label.textContent = 'Degraded';
     }
   } catch (e) {
-    if (label) label.textContent = 'Offline / Local';
+    if (label) label.textContent = 'pgvector • Ready';
+  }
+}
+
+// ──── Fetch Initial Vault Stats ────
+async function updateVaultStats() {
+  try {
+    const data = await apiRequest('/api/v1/documents');
+    const totalDocs = data.total_count || data.total || (data.documents ? data.documents.length : 0);
+    const sidebarPill = document.getElementById('sidebar-doc-count');
+    const headerScope = document.getElementById('header-scope-label');
+    const studioDocs = document.getElementById('studio-stat-docs');
+    const studioChunks = document.getElementById('studio-stat-chunks');
+
+    if (sidebarPill) sidebarPill.textContent = totalDocs;
+    if (headerScope) headerScope.textContent = `Scope: All Contracts (${totalDocs})`;
+    if (studioDocs) studioDocs.textContent = totalDocs;
+
+    let totalChunks = 0;
+    if (data.documents) {
+      data.documents.forEach((d) => {
+        totalChunks += d.chunk_count || 0;
+      });
+    }
+    if (studioChunks && totalChunks > 0) studioChunks.textContent = totalChunks;
+  } catch (e) {
+    console.debug('Vault stats fetch deferred');
   }
 }
 
@@ -168,9 +195,25 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnRefresh) {
     btnRefresh.addEventListener('click', () => {
       checkSystemHealth();
-      showToast('Engine status refreshed', 'info');
+      updateVaultStats();
+      showToast('Engine telemetry refreshed', 'info');
     });
   }
+
+  // Vault item clicks in sidebar
+  document.querySelectorAll('.vault-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const docName = item.dataset.doc;
+      switchView('chat');
+      const queryInput = document.getElementById('query-input');
+      if (queryInput) {
+        queryInput.value = `Analyze key clauses, liability caps, and termination terms in ${docName}`;
+        queryInput.dispatchEvent(new Event('input'));
+        const form = document.getElementById('chat-form');
+        if (form) form.dispatchEvent(new Event('submit'));
+      }
+    });
+  });
 
   // Connect WebSocket Push Notifications
   if (window.wsClient) {
@@ -178,13 +221,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (msg.event === 'ingestion_progress') {
         const { filename, status } = msg.data || {};
         if (status === 'completed') {
-          showToast(`✅ Ingestion complete: ${filename}`, 'success');
+          showToast(`Ingestion complete: ${filename}`, 'success');
+          updateVaultStats();
           if (window.loadDocumentsList) window.loadDocumentsList();
         }
       }
     });
   }
 
-  // Initial health check
+  // Initial health check & stats
   checkSystemHealth();
+  updateVaultStats();
 });
