@@ -1,0 +1,84 @@
+name: ContractIQ CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Linting Tools
+        run: |
+          pip install --upgrade pip
+          pip install ruff mypy
+
+      - name: Run Ruff Linter
+        run: ruff check src/ tests/
+
+      - name: Run Ruff Format Check
+        run: ruff format --check src/ tests/
+
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: contractiq
+          POSTGRES_PASSWORD: contractiq_dev
+          POSTGRES_DB: contractiq_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -e ".[all]"
+
+      - name: Run Pytest Suite with Coverage
+        env:
+          DATABASE_URL: postgresql+asyncpg://contractiq:contractiq_dev@localhost:5432/contractiq_test
+          REDIS_URL: redis://localhost:6379/0
+          LLM_PROVIDER: mock
+          OPENAI_API_KEY: ci-test-key
+        run: |
+          pytest tests/ -v --cov=src/contractiq --cov-report=xml --cov-report=term-missing

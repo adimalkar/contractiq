@@ -1,0 +1,156 @@
+"""Shared test fixtures, mock providers, and isolated test database sessions."""
+
+from collections.abc import AsyncGenerator
+
+import pytest
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
+
+from contractiq.api.main import create_app
+from contractiq.config import Settings
+from contractiq.db.connection import _create_async_engine
+from contractiq.db.models import Base
+from contractiq.pipeline import ChunkData, PageContent, ProcessedDocument, Section
+from contractiq.pipeline.embedder import EmbeddingService
+
+
+@pytest.fixture(scope="session")
+def test_settings() -> Settings:
+    """Provide isolated configuration for test runs."""
+    return Settings(
+        DATABASE_URL="postgresql+asyncpg://aditya@localhost:5432/contractiq_test",
+        DATABASE_URL_SYNC="postgresql://aditya@localhost:5432/contractiq_test",
+        REDIS_URL="redis://localhost:6379/1",
+        LLM_PROVIDER="mock",
+        OPENAI_API_KEY="test-mock-key",
+        APP_ENV="test",
+        LOG_LEVEL="WARNING",
+        CHUNK_SIZE=256,
+        CHUNK_OVERLAP=32,
+        MIN_CHUNK_SIZE=20,
+        RELEVANCE_THRESHOLD=0.2,
+    )
+
+
+@pytest.fixture(scope="session")
+def test_embedder(test_settings: Settings) -> EmbeddingService:
+    """Provide deterministic embedding service."""
+    return EmbeddingService(test_settings)
+
+
+@pytest.fixture
+async def test_engine(test_settings: Settings) -> AsyncGenerator[AsyncEngine, None]:
+    """Provide clean database engine for integration tests."""
+    engine = _create_async_engine(test_settings.DATABASE_URL)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield engine
+    await engine.dispose()
+
+
+@pytest.fixture
+async def test_session(test_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
+    """Yield an isolated transaction per test."""
+    factory = async_sessionmaker(test_engine, expire_on_commit=False, class_=AsyncSession)
+    async with factory() as session:
+        yield session
+        await session.rollback()
+
+
+# Alias for backward compatibility
+test_db_session = test_session
+
+
+@pytest.fixture
+def sample_processed_doc() -> ProcessedDocument:
+    """Fixture providing a mock parsed document."""
+    return ProcessedDocument(
+        filename="test_agreement.pdf",
+        file_type="pdf",
+        file_hash="mock_hash_abc123",
+        page_count=2,
+        pages=[
+            PageContent(
+                page_number=1,
+                text="ARTICLE 1: SERVICES\nProvider will deliver AI software systems.\n\nARTICLE 2: FEES\nClient will pay $50,000 monthly.",
+                sections=[
+                    Section(
+                        header="ARTICLE 1: SERVICES",
+                        text="Provider will deliver AI software systems.",
+                        start_offset=0,
+                    ),
+                    Section(
+                        header="ARTICLE 2: FEES",
+                        text="Client will pay $50,000 monthly.",
+                        start_offset=60,
+                    ),
+                ],
+            ),
+            PageContent(
+                page_number=2,
+                text="ARTICLE 3: LIABILITY\nTotal liability is capped at $1,000,000.\n\nARTICLE 4: TERMINATION\nNotice period is 30 days.",
+                sections=[
+                    Section(
+                        header="ARTICLE 3: LIABILITY",
+                        text="Total liability is capped at $1,000,000.",
+                        start_offset=0,
+                    ),
+                    Section(
+                        header="ARTICLE 4: TERMINATION",
+                        text="Notice period is 30 days.",
+                        start_offset=50,
+                    ),
+                ],
+            ),
+        ],
+        metadata={
+            "contract_type": "Master Services Agreement",
+            "parties": ["Acme Corp", "TechVentures"],
+            "amounts_found": ["$50,000", "$1,000,000"],
+            "dates_found": ["March 1, 2024"],
+        },
+        raw_text="Full contract text...",
+    )
+
+
+@pytest.fixture
+def sample_chunks() -> list[ChunkData]:
+    """Fixture providing mock chunk data items."""
+    return [
+        ChunkData(
+            content="[ARTICLE 1: SERVICES]\nProvider will deliver AI software systems.",
+            page_number=1,
+            section_header="ARTICLE 1: SERVICES",
+            chunk_index=0,
+            char_offset_start=0,
+            char_offset_end=50,
+            token_count=12,
+        ),
+        ChunkData(
+            content="[ARTICLE 2: FEES]\nClient will pay $50,000 monthly.",
+            page_number=1,
+            section_header="ARTICLE 2: FEES",
+            chunk_index=1,
+            char_offset_start=55,
+            char_offset_end=100,
+            token_count=10,
+        ),
+        ChunkData(
+            content="[ARTICLE 3: LIABILITY]\nTotal liability is capped at $1,000,000.",
+            page_number=2,
+            section_header="ARTICLE 3: LIABILITY",
+            chunk_index=2,
+            char_offset_start=105,
+            char_offset_end=160,
+            token_count=12,
+        ),
+    ]
+
+
+@pytest.fixture
+async def api_client(test_settings: Settings) -> AsyncGenerator[AsyncClient, None]:
+    """Provide async HTTP client bound to the test FastAPI application."""
+    app = create_app(test_settings)
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        yield client

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "eval_001",
+    "query": "What is the liability cap under the Master Services Agreement?",
+    "ground_truth_answer": "Under Article 6.1 of the Master Services Agreement, the total aggregate liability is capped at $2,500,000 or the total amounts paid by Client in the preceding 12 months, whichever is greater, except for confidentiality breaches or indemnification.",
+    "ground_truth_contexts": ["ARTICLE 6: LIMITATION OF LIABILITY", "$2,500,000"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 3,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_002",
+    "query": "What are the payment terms and invoice frequency in the MSA?",
+    "ground_truth_answer": "Invoices are submitted electronically on the first business day of each calendar month and all undisputed invoices are payable net 45 days. Overdue payments accrue interest at 1.5% per month.",
+    "ground_truth_contexts": ["ARTICLE 3: FEES, INVOICING & PAYMENT", "net forty-five (45) days", "1.5% per month"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 2,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_003",
+    "query": "How long is the initial term and renewal notice requirement for the MSA?",
+    "ground_truth_answer": "The initial term is three (3) years from March 1, 2024. It automatically renews for successive 1-year terms unless written notice of non-renewal is provided at least sixty (60) days prior to expiration.",
+    "ground_truth_contexts": ["ARTICLE 2: TERM AND TERMINATION", "three (3) years", "sixty (60) days"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_004",
+    "query": "What is the governing law and arbitration location for the Master Services Agreement?",
+    "ground_truth_answer": "The MSA is governed by the laws of the State of New York, and disputes are subject to binding arbitration in New York County under AAA rules.",
+    "ground_truth_contexts": ["ARTICLE 7: GOVERNING LAW & JURISDICTION", "State of New York", "New York County"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 3,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_005",
+    "query": "Who owns custom code and deliverables created under SOWs under the MSA?",
+    "ground_truth_answer": "Under Article 4.2, all custom code, deliverables, documentation, and algorithms developed specifically for Client constitute 'Work Made for Hire' and belong exclusively to Client upon full payment.",
+    "ground_truth_contexts": ["ARTICLE 4: INTELLECTUAL PROPERTY RIGHTS", "Work Made for Hire", "belong exclusively to Client"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 2,
+    "difficulty": "medium",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_006",
+    "query": "What is the total fixed budget for the Cloud Migration SOW (SOW-2024-08)?",
+    "ground_truth_answer": "The total fixed project budget is $550,000 divided across three milestones: Milestone 1 ($150,000), Milestone 2 ($220,000), and Milestone 3 ($180,000).",
+    "ground_truth_contexts": ["SECTION 1: DELIVERABLES AND MILESTONES", "$550,000", "Milestone 1", "Milestone 2", "Milestone 3"],
+    "source_document": "sample_sow.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_007",
+    "query": "How many days does Client have to perform user acceptance testing (UAT) under SOW-2024-08?",
+    "ground_truth_answer": "Client has fifteen (15) business days following delivery of each milestone to review and perform user acceptance testing (UAT).",
+    "ground_truth_contexts": ["SECTION 2: ACCEPTANCE CRITERIA & SLA", "fifteen (15) business days"],
+    "source_document": "sample_sow.pdf",
+    "source_page": 2,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_008",
+    "query": "Who is designated as Key Personnel in the Cloud Migration SOW and what is the replacement requirement?",
+    "ground_truth_answer": "Lead cloud architect Dr. Marcus Vance is designated as Key Personnel. Provider cannot substitute Key Personnel without prior written consent and a mandatory 30-day knowledge transfer overlap.",
+    "ground_truth_contexts": ["SECTION 3: STAFFING AND KEY PERSONNEL", "Dr. Marcus Vance", "30-day knowledge transfer"],
+    "source_document": "sample_sow.pdf",
+    "source_page": 2,
+    "difficulty": "medium",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_009",
+    "query": "What is the survival period of confidentiality obligations in the NDA?",
+    "ground_truth_answer": "The confidentiality obligations survive for a period of five (5) years following the termination or expiration of the NDA.",
+    "ground_truth_contexts": ["TERM & SURVIVAL", "five (5) years"],
+    "source_document": "sample_nda.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_010",
+    "query": "What is the uptime guarantee percentage in the Vendor Service Level Agreement?",
+    "ground_truth_answer": "Provider guarantees a Monthly Uptime Percentage of at least 99.95% during each calendar month.",
+    "ground_truth_contexts": ["SERVICE COMMITMENT & UPTIME GUARANTEE", "99.95%"],
+    "source_document": "sample_vendor.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_011",
+    "query": "What service credit penalty applies if uptime drops below 95% in the Vendor SLA?",
+    "ground_truth_answer": "If uptime drops below 95.00%, Client receives a 50% monthly fee credit and an immediate right to terminate the contract without penalty.",
+    "ground_truth_contexts": ["SERVICE CREDITS & PENALTIES", "Below 95.00% Uptime: 50% monthly fee credit"],
+    "source_document": "sample_vendor.pdf",
+    "source_page": 1,
+    "difficulty": "medium",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_012",
+    "query": "What is the monthly base rent and square footage for the commercial lease?",
+    "ground_truth_answer": "Base rent is $125,000 per month ($1,500,000 annualized) for Year 1 for approximately 25,000 rentable square feet at 500 Hudson Yards Boulevard, Suite 3400.",
+    "ground_truth_contexts": ["LEASE PREMISES & TERM", "BASE RENT & ESCALATIONS", "$125,000 per month", "25,000 rentable square feet"],
+    "source_document": "sample_lease.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_013",
+    "query": "What is the annual rent escalation percentage in the commercial lease?",
+    "ground_truth_answer": "Base rent escalates by three percent (3.0%) annually on each anniversary of the Commencement Date.",
+    "ground_truth_contexts": ["BASE RENT & ESCALATIONS", "three percent (3.0%) annually"],
+    "source_document": "sample_lease.pdf",
+    "source_page": 1,
+    "difficulty": "simple",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_014",
+    "query": "What are the requirements for early termination of the commercial lease by Tenant?",
+    "ground_truth_answer": "Tenant can terminate at the end of the 36th month with 9 months prior written notice and payment of an early termination fee equal to 3 months Base Rent plus unamortized improvements.",
+    "ground_truth_contexts": ["EARLY TERMINATION & EXTENSION OPTION", "thirty-sixth (36th) full calendar month", "nine (9) months prior written notice"],
+    "source_document": "sample_lease.pdf",
+    "source_page": 2,
+    "difficulty": "hard",
+    "category": "extraction"
+  },
+  {
+    "id": "eval_015",
+    "query": "Compare the termination notice periods between the Master Services Agreement and the Commercial Lease.",
+    "ground_truth_answer": "The MSA requires at least 60 days written notice for non-renewal (or 30 days cure period for cause), whereas the Commercial Lease requires 9 months prior written notice for early termination.",
+    "ground_truth_contexts": ["ARTICLE 2: TERM AND TERMINATION (MSA)", "EARLY TERMINATION & EXTENSION OPTION (Lease)"],
+    "source_document": "sample_msa.pdf, sample_lease.pdf",
+    "source_page": 1,
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "id": "eval_016",
+    "query": "Compare the financial obligations and liabilities between the MSA liability cap and the SOW project budget.",
+    "ground_truth_answer": "The SOW project budget is a fixed amount of $550,000, while the MSA caps overall aggregate liability at $2,500,000 (or prior 12 months spend, whichever is greater).",
+    "ground_truth_contexts": ["ARTICLE 6: LIMITATION OF LIABILITY", "SECTION 1: DELIVERABLES AND MILESTONES"],
+    "source_document": "sample_msa.pdf, sample_sow.pdf",
+    "source_page": 1,
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "id": "eval_017",
+    "query": "Compare the support response times for Severity 1 vs Severity 2 issues under the Vendor SLA.",
+    "ground_truth_answer": "Severity 1 issues require response within 15 minutes 24x7x365 with hourly updates, whereas Severity 2 issues require response within 1 hour during business hours.",
+    "ground_truth_contexts": ["SUPPORT RESPONSE TIMES", "Severity 1: Response within 15 minutes", "Severity 2: Response within 1 hour"],
+    "source_document": "sample_vendor.pdf",
+    "source_page": 2,
+    "difficulty": "medium",
+    "category": "comparison"
+  },
+  {
+    "id": "eval_018",
+    "query": "Compare the security standards required in the MSA vs the audit rights under the Vendor SLA.",
+    "ground_truth_answer": "The MSA mandates Provider maintain SOC 2 Type II and ISO 27001 certifications. The Vendor SLA gives Client the right to conduct independent annual third-party audits with 14 days notice.",
+    "ground_truth_contexts": ["ARTICLE 5: CONFIDENTIALITY & DATA SECURITY", "SECURITY & AUDIT RIGHTS"],
+    "source_document": "sample_msa.pdf, sample_vendor.pdf",
+    "source_page": 3,
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "id": "eval_019",
+    "query": "Compare the definition of Confidential Information between the MSA and the Mutual NDA.",
+    "ground_truth_answer": "The NDA specifically enumerates financial reports, AI models, training datasets, algorithm benchmarks, customer lists, and patent filings, while the MSA contains a general standard of care with SOC 2/ISO 27001 data protection mandates.",
+    "ground_truth_contexts": ["ARTICLE 5 (MSA)", "NDA TERMS & DEFINITION OF CONFIDENTIAL INFORMATION (NDA)"],
+    "source_document": "sample_msa.pdf, sample_nda.pdf",
+    "source_page": 1,
+    "difficulty": "hard",
+    "category": "comparison"
+  },
+  {
+    "id": "eval_020",
+    "query": "Synthesize all payment deadlines and monetary thresholds across the MSA and Commercial Lease.",
+    "ground_truth_answer": "The MSA requires payment net 45 days with a 1.5% monthly late fee and a $2.5M liability cap. The Commercial Lease requires $125,000 monthly rent ($1.5M/yr), a 3.0% annual escalation, a $375,000 security deposit letter of credit, and an early termination fee of 3 months rent.",
+    "ground_truth_contexts": ["ARTICLE 3 (MSA)", "BASE RENT & ESCALATIONS (Lease)"],
+    "source_document": "sample_msa.pdf, sample_lease.pdf",
+    "source_page": 1,
+    "difficulty": "hard",
+    "category": "synthesis"
+  },
+  {
+    "id": "eval_021",
+    "query": "Synthesize the complete milestone schedule and payment timeline for the Cloud Migration SOW.",
+    "ground_truth_answer": "The project runs from April 15, 2024 to December 31, 2024 with three milestones: Milestone 1 by June 1 ($150,000), Milestone 2 by September 15 ($220,000), and Milestone 3 by November 30 ($180,000), with 15 business days for UAT and 5 days for defect remediation.",
+    "ground_truth_contexts": ["SOW OVERVIEW & SCHEDULE", "SECTION 1", "SECTION 2"],
+    "source_document": "sample_sow.pdf",
+    "source_page": 1,
+    "difficulty": "medium",
+    "category": "synthesis"
+  },
+  {
+    "id": "eval_022",
+    "query": "Synthesize the conditions under which Client can terminate agreements immediately without penalty.",
+    "ground_truth_answer": "Under the MSA, Client can terminate for uncured material breach after 30 days notice. Under the Vendor SLA, Client can terminate immediately without penalty if uptime drops below 95.00%.",
+    "ground_truth_contexts": ["ARTICLE 2 (MSA)", "SERVICE CREDITS & PENALTIES (Vendor SLA)"],
+    "source_document": "sample_msa.pdf, sample_vendor.pdf",
+    "source_page": 1,
+    "difficulty": "hard",
+    "category": "synthesis"
+  },
+  {
+    "id": "eval_023",
+    "query": "Synthesize all notice periods across all agreements.",
+    "ground_truth_answer": "Notice periods include: MSA non-renewal (60 days), MSA breach cure (30 days), Key Personnel replacement (30 days overlap), Vendor SLA maintenance (48 hours), Vendor security audit (14 days), and Lease early termination (9 months).",
+    "ground_truth_contexts": ["Various sections across contracts"],
+    "source_document": "all",
+    "source_page": 1,
+    "difficulty": "hard",
+    "category": "synthesis"
+  },
+  {
+    "id": "eval_024",
+    "query": "Synthesize all entities and contracting parties identified in the documents.",
+    "ground_truth_answer": "Parties include: Acme Enterprise Solutions Inc. (Client/Tenant), CloudTech Global Systems LLC (Provider), TechVentures Capital Partners LLC (NDA Party), and Hudson Yards Tower LLC (Landlord).",
+    "ground_truth_contexts": ["Preambles across contracts"],
+    "source_document": "all",
+    "source_page": 1,
+    "difficulty": "medium",
+    "category": "synthesis"
+  },
+  {
+    "id": "eval_025",
+    "query": "If CloudTech suffers a server outage resulting in 94.5% uptime in July, what financial and contractual remedies does Acme have?",
+    "ground_truth_answer": "Because uptime is below 95.00%, Acme is entitled to a 50% monthly fee credit and the immediate contractual right to terminate the agreement without penalty.",
+    "ground_truth_contexts": ["SERVICE CREDITS & PENALTIES", "Below 95.00% Uptime: 50% monthly fee credit and immediate right to terminate"],
+    "source_document": "sample_vendor.pdf",
+    "source_page": 1,
+    "difficulty": "hard",
+    "category": "reasoning"
+  },
+  {
+    "id": "eval_026",
+    "query": "Can Acme terminate the Commercial Lease in Year 2?",
+    "ground_truth_answer": "No, the early termination right is specifically designated to take effect at the end of the thirty-sixth (36th) full calendar month (end of Year 3), requiring 9 months prior written notice.",
+    "ground_truth_contexts": ["EARLY TERMINATION & EXTENSION OPTION", "end of the thirty-sixth (36th) full calendar month"],
+    "source_document": "sample_lease.pdf",
+    "source_page": 2,
+    "difficulty": "hard",
+    "category": "reasoning"
+  },
+  {
+    "id": "eval_027",
+    "query": "What happens if an invoice submitted under the MSA is disputed in good faith by Acme?",
+    "ground_truth_answer": "Under Article 3.3, payment terms of net 45 days apply to 'all undisputed invoices', meaning disputed amounts are withheld pending resolution while undisputed portions remain payable.",
+    "ground_truth_contexts": ["ARTICLE 3: FEES, INVOICING & PAYMENT", "undisputed invoices are payable net forty-five"],
+    "source_document": "sample_msa.pdf",
+    "source_page": 2,
+    "difficulty": "medium",
+    "category": "reasoning"
+  },
+  {
+    "id": "eval_028",
+    "query": "What is the penalty for early termination of employee non-compete agreements?",
+    "ground_truth_answer": "Based on the provided contracts, there is insufficient information because no employee non-compete agreement or non-compete penalty clause exists in the uploaded contracts.",
+    "ground_truth_contexts": [],
+    "source_document": "none",
+    "source_page": 0,
+    "difficulty": "negative",
+    "category": "negative"
+  },
+  {
+    "id": "eval_029",
+    "query": "What are the GDPR data subject access request response SLA timeframes?",
+    "ground_truth_answer": "Based on the provided contracts, there is insufficient information regarding GDPR data subject access request SLA timeframes in the uploaded agreements.",
+    "ground_truth_contexts": [],
+    "source_document": "none",
+    "source_page": 0,
+    "difficulty": "negative",
+    "category": "negative"
+  },
+  {
+    "id": "eval_030",
+    "query": "What is the executive stock option vesting schedule specified in the contracts?",
+    "ground_truth_answer": "Based on the provided contracts, there is insufficient information as no executive compensation or stock option vesting schedules are present in the uploaded agreements.",
+    "ground_truth_contexts": [],
+    "source_document": "none",
+    "source_page": 0,
+    "difficulty": "negative",
+    "category": "negative"
+  }
+]
