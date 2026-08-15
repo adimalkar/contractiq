@@ -154,7 +154,9 @@ def sample_chunks() -> list[ChunkData]:
 
 
 @pytest.fixture
-async def api_client(test_settings: Settings) -> AsyncGenerator[AsyncClient, None]:
+async def api_client(
+    test_settings: Settings, test_engine: AsyncEngine
+) -> AsyncGenerator[AsyncClient, None]:
     """Provide async HTTP client bound to the test FastAPI application."""
     app = create_app(test_settings)
     transport = ASGITransport(app=app)
