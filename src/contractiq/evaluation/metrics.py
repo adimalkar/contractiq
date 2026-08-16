@@ -18,12 +18,8 @@ def compute_faithfulness(
 
     Returns score between 0.0 and 1.0.
     """
-    if not answer:
-        return 0.0
-    if "insufficient information" in answer.lower():
-        return 1.0
-    if not retrieved_contexts:
-        return 0.0
+    if not answer or not retrieved_contexts:
+        return 1.0 if "insufficient information" in answer.lower() else 0.0
 
     # Extract sentences/claims
     clean_text = re.sub(r"\[Source\s+\d+\]", "", answer)
