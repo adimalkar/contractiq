@@ -17,6 +17,21 @@ PII_PATTERNS = {
     "CREDIT_CARD": re.compile(r"\b(?:\d{4}[-\s]?){3}\d{4}\b"),
 }
 
+# API Key & Secret Leakage Regex Patterns
+SECRET_PATTERNS = {
+    "OPENROUTER_KEY": re.compile(r"\bsk-or-v1-[a-zA-Z0-9]{64}\b|\bsk-or-[a-zA-Z0-9_\-]{20,}\b"),
+    "OPENAI_KEY": re.compile(r"\bsk-[a-zA-Z0-9_\-]{20,}\b"),
+    "GITHUB_TOKEN": re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[a-zA-Z0-9]{36,}\b"),
+    "AWS_KEY": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    "DB_CONNECTION": re.compile(r"\b(?:postgres|postgresql|rediss?):\/\/[^\s\"']+\b"),
+    "JWT_TOKEN": re.compile(
+        r"\beyJ[a-zA-Z0-9_\-]{10,}\.eyJ[a-zA-Z0-9_\-]{10,}\.[a-zA-Z0-9_\-]{10,}\b"
+    ),
+    "GENERIC_SECRET": re.compile(
+        r"(?i)(?:api[_-]?key|secret[_-]?key|access[_-]?token)[\s:=]+['\"]?([a-zA-Z0-9_\-]{20,})['\"]?"
+    ),
+}
+
 
 class GuardrailChecker:
     """Responsible AI auditor verifying factual entailment and privacy compliance."""
@@ -115,6 +130,18 @@ class GuardrailChecker:
 
         return redacted, pii_found
 
+    def _redact_secrets(self, text: str) -> tuple[str, bool]:
+        """Detect and sanitize API keys, credentials, database strings, and secret tokens."""
+        redacted = text
+        secret_found = False
+
+        for sec_type, pattern in SECRET_PATTERNS.items():
+            if pattern.search(redacted):
+                secret_found = True
+                redacted = pattern.sub(f"[REDACTED_{sec_type}]", redacted)
+
+        return redacted, secret_found
+
     def _compute_confidence(
         self,
         retrieval_chunks: list[GradedChunk],
@@ -136,13 +163,14 @@ class GuardrailChecker:
         answer: GeneratedAnswer,
         context_chunks: list[GradedChunk],
     ) -> GuardrailResult:
-        """Run all guardrails checks across generation and privacy."""
-        # 1. PII Redaction
-        redacted_text, pii_redacted = self._redact_pii(answer.answer_text)
+        """Run all guardrails checks across generation, privacy, and secret defense."""
+        # 1. PII and Secret Redaction
+        sanitized_text, pii_redacted = self._redact_pii(answer.answer_text)
+        sanitized_text, secret_redacted = self._redact_secrets(sanitized_text)
 
         # 2. Hallucination and Faithfulness Audit
         faithfulness_score, hallucination_flags = await self._audit_hallucinations(
-            answer_text=redacted_text,
+            answer_text=sanitized_text,
             context_chunks=context_chunks,
         )
 
@@ -161,13 +189,14 @@ class GuardrailChecker:
             confidence=confidence_score,
             flags_count=len(hallucination_flags),
             pii_redacted=pii_redacted,
+            secret_redacted=secret_redacted,
         )
 
         return GuardrailResult(
             faithfulness_score=faithfulness_score,
             hallucination_flags=hallucination_flags,
-            pii_redacted=pii_redacted,
-            redacted_answer=redacted_text,
+            pii_redacted=pii_redacted or secret_redacted,
+            redacted_answer=sanitized_text,
             confidence_score=confidence_score,
             passed=passed,
         )

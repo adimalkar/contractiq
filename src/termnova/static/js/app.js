@@ -229,6 +229,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Legal Modals handlers
+  const btnDisclaimer = document.getElementById('btn-open-disclaimer');
+  const btnTerms = document.getElementById('btn-open-terms');
+  const btnPrivacy = document.getElementById('btn-open-privacy');
+
+  if (btnDisclaimer) {
+    btnDisclaimer.addEventListener('click', () => {
+      const modal = document.getElementById('modal-disclaimer');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+  if (btnTerms) {
+    btnTerms.addEventListener('click', () => {
+      const modal = document.getElementById('modal-terms');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+  if (btnPrivacy) {
+    btnPrivacy.addEventListener('click', () => {
+      const modal = document.getElementById('modal-privacy');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+
+  // Close modals on clicking close buttons or backdrop
+  document.querySelectorAll('.btn-close-modal').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modalId = btn.dataset.close;
+      if (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'none';
+      }
+    });
+  });
+
+  document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) {
+        backdrop.style.display = 'none';
+      }
+    });
+  });
+
   // Initial health check & stats
   checkSystemHealth();
   updateVaultStats();

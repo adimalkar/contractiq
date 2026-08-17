@@ -57,8 +57,11 @@ async def upload_contract(
     settings: Settings = Depends(get_settings),
 ) -> UploadResponse:
     """Upload and ingest a contract document (PDF/DOCX/TXT)."""
-    filename = file.filename or "uploaded_contract.pdf"
-    ext = Path(filename).suffix.lower()
+    import re
+
+    raw_filename = Path(file.filename or "uploaded_contract.pdf").name
+    safe_filename = re.sub(r"[^a-zA-Z0-9._-]", "_", raw_filename)
+    ext = Path(safe_filename).suffix.lower()
 
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(
@@ -67,7 +70,7 @@ async def upload_contract(
         )
 
     # Save file to disk
-    dest_path = settings.upload_path / f"{uuid.uuid4().hex[:8]}_{filename}"
+    dest_path = settings.upload_path / f"{uuid.uuid4().hex[:8]}_{safe_filename}"
     content = await file.read()
 
     max_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
@@ -89,7 +92,7 @@ async def upload_contract(
             filename=doc.filename,
             file_type=doc.file_type,
             status=doc.processing_status,
-            message=f"Contract '{filename}' successfully ingested into knowledge base.",
+            message=f"Contract '{safe_filename}' successfully ingested into knowledge base.",
         )
     except Exception as e:
         logger.error("Synchronous ingestion failed", error=str(e))
@@ -97,7 +100,7 @@ async def upload_contract(
         background_tasks.add_task(_run_background_ingest, dest_path, settings)
         return UploadResponse(
             document_id=uuid.uuid4(),
-            filename=filename,
+            filename=safe_filename,
             file_type=ext.lstrip("."),
             status="processing",
             message="Contract uploaded and scheduled for background parsing and vectorization.",

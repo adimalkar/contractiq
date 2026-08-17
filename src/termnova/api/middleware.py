@@ -23,6 +23,10 @@ class RequestCorrelationMiddleware(BaseHTTPMiddleware):
         duration_ms = int((time.time() - start_time) * 1000)
 
         response.headers["X-Request-ID"] = req_id
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
         # Log access event if not health check polling
         if not request.url.path.endswith("/health"):

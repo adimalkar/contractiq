@@ -3,19 +3,20 @@
 # 📑 Termnova
 ### Production-Grade AI Contract Intelligence Platform with Hybrid RAG, LangGraph Agents & Responsible AI Guardrails
 
+[![Live Deployment](https://img.shields.io/badge/Live%20Demo-termnova.onrender.com-00C7B7.svg?logo=render&logoColor=white)](https://termnova.onrender.com)
+[![System Health](https://img.shields.io/badge/Status-100%25%20Operational-brightgreen.svg)](https://termnova.onrender.com/health)
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.14-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Agentic%20RAG-FF6F00.svg)](https://github.com/langchain-ai/langgraph)
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%203.3%20%7C%20Gemini%202.0-6366F1.svg)](https://openrouter.ai)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%20(pgvector)-336791.svg?logo=postgresql&logoColor=white)](https://github.com/pgvector/pgvector)
 [![Celery](https://img.shields.io/badge/Celery-Distributed%20Tasks-37814A.svg?logo=celery&logoColor=white)](https://docs.celeryq.dev)
 [![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-Tracing%20%26%20Metrics-F54C00.svg?logo=opentelemetry&logoColor=white)](https://opentelemetry.io)
-[![Redis](https://img.shields.io/badge/Redis-7.0-DC382D.svg?logo=redis&logoColor=white)](https://redis.io)
-[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF.svg?logo=githubactions&logoColor=white)](https://github.com/adimalkar/termnova)
-[![Coverage](https://img.shields.io/badge/Tests-39%20Passed%20(100%25)-brightgreen.svg)](https://pytest.org)
+[![Tests](https://img.shields.io/badge/Tests-43%20Passed%20(100%25)-brightgreen.svg)](https://github.com/adimalkar/termnova/actions)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
 <p align="center">
-  <strong>Grounded enterprise contract analysis combining dense semantic embeddings, BM25 keyword matching, Reciprocal Rank Fusion (RRF), Cross-Encoder re-ranking, LangGraph multi-step agents, clause-by-clause comparison, and automated hallucination guardrails.</strong>
+  🌐 <strong>Live Application:</strong> <a href="https://termnova.onrender.com"><strong>https://termnova.onrender.com</strong></a><br>
+  <em>Enterprise contract analysis combining dense semantic embeddings, BM25 keyword matching, Reciprocal Rank Fusion (RRF), Cross-Encoder re-ranking, LangGraph multi-step agents, clause-by-clause comparison, and automated hallucination guardrails.</em>
 </p>
 
 </div>
@@ -178,6 +179,31 @@ make evaluate
 
 ---
 
+## 🛡️ Security, Privacy & Secret Redaction Guardrails
+
+Termnova enforces defensive security controls designed for confidential enterprise legal documents:
+* **Multi-Layer Secret Redaction**: Real-time regex pattern scanners in [`guardrails.py`](file:///mnt/1TB_Drive/Data/MyFiles/Projects/contractiq/src/termnova/rag/guardrails.py) actively mask and sanitize OpenRouter API keys (`sk-or-v1-...`), OpenAI keys (`sk-...`), GitHub tokens, AWS access keys, JWT tokens, and database connection strings (`postgresql://...`, `rediss://...`) from model outputs before they reach the user.
+* **Prompt Injection Defense**: Boundary instructions in `SYSTEM_PROMPT` prevent jailbreaking, instruction leakage, and unauthorized credential disclosure.
+* **Sensitive PII Scrubbing**: Automated redactors for SSNs, phone numbers, email addresses, and credit cards.
+* **Enterprise Hardened Headers**: HTTP responses include `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `X-XSS-Protection: 1; mode=block`, and `Referrer-Policy: strict-origin-when-cross-origin`.
+* **Path Traversal Protection**: Uploaded contract filenames are sanitized with UUID prefixes to prevent directory traversal attacks.
+
+Detailed audit report: [Security & Vulnerability Audit Report](file:///mnt/1TB_Drive/Data/MyFiles/Projects/contractiq/docs/security/security_and_vulnerability_audit.md).
+
+---
+
+## ⚖️ Legal & Regulatory Compliance
+
+* **Informational & Productivity Software**: Termnova is an AI assistant, not a law firm or licensed attorney. Outputs do not constitute legal advice, representation, or an attorney-client relationship.
+* **Zero Model Training Retention**: Uploaded private contracts and prompts are never used to train public foundation models.
+* **Human-in-the-Loop Requirement**: All automated analyses, risk flags, and redlines must be reviewed by qualified legal professionals before executing binding contracts.
+* **Documentation**:
+  - [Terms of Service](file:///mnt/1TB_Drive/Data/MyFiles/Projects/contractiq/docs/legal/terms_of_service.md)
+  - [Privacy Policy](file:///mnt/1TB_Drive/Data/MyFiles/Projects/contractiq/docs/legal/privacy_policy.md)
+  - [Responsible AI & Legal Disclaimer](file:///mnt/1TB_Drive/Data/MyFiles/Projects/contractiq/docs/legal/ai_disclaimer.md)
+
+---
+
 ## 👤 Author & Portfolio
 
 **Aditya Malkar**  
@@ -185,3 +211,4 @@ AI Engineer | MS Data Science (Stevens Institute of Technology)
 - **Email:** [adityamalkar0@gmail.com](mailto:adityamalkar0@gmail.com)  
 - **GitHub:** [@adimalkar](https://github.com/adimalkar)  
 - **LinkedIn:** [Aditya Malkar](https://linkedin.com/in/aditya-malkar)
+
