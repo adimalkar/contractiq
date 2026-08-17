@@ -78,7 +78,27 @@ docker compose down
 
 ## 4. Cloud Deployment Strategies
 
-### Option A: AWS ECS Fargate & Amazon RDS (PostgreSQL)
+### Option A: Render (1-Click Blueprint) — Recommended
+The repository includes a ready-to-deploy [`render.yaml`](../render.yaml) Infrastructure-as-Code blueprint that automatically sets up the FastAPI container, PostgreSQL (with pgvector), and Redis.
+
+1. Push your repository to GitHub.
+2. Log into [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** $\rightarrow$ **Blueprint**.
+4. Connect your `termnova` repository.
+5. In the Environment Variables screen, provide your `OPENAI_API_KEY`.
+6. Click **Apply**. Render will automatically build the container and provision all services.
+
+### Option B: Railway (1-Click Container + Managed DBs)
+Railway automatically detects the [`railway.json`](../railway.json) and `Dockerfile`.
+
+1. Go to [Railway](https://railway.app/) and create a **New Project**.
+2. Select **Deploy from GitHub repo** $\rightarrow$ select `termnova`.
+3. Click **Add Service** $\rightarrow$ **Database** $\rightarrow$ **PostgreSQL**.
+4. Click **Add Service** $\rightarrow$ **Database** $\rightarrow$ **Redis**.
+5. In the Web Service settings, add the environment variable `OPENAI_API_KEY`.
+6. Railway will automatically link `DATABASE_URL` and `REDIS_URL` and deploy the service.
+
+### Option C: AWS ECS Fargate & Amazon RDS (PostgreSQL)
 1. **Database:** Provision Amazon RDS PostgreSQL 16 instance. Enable `pgvector` extension:
    ```sql
    CREATE EXTENSION vector;

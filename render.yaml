@@ -1,0 +1,50 @@
+services:
+  # ──── Termnova FastAPI Web Application ────
+  - type: web
+    name: termnova-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: EMBEDDING_DIMENSION
+        value: "1536"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: termnova-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: termnova-redis
+          property: connectionString
+
+  # ──── Redis Distributed Cache ────
+  - type: redis
+    name: termnova-redis
+    plan: starter
+    region: oregon
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+databases:
+  # ──── PostgreSQL Database with pgvector ────
+  - name: termnova-postgres
+    plan: starter
+    region: oregon
+    databaseName: termnova
+    user: termnova
+    postgresMajorVersion: 16
