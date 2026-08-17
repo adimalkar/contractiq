@@ -1,61 +1,61 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ContractIQ — Production RAG Multi-Container Infrastructure
+# Termnova — Production RAG Multi-Container Infrastructure
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 services:
   # ──── PostgreSQL with pgvector Extension ────
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: contractiq-postgres
+    container_name: termnova-postgres
     environment:
-      POSTGRES_USER: ${DB_USER:-contractiq}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-contractiq_dev}
-      POSTGRES_DB: ${DB_NAME:-contractiq}
+      POSTGRES_USER: ${DB_USER:-termnova}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-termnova_dev}
+      POSTGRES_DB: ${DB_NAME:-termnova}
     ports:
       - "${DB_PORT:-5433}:5432"
     volumes:
-      - contractiq-pgdata:/var/lib/postgresql/data
+      - termnova-pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-contractiq} -d ${DB_NAME:-contractiq}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-termnova} -d ${DB_NAME:-termnova}"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
   # ──── Redis Distributed Cache & Celery Broker ────
   redis:
     image: redis:7-alpine
-    container_name: contractiq-redis
+    container_name: termnova-redis
     ports:
       - "${REDIS_PORT:-6380}:6379"
     volumes:
-      - contractiq-redis-data:/data
+      - termnova-redis-data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
-  # ──── ContractIQ FastAPI Application ────
+  # ──── Termnova FastAPI Application ────
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: contractiq-api
+    container_name: termnova-api
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+asyncpg://${DB_USER:-contractiq}:${DB_PASSWORD:-contractiq_dev}@postgres:5432/${DB_NAME:-contractiq}
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-termnova}:${DB_PASSWORD:-termnova_dev}@postgres:5432/${DB_NAME:-termnova}
       REDIS_URL: redis://redis:6379/0
       LLM_PROVIDER: ${LLM_PROVIDER:-openai}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -73,7 +73,7 @@ services:
     volumes:
       - ./data/uploads:/app/data/uploads
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
   # ──── Celery Async Ingestion Worker ────
@@ -81,21 +81,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: contractiq-celery-worker
-    command: celery -A contractiq.pipeline.celery_app worker -l info -Q ingestion -c 2
+    container_name: termnova-celery-worker
+    command: celery -A termnova.pipeline.celery_app worker -l info -Q ingestion -c 2
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+asyncpg://${DB_USER:-contractiq}:${DB_PASSWORD:-contractiq_dev}@postgres:5432/${DB_NAME:-contractiq}
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-termnova}:${DB_PASSWORD:-termnova_dev}@postgres:5432/${DB_NAME:-termnova}
       REDIS_URL: redis://redis:6379/0
       OPENAI_API_KEY: ${OPENAI_API_KEY}
     volumes:
       - ./data:/app/data
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
   # ──── Flower Celery Monitoring Dashboard ────
@@ -103,8 +103,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: contractiq-flower
-    command: celery -A contractiq.pipeline.celery_app flower --port=5555
+    container_name: termnova-flower
+    command: celery -A termnova.pipeline.celery_app flower --port=5555
     depends_on:
       - celery-worker
     environment:
@@ -112,13 +112,13 @@ services:
     ports:
       - "5555:5555"
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
   # ──── OpenTelemetry Collector ────
   otel-collector:
     image: otel/opentelemetry-collector:latest
-    container_name: contractiq-otel-collector
+    container_name: termnova-otel-collector
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
@@ -126,13 +126,13 @@ services:
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP HTTP receiver
     networks:
-      - contractiq-net
+      - termnova-net
     restart: unless-stopped
 
 volumes:
-  contractiq-pgdata:
-  contractiq-redis-data:
+  termnova-pgdata:
+  termnova-redis-data:
 
 networks:
-  contractiq-net:
+  termnova-net:
     driver: bridge

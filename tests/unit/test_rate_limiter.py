@@ -2,8 +2,8 @@
 
 import pytest
 
-from contractiq.security.auth import verify_api_key
-from contractiq.security.rate_limiter import limiter
+from termnova.security.auth import verify_api_key
+from termnova.security.rate_limiter import limiter
 
 
 @pytest.mark.unit

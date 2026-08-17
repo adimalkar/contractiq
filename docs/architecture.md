@@ -1,4 +1,4 @@
-# ContractIQ System Architecture & Engineering Design
+# Termnova System Architecture & Engineering Design
 
 > **Production-Grade Enterprise AI Contract Intelligence Platform**  
 > Engineered by **Aditya Malkar**
@@ -7,7 +7,7 @@
 
 ## 1. System Overview
 
-**ContractIQ** is an autonomous, evidence-grounded Retrieval-Augmented Generation (RAG) platform designed to parse, index, search, and analyze complex enterprise legal contracts (Master Services Agreements, Statements of Work, NDAs, Vendor SLAs, and Commercial Leases).
+**Termnova** is an autonomous, evidence-grounded Retrieval-Augmented Generation (RAG) platform designed to parse, index, search, and analyze complex enterprise legal contracts (Master Services Agreements, Statements of Work, NDAs, Vendor SLAs, and Commercial Leases).
 
 Traditional naive single-pass RAG pipelines frequently suffer from:
 1. **Low Keyword Recall:** Dense embedding search misses exact clause numbers (`ARTICLE 6.1`), currency thresholds (`$2,500,000`), and specific identifiers.
@@ -15,7 +15,7 @@ Traditional naive single-pass RAG pipelines frequently suffer from:
 3. **Lack of Verifiable Grounding:** Generic chatbots generate prose without citing exact source pages, paragraphs, or section headings.
 4. **Privacy Vulnerabilities:** Sensitive Personally Identifiable Information (SSNs, emails, phone numbers) leaking in generation outputs.
 
-ContractIQ solves these challenges through an integrated 5-stage architecture:
+Termnova solves these challenges through an integrated 5-stage architecture:
 - **Structure-Aware Document Ingestion:** Extracts pages, preserves section boundaries, and tracks exact character offsets.
 - **Hybrid Retrieval (Dense + Sparse with RRF):** Fuses pgvector cosine similarity with BM25 keyword matching via Reciprocal Rank Fusion.
 - **Relevance Grading:** Filters out low-relevance candidates before generation.

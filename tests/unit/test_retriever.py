@@ -2,7 +2,7 @@
 
 import pytest
 
-from contractiq.rag.retriever import _simple_tokenize
+from termnova.rag.retriever import _simple_tokenize
 
 
 @pytest.mark.unit

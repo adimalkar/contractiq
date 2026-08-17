@@ -1,4 +1,4 @@
-name: ContractIQ CI Pipeline
+name: Termnova CI Pipeline
 
 on:
   push:
@@ -38,9 +38,9 @@ jobs:
       postgres:
         image: pgvector/pgvector:pg16
         env:
-          POSTGRES_USER: contractiq
-          POSTGRES_PASSWORD: contractiq_dev
-          POSTGRES_DB: contractiq_test
+          POSTGRES_USER: termnova
+          POSTGRES_PASSWORD: termnova_dev
+          POSTGRES_DB: termnova_test
         ports:
           - 5432:5432
         options: >-
@@ -76,9 +76,9 @@ jobs:
 
       - name: Run Pytest Suite with Coverage
         env:
-          DATABASE_URL: postgresql+asyncpg://contractiq:contractiq_dev@localhost:5432/contractiq_test
+          DATABASE_URL: postgresql+asyncpg://termnova:termnova_dev@localhost:5432/termnova_test
           REDIS_URL: redis://localhost:6379/0
           LLM_PROVIDER: mock
           OPENAI_API_KEY: ci-test-key
         run: |
-          pytest tests/ -v --cov=src/contractiq --cov-report=xml --cov-report=term-missing
+          pytest tests/ -v --cov=src/termnova --cov-report=xml --cov-report=term-missing

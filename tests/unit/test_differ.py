@@ -2,8 +2,8 @@
 
 import pytest
 
-from contractiq.comparison import ClauseAlignment
-from contractiq.comparison.differ import ClauseDiffer
+from termnova.comparison import ClauseAlignment
+from termnova.comparison.differ import ClauseDiffer
 
 
 @pytest.mark.unit

@@ -1,4 +1,4 @@
-# ContractIQ REST API Reference
+# Termnova REST API Reference
 
 Base URL: `http://localhost:8000`  
 OpenAPI Documentation: `http://localhost:8000/docs`  

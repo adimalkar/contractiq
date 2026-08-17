@@ -6,12 +6,12 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
-from contractiq.api.main import create_app
-from contractiq.config import Settings
-from contractiq.db.connection import _create_async_engine
-from contractiq.db.models import Base
-from contractiq.pipeline import ChunkData, PageContent, ProcessedDocument, Section
-from contractiq.pipeline.embedder import EmbeddingService
+from termnova.api.main import create_app
+from termnova.config import Settings
+from termnova.db.connection import _create_async_engine
+from termnova.db.models import Base
+from termnova.pipeline import ChunkData, PageContent, ProcessedDocument, Section
+from termnova.pipeline.embedder import EmbeddingService
 
 
 @pytest.fixture(scope="session")
@@ -19,7 +19,7 @@ def test_settings() -> Settings:
     """Provide isolated configuration for test runs."""
     import os
 
-    db_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://aditya@localhost:5432/contractiq_test")
+    db_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://aditya@localhost:5432/termnova_test")
     db_sync = os.getenv("DATABASE_URL_SYNC", db_url.replace("+asyncpg", ""))
     redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/1")
 

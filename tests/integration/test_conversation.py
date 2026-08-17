@@ -3,8 +3,8 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from contractiq.db.repository import ContractRepository
-from contractiq.rag.conversation import ConversationMemory
+from termnova.db.repository import ContractRepository
+from termnova.rag.conversation import ConversationMemory
 
 
 @pytest.mark.integration

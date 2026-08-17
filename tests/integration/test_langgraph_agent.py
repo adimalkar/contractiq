@@ -3,9 +3,9 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from contractiq.agents.graph import build_rag_graph
-from contractiq.pipeline.embedder import EmbeddingService
-from contractiq.rag.engine import RAGEngine
+from termnova.agents.graph import build_rag_graph
+from termnova.pipeline.embedder import EmbeddingService
+from termnova.rag.engine import RAGEngine
 
 
 @pytest.mark.integration

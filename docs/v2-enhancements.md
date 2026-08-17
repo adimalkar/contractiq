@@ -1,17 +1,17 @@
-# ContractIQ v2 — Architectural Upgrades & Enhancement Summary
+# Termnova v2 — Architectural Upgrades & Enhancement Summary
 
-ContractIQ v2 elevates the platform from a linear RAG pipeline into an enterprise agentic contract intelligence system with distributed task queues, full observability, two-stage retrieval, and clause comparison.
+Termnova v2 elevates the platform from a linear RAG pipeline into an enterprise agentic contract intelligence system with distributed task queues, full observability, two-stage retrieval, and clause comparison.
 
 ---
 
 ## 🌟 Major Architectural Upgrades
 
 ### 1. LangGraph Agentic RAG Workflow (Phase 11)
-- Implemented stateful `StateGraph` in `src/contractiq/agents/`.
+- Implemented stateful `StateGraph` in `src/termnova/agents/`.
 - Features dynamic intent classification, multi-part query decomposition, self-correction loops on poor relevance, and maximum retry bounds.
 
 ### 2. Contextual Query Rewriting & Multi-Turn Memory (Phase 12)
-- Added `QueryRewriter` and `ConversationMemory` in `src/contractiq/rag/`.
+- Added `QueryRewriter` and `ConversationMemory` in `src/termnova/rag/`.
 - Resolves relative follow-up queries (e.g. *"What about termination in that agreement?"*) by injecting past conversation context and generating hypothetical document expansions (HyDE).
 
 ### 3. Celery + Redis Asynchronous Task Processing (Phase 13)
@@ -27,7 +27,7 @@ ContractIQ v2 elevates the platform from a linear RAG pipeline into an enterpris
 - Added Maximal Marginal Relevance (MMR) scoring to eliminate redundant chunk clustering.
 
 ### 6. Semantic Clause Alignment & Redline Diffing (Phase 16)
-- Built `ClauseAligner` and `ClauseDiffer` in `src/contractiq/comparison/`.
+- Built `ClauseAligner` and `ClauseDiffer` in `src/termnova/comparison/`.
 - Computes chunk-level cosine similarity matrices, identifies added/modified/removed clauses, and highlights financial/deadline discrepancies.
 
 ### 7. Bidirectional WebSocket Live Streaming (Phase 17)

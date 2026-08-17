@@ -5,9 +5,9 @@ from pathlib import Path
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from contractiq.config import Settings
-from contractiq.pipeline.embedder import EmbeddingService
-from contractiq.pipeline.ingestion import IngestionPipeline
+from termnova.config import Settings
+from termnova.pipeline.embedder import EmbeddingService
+from termnova.pipeline.ingestion import IngestionPipeline
 
 
 @pytest.mark.integration

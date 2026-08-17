@@ -5,10 +5,10 @@ from pathlib import Path
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from contractiq.config import Settings
-from contractiq.pipeline.embedder import EmbeddingService
-from contractiq.pipeline.ingestion import IngestionPipeline
-from contractiq.rag.engine import RAGEngine
+from termnova.config import Settings
+from termnova.pipeline.embedder import EmbeddingService
+from termnova.pipeline.ingestion import IngestionPipeline
+from termnova.rag.engine import RAGEngine
 
 
 @pytest.mark.integration

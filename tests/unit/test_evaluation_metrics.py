@@ -2,7 +2,7 @@
 
 import pytest
 
-from contractiq.evaluation.metrics import (
+from termnova.evaluation.metrics import (
     compute_context_precision,
     compute_faithfulness,
 )

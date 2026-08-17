@@ -5,7 +5,7 @@ import uuid
 import pytest
 from pydantic import ValidationError
 
-from contractiq.api.schemas import FeedbackRequest, QueryRequest
+from termnova.api.schemas import FeedbackRequest, QueryRequest
 
 
 @pytest.mark.unit

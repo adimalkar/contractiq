@@ -1,1 +1,1 @@
-"""ContractIQ Test Suite."""
+"""Termnova Test Suite."""

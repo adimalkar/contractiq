@@ -1,4 +1,4 @@
-# ContractIQ Deployment & Operations Guide
+# Termnova Deployment & Operations Guide
 
 This guide covers local environment setup, containerized Docker orchestration, and cloud deployment procedures.
 
@@ -17,8 +17,8 @@ This guide covers local environment setup, containerized Docker orchestration, a
 
 ### Step 1: Clone and Set Up Virtual Environment
 ```bash
-git clone https://github.com/adimalkar/contractiq.git
-cd contractiq
+git clone https://github.com/adimalkar/termnova.git
+cd termnova
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -34,8 +34,8 @@ cp .env.example .env
 
 ### Step 3: Initialize Database Schema
 ```bash
-psql -d postgres -c "CREATE DATABASE contractiq;"
-psql -d contractiq -f db/init/01_schema.sql
+psql -d postgres -c "CREATE DATABASE termnova;"
+psql -d termnova -f db/init/01_schema.sql
 ```
 
 ### Step 4: Run Development Server
@@ -66,7 +66,7 @@ docker compose logs -f api
 
 ### Ingest Contracts inside Container
 ```bash
-docker compose exec api python -m contractiq.pipeline.ingestion /app/data/eval/sample_contracts/
+docker compose exec api python -m termnova.pipeline.ingestion /app/data/eval/sample_contracts/
 ```
 
 ### Stop Containers
@@ -87,9 +87,9 @@ docker compose down
 3. **Container Registry:** Build and push Docker image to Amazon ECR:
    ```bash
    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
-   docker build -t contractiq:latest .
-   docker tag contractiq:latest <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/contractiq:latest
-   docker push <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/contractiq:latest
+   docker build -t termnova:latest .
+   docker tag termnova:latest <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/termnova:latest
+   docker push <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/termnova:latest
    ```
 4. **Task Definition:** Configure AWS Secrets Manager for `OPENAI_API_KEY` and database credentials. Attach `BedrockFullAccess` IAM role if using AWS Bedrock foundation models.
 
