@@ -123,9 +123,14 @@ To ensure deployment remains 100% free and functional as new features are implem
    DATABASE_URL=postgresql+asyncpg://<NEON_USER>:<NEON_PASSWORD>@<NEON_HOST>/termnova?ssl=require
    DATABASE_URL_SYNC=postgresql://<NEON_USER>:<NEON_PASSWORD>@<NEON_HOST>/termnova?sslmode=require
    REDIS_URL=rediss://default:<UPSTASH_PASSWORD>@<UPSTASH_HOST>:6379
-   LLM_PROVIDER=openai
-   OPENAI_API_KEY=your-openai-api-key
-   LLM_MODEL=gpt-4o-mini
+   LLM_PROVIDER=openrouter
+   OPENROUTER_API_KEY=your-openrouter-api-key
+   # Ultra-low-cost / free OpenRouter models:
+   # • google/gemini-2.0-flash-001 (~$0.10/M tokens - recommended)
+   # • google/gemini-2.0-flash-exp:free (100% Free on OpenRouter)
+   # • meta-llama/llama-3.3-70b-instruct:free (100% Free on OpenRouter)
+   # • deepseek/deepseek-chat (~$0.14/M tokens)
+   LLM_MODEL=google/gemini-2.0-flash-001
    EMBEDDING_MODEL=text-embedding-3-small
    EMBEDDING_DIMENSION=1536
    ```

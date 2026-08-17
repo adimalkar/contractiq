@@ -40,11 +40,16 @@ class Settings(BaseSettings):
     )
 
     # ── LLM Provider & Routing ──
-    LLM_PROVIDER: Literal["openai", "bedrock", "ollama", "mock"] = Field(
-        default="openai",
+    LLM_PROVIDER: Literal["openai", "openrouter", "bedrock", "ollama", "mock"] = Field(
+        default="openrouter",
         description="Active LLM provider backend",
     )
     OPENAI_API_KEY: str | None = Field(default=None, description="OpenAI API key")
+    OPENROUTER_API_KEY: str | None = Field(default=None, description="OpenRouter API key")
+    OPENROUTER_BASE_URL: str = Field(
+        default="https://openrouter.ai/api/v1",
+        description="OpenRouter API base URL",
+    )
     AWS_ACCESS_KEY_ID: str | None = Field(default=None, description="AWS access key ID")
     AWS_SECRET_ACCESS_KEY: str | None = Field(default=None, description="AWS secret access key")
     AWS_REGION: str = Field(default="us-east-1", description="AWS Bedrock region")
@@ -55,8 +60,8 @@ class Settings(BaseSettings):
 
     # ── Model Names & Embedding Dimensions ──
     LLM_MODEL: str = Field(
-        default="gpt-4o-mini",
-        description="Main generator and grader LLM model identifier",
+        default="google/gemini-2.0-flash-001",
+        description="Main generator and grader LLM model identifier (e.g. google/gemini-2.0-flash-001, deepseek/deepseek-chat, meta-llama/llama-3.3-70b-instruct:free)",
     )
     EMBEDDING_MODEL: str = Field(
         default="text-embedding-3-small",

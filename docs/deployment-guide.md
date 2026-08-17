@@ -121,10 +121,11 @@ Railway automatically detects the [`railway.json`](../railway.json) and `Dockerf
 |---|---|---|---|
 | `DATABASE_URL` | string | `postgresql+asyncpg://...` | Async SQLAlchemy PostgreSQL connection string |
 | `REDIS_URL` | string | `redis://localhost:6379/0` | Redis caching connection string |
-| `LLM_PROVIDER` | string | `openai` | Model provider backend (`openai`, `bedrock`, `ollama`, `mock`) |
-| `OPENAI_API_KEY` | string | - | OpenAI API key for generation & embeddings |
+| `LLM_PROVIDER` | string | `openrouter` | Model provider backend (`openrouter`, `openai`, `bedrock`, `ollama`, `mock`) |
+| `OPENROUTER_API_KEY`| string | - | OpenRouter API key (supports free & ultra-low cost models) |
+| `OPENAI_API_KEY` | string | - | OpenAI API key (optional fallback) |
 | `AWS_REGION` | string | `us-east-1` | AWS region when using Bedrock |
-| `LLM_MODEL` | string | `gpt-4o-mini` | Main LLM model identifier |
+| `LLM_MODEL` | string | `google/gemini-2.0-flash-001` | Main LLM model (e.g. `google/gemini-2.0-flash-001`, `meta-llama/llama-3.3-70b-instruct:free`) |
 | `EMBEDDING_MODEL` | string | `text-embedding-3-small` | Embedding model identifier |
 | `EMBEDDING_DIMENSION` | int | `1536` | Dimensionality of embedding vector |
 | `CHUNK_SIZE` | int | `512` | Token chunk target size |

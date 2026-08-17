@@ -64,9 +64,13 @@ class RelevanceGrader:
 
     async def grade_chunk(self, query: str, chunk: RetrievedChunk) -> GradedChunk:
         """Grade a single retrieved chunk."""
-        if self.provider == "mock" or not (
-            self.settings.OPENAI_API_KEY or self.provider in ["bedrock", "ollama"]
-        ):
+        has_credentials = bool(
+            self.settings.OPENROUTER_API_KEY
+            or self.settings.OPENAI_API_KEY
+            or self.provider in ["bedrock", "ollama"]
+        )
+
+        if self.provider == "mock" or not has_credentials:
             return self._heuristic_grade(query, chunk)
 
         try:
@@ -78,16 +82,30 @@ class RelevanceGrader:
                 threshold=self.threshold,
             )
 
+            model_name = self.model
             kwargs: dict[str, Any] = {"temperature": 0.0, "max_tokens": 150}
-            if self.provider == "openai" and self.settings.OPENAI_API_KEY:
+
+            if self.provider == "openrouter" or self.settings.OPENROUTER_API_KEY:
+                if not model_name.startswith("openrouter/"):
+                    model_name = f"openrouter/{model_name}"
+                kwargs["api_key"] = self.settings.OPENROUTER_API_KEY or self.settings.OPENAI_API_KEY
+                kwargs["api_base"] = self.settings.OPENROUTER_BASE_URL
+            elif self.provider == "openai" and self.settings.OPENAI_API_KEY:
                 kwargs["api_key"] = self.settings.OPENAI_API_KEY
             elif self.provider == "bedrock":
-                kwargs["aws_region_name"] = self.settings.AWS_REGION
+                model_name = (
+                    f"bedrock/{self.model}" if not self.model.startswith("bedrock/") else self.model
+                )
+                if self.settings.AWS_REGION:
+                    kwargs["aws_region_name"] = self.settings.AWS_REGION
             elif self.provider == "ollama":
+                model_name = (
+                    f"ollama/{self.model}" if not self.model.startswith("ollama/") else self.model
+                )
                 kwargs["api_base"] = self.settings.OLLAMA_BASE_URL
 
             response = await litellm.acompletion(
-                model=self.model,
+                model=model_name,
                 messages=[{"role": "user", "content": prompt}],
                 **kwargs,
             )

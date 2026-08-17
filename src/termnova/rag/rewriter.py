@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
+from typing import Any
 
 import structlog
 
@@ -32,10 +33,10 @@ class QueryRewriter:
     async def rewrite(
         self,
         query: str,
-        conversation_history: list[dict[str, str]] | None = None,
+        conversation_history: list[dict[str, Any]] | None = None,
         use_hyde: bool = False,
     ) -> RewrittenQuery:
-        """Analyze conversation history and rewrite query to be contextually self-contained."""
+        """Execute heuristic + LLM rewrite pipeline."""
         clean_query = query.strip()
         if not clean_query:
             return RewrittenQuery(original="", rewritten="", strategy_used="passthrough")
@@ -43,6 +44,12 @@ class QueryRewriter:
         strategy = "passthrough"
         rewritten_text = clean_query
         sub_queries: list[str] = []
+
+        has_credentials = bool(
+            self.settings.OPENROUTER_API_KEY
+            or self.settings.OPENAI_API_KEY
+            or self.provider in ["bedrock", "ollama"]
+        )
 
         # 1. Multi-part Decomposition
         if (
@@ -67,11 +74,37 @@ class QueryRewriter:
                 clean_query.lower().startswith(w)
                 for w in ["what about", "how about", "and", "what of"]
             ):
-                if self.provider != "mock" and (
-                    self.settings.OPENAI_API_KEY or self.provider in ["bedrock", "ollama"]
-                ):
+                if self.provider != "mock" and has_credentials:
                     try:
                         import litellm
+
+                        model_name = self.model
+                        kwargs: dict[str, Any] = {"temperature": 0.0, "max_tokens": 60}
+
+                        if self.provider == "openrouter" or self.settings.OPENROUTER_API_KEY:
+                            if not model_name.startswith("openrouter/"):
+                                model_name = f"openrouter/{model_name}"
+                            kwargs["api_key"] = (
+                                self.settings.OPENROUTER_API_KEY or self.settings.OPENAI_API_KEY
+                            )
+                            kwargs["api_base"] = self.settings.OPENROUTER_BASE_URL
+                        elif self.provider == "openai" and self.settings.OPENAI_API_KEY:
+                            kwargs["api_key"] = self.settings.OPENAI_API_KEY
+                        elif self.provider == "bedrock":
+                            model_name = (
+                                f"bedrock/{self.model}"
+                                if not self.model.startswith("bedrock/")
+                                else self.model
+                            )
+                            if self.settings.AWS_REGION:
+                                kwargs["aws_region_name"] = self.settings.AWS_REGION
+                        elif self.provider == "ollama":
+                            model_name = (
+                                f"ollama/{self.model}"
+                                if not self.model.startswith("ollama/")
+                                else self.model
+                            )
+                            kwargs["api_base"] = self.settings.OLLAMA_BASE_URL
 
                         prompt = (
                             f"Given the following previous conversation question: '{last_q}'\n"
@@ -79,10 +112,9 @@ class QueryRewriter:
                             f"Respond with ONLY the rewritten query."
                         )
                         resp = await litellm.acompletion(
-                            model=self.model,
+                            model=model_name,
                             messages=[{"role": "user", "content": prompt}],
-                            temperature=0.0,
-                            max_tokens=60,
+                            **kwargs,
                         )
                         rewritten_text = resp.choices[0].message.content.strip()
                         strategy = "contextual"
@@ -98,11 +130,37 @@ class QueryRewriter:
         # 3. Optional HyDE (Hypothetical Document Embeddings)
         hyde_passage = None
         if use_hyde:
-            if self.provider != "mock" and (
-                self.settings.OPENAI_API_KEY or self.provider in ["bedrock", "ollama"]
-            ):
+            if self.provider != "mock" and has_credentials:
                 try:
                     import litellm
+
+                    model_name = self.model
+                    kwargs = {"temperature": 0.1, "max_tokens": 100}
+
+                    if self.provider == "openrouter" or self.settings.OPENROUTER_API_KEY:
+                        if not model_name.startswith("openrouter/"):
+                            model_name = f"openrouter/{model_name}"
+                        kwargs["api_key"] = (
+                            self.settings.OPENROUTER_API_KEY or self.settings.OPENAI_API_KEY
+                        )
+                        kwargs["api_base"] = self.settings.OPENROUTER_BASE_URL
+                    elif self.provider == "openai" and self.settings.OPENAI_API_KEY:
+                        kwargs["api_key"] = self.settings.OPENAI_API_KEY
+                    elif self.provider == "bedrock":
+                        model_name = (
+                            f"bedrock/{self.model}"
+                            if not self.model.startswith("bedrock/")
+                            else self.model
+                        )
+                        if self.settings.AWS_REGION:
+                            kwargs["aws_region_name"] = self.settings.AWS_REGION
+                    elif self.provider == "ollama":
+                        model_name = (
+                            f"ollama/{self.model}"
+                            if not self.model.startswith("ollama/")
+                            else self.model
+                        )
+                        kwargs["api_base"] = self.settings.OLLAMA_BASE_URL
 
                     hyde_prompt = (
                         f"Write a short, realistic 2-sentence legal contract clause that would answer this inquiry:\n"
@@ -110,10 +168,9 @@ class QueryRewriter:
                         f"Clause excerpt:"
                     )
                     resp = await litellm.acompletion(
-                        model=self.model,
+                        model=model_name,
                         messages=[{"role": "user", "content": hyde_prompt}],
-                        temperature=0.1,
-                        max_tokens=100,
+                        **kwargs,
                     )
                     hyde_passage = resp.choices[0].message.content.strip()
                 except Exception:
