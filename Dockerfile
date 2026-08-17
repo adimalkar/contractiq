@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY pyproject.toml README.md /app/
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir ".[api,pipeline,llm,eval]"
+    pip install --no-cache-dir ".[api,pipeline,llm,agents,queue,observability,security,eval]"
 
 # Stage 2: Production Runtime
 FROM python:3.11-slim AS runtime

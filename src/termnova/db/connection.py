@@ -66,12 +66,23 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def init_db(settings: Settings | None = None) -> None:
-    """Initialize database engine and session factory on app startup."""
+    """Initialize database engine, session factory, and ensure schema on app startup."""
     global _engine, _session_factory, _engine_loop
     current_loop = asyncio.get_event_loop()
     _engine = create_async_engine(settings)
     _engine_loop = current_loop
     _session_factory = async_sessionmaker(_engine, expire_on_commit=False, class_=AsyncSession)
+
+    # Automatically create tables if they do not exist
+    try:
+        from termnova.db.models import Base
+
+        async with _engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        import structlog
+
+        structlog.get_logger(__name__).warning("Schema initialization note", error=str(e))
 
 
 async def close_db() -> None:
