@@ -1,4 +1,4 @@
-# ContractIQ Deployment & Operations Guide
+# Termnova Deployment & Operations Guide
 
 This guide covers local environment setup, containerized Docker orchestration, and cloud deployment procedures.
 
@@ -17,8 +17,8 @@ This guide covers local environment setup, containerized Docker orchestration, a
 
 ### Step 1: Clone and Set Up Virtual Environment
 ```bash
-git clone https://github.com/adimalkar/contractiq.git
-cd contractiq
+git clone https://github.com/adimalkar/termnova.git
+cd termnova
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -34,8 +34,8 @@ cp .env.example .env
 
 ### Step 3: Initialize Database Schema
 ```bash
-psql -d postgres -c "CREATE DATABASE contractiq;"
-psql -d contractiq -f db/init/01_schema.sql
+psql -d postgres -c "CREATE DATABASE termnova;"
+psql -d termnova -f db/init/01_schema.sql
 ```
 
 ### Step 4: Run Development Server
@@ -66,7 +66,7 @@ docker compose logs -f api
 
 ### Ingest Contracts inside Container
 ```bash
-docker compose exec api python -m contractiq.pipeline.ingestion /app/data/eval/sample_contracts/
+docker compose exec api python -m termnova.pipeline.ingestion /app/data/eval/sample_contracts/
 ```
 
 ### Stop Containers
@@ -78,7 +78,27 @@ docker compose down
 
 ## 4. Cloud Deployment Strategies
 
-### Option A: AWS ECS Fargate & Amazon RDS (PostgreSQL)
+### Option A: Render (1-Click Blueprint) — Recommended
+The repository includes a ready-to-deploy [`render.yaml`](../render.yaml) Infrastructure-as-Code blueprint that automatically sets up the FastAPI container, PostgreSQL (with pgvector), and Redis.
+
+1. Push your repository to GitHub.
+2. Log into [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** $\rightarrow$ **Blueprint**.
+4. Connect your `termnova` repository.
+5. In the Environment Variables screen, provide your `OPENAI_API_KEY`.
+6. Click **Apply**. Render will automatically build the container and provision all services.
+
+### Option B: Railway (1-Click Container + Managed DBs)
+Railway automatically detects the [`railway.json`](../railway.json) and `Dockerfile`.
+
+1. Go to [Railway](https://railway.app/) and create a **New Project**.
+2. Select **Deploy from GitHub repo** $\rightarrow$ select `termnova`.
+3. Click **Add Service** $\rightarrow$ **Database** $\rightarrow$ **PostgreSQL**.
+4. Click **Add Service** $\rightarrow$ **Database** $\rightarrow$ **Redis**.
+5. In the Web Service settings, add the environment variable `OPENAI_API_KEY`.
+6. Railway will automatically link `DATABASE_URL` and `REDIS_URL` and deploy the service.
+
+### Option C: AWS ECS Fargate & Amazon RDS (PostgreSQL)
 1. **Database:** Provision Amazon RDS PostgreSQL 16 instance. Enable `pgvector` extension:
    ```sql
    CREATE EXTENSION vector;
@@ -87,9 +107,9 @@ docker compose down
 3. **Container Registry:** Build and push Docker image to Amazon ECR:
    ```bash
    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
-   docker build -t contractiq:latest .
-   docker tag contractiq:latest <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/contractiq:latest
-   docker push <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/contractiq:latest
+   docker build -t termnova:latest .
+   docker tag termnova:latest <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/termnova:latest
+   docker push <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/termnova:latest
    ```
 4. **Task Definition:** Configure AWS Secrets Manager for `OPENAI_API_KEY` and database credentials. Attach `BedrockFullAccess` IAM role if using AWS Bedrock foundation models.
 

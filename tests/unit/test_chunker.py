@@ -2,8 +2,8 @@
 
 import pytest
 
-from contractiq.pipeline import PageContent, ProcessedDocument, Section
-from contractiq.pipeline.chunker import RecursiveChunker
+from termnova.pipeline import PageContent, ProcessedDocument, Section
+from termnova.pipeline.chunker import RecursiveChunker
 
 
 @pytest.mark.unit

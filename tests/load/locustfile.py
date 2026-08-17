@@ -1,4 +1,4 @@
-"""Locust load testing suite for ContractIQ RAG query throughput and latency profiling."""
+"""Locust load testing suite for Termnova RAG query throughput and latency profiling."""
 
 import random
 
@@ -16,8 +16,8 @@ SAMPLE_QUERIES = [
 ]
 
 
-class ContractIQUser(HttpUser):
-    """Simulates realistic concurrent user interactions against ContractIQ."""
+class TermnovaUser(HttpUser):
+    """Simulates realistic concurrent user interactions against Termnova."""
 
     wait_time = between(1, 3)
 

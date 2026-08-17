@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "contractiq"
+name = "termnova"
 version = "0.2.0"
 description = "Production-grade AI Contract Intelligence Platform with Hybrid RAG, LangGraph Agents, OpenTelemetry, Celery Queues, and Responsible Guardrails"
 readme = "README.md"
@@ -90,14 +90,14 @@ dev = [
     "locust>=2.29.0",
 ]
 all = [
-    "contractiq[api,pipeline,llm,agents,queue,observability,security,eval,dev]",
+    "termnova[api,pipeline,llm,agents,queue,observability,security,eval,dev]",
 ]
 
 [project.scripts]
-contractiq = "contractiq.pipeline.ingestion:main"
+termnova = "termnova.pipeline.ingestion:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/contractiq"]
+packages = ["src/termnova"]
 
 # ──────────────────────────────────────────────
 # Ruff Linter & Formatter
@@ -127,7 +127,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["contractiq"]
+known-first-party = ["termnova"]
 
 # ──────────────────────────────────────────────
 # Mypy Type Checker

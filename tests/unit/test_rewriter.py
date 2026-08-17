@@ -2,7 +2,7 @@
 
 import pytest
 
-from contractiq.rag.rewriter import QueryRewriter
+from termnova.rag.rewriter import QueryRewriter
 
 
 @pytest.mark.unit

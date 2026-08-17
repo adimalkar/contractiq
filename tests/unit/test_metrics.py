@@ -2,7 +2,7 @@
 
 import pytest
 
-from contractiq.observability.metrics import (
+from termnova.observability.metrics import (
     CHUNKS_CREATED,
     DOCUMENTS_INGESTED,
     FAITHFULNESS_SCORE,

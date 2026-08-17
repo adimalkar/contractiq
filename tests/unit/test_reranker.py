@@ -4,8 +4,8 @@ import uuid
 
 import pytest
 
-from contractiq.rag import RetrievedChunk
-from contractiq.rag.reranker import CrossEncoderReranker
+from termnova.rag import RetrievedChunk
+from termnova.rag.reranker import CrossEncoderReranker
 
 
 def make_chunk(content: str, score: float = 0.5) -> RetrievedChunk:

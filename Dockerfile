@@ -1,5 +1,5 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ContractIQ — Production Multi-Stage Container Build
+# Termnova — Production Multi-Stage Container Build
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Stage 1: Build & Dependencies
@@ -36,7 +36,7 @@ COPY src/ /app/src/
 COPY db/ /app/db/
 COPY pyproject.toml README.md /app/
 
-# Install the contractiq package in editable mode without reinstalling dependencies
+# Install the termnova package in editable mode without reinstalling dependencies
 RUN pip install --no-deps -e .
 
 # Create non-root user and runtime directories
@@ -51,4 +51,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
     CMD curl -f http://localhost:8000/health || exit 1
 
-CMD ["uvicorn", "contractiq.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "termnova.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

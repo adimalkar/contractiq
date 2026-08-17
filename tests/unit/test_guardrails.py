@@ -4,9 +4,9 @@ import uuid
 
 import pytest
 
-from contractiq.config import Settings
-from contractiq.rag import GeneratedAnswer, GradedChunk
-from contractiq.rag.guardrails import GuardrailChecker
+from termnova.config import Settings
+from termnova.rag import GeneratedAnswer, GradedChunk
+from termnova.rag.guardrails import GuardrailChecker
 
 
 @pytest.mark.unit

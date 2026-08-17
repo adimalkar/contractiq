@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📑 ContractIQ
+# 📑 Termnova
 ### Production-Grade AI Contract Intelligence Platform with Hybrid RAG, LangGraph Agents & Responsible AI Guardrails
 
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.14-blue.svg)](https://www.python.org/)
@@ -10,7 +10,7 @@
 [![Celery](https://img.shields.io/badge/Celery-Distributed%20Tasks-37814A.svg?logo=celery&logoColor=white)](https://docs.celeryq.dev)
 [![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-Tracing%20%26%20Metrics-F54C00.svg?logo=opentelemetry&logoColor=white)](https://opentelemetry.io)
 [![Redis](https://img.shields.io/badge/Redis-7.0-DC382D.svg?logo=redis&logoColor=white)](https://redis.io)
-[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF.svg?logo=githubactions&logoColor=white)](https://github.com/adimalkar/contractiq)
+[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF.svg?logo=githubactions&logoColor=white)](https://github.com/adimalkar/termnova)
 [![Coverage](https://img.shields.io/badge/Tests-39%20Passed%20(100%25)-brightgreen.svg)](https://pytest.org)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
@@ -28,7 +28,7 @@ Enterprises manage thousands of high-stakes vendor agreements, Master Services A
 
 Conversely, naive single-pass RAG systems frequently hallucinate terms, lose clause context, fail on exact contract identifiers (`SOW-2024-08`), and leak sensitive PII.
 
-**ContractIQ** is an end-to-end, production-ready AI platform engineered to parse, index, retrieve, evaluate, compare, and audit enterprise contracts with **100% evidence-grounded answers** and sub-second query latency.
+**Termnova** is an end-to-end, production-ready AI platform engineered to parse, index, retrieve, evaluate, compare, and audit enterprise contracts with **100% evidence-grounded answers** and sub-second query latency.
 
 ---
 
@@ -36,7 +36,7 @@ Conversely, naive single-pass RAG systems frequently hallucinate terms, lose cla
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                    ContractIQ v2                                       │
+│                                    Termnova v2                                       │
 │                                                                                        │
 │  ┌──────────────────┐    ┌─────────────────────┐    ┌───────────────────────────────┐  │
 │  │   Web Dashboard  │    │  FastAPI REST / WS  │    │  Distributed Ingestion Queue  │  │
@@ -109,8 +109,8 @@ Conversely, naive single-pass RAG systems frequently hallucinate terms, lose cla
 ### 1. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/adimalkar/contractiq.git
-cd contractiq
+git clone https://github.com/adimalkar/termnova.git
+cd termnova
 
 # Create virtual environment & install dependencies
 python3 -m venv .venv
