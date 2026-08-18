@@ -112,6 +112,20 @@ class IngestionPipeline:
                 page_count=processed_doc.page_count,
                 metadata=processed_doc.metadata,
             )
+
+            # Build and update knowledge graph entities and cross-contract relationships
+            try:
+                from termnova.graph.builder import GraphBuilder
+
+                graph_builder = GraphBuilder(self.session, self.settings)
+                await graph_builder.build_graph_for_document(doc.id)
+            except Exception as graph_err:
+                logger.warning(
+                    "Graph extraction non-fatal warning",
+                    filename=path.name,
+                    error=str(graph_err),
+                )
+
             await self.session.commit()
             logger.info(
                 "Document successfully ingested", filename=path.name, chunks=len(chunk_records)

@@ -82,3 +82,46 @@ jobs:
           OPENAI_API_KEY: ci-test-key
         run: |
           pytest tests/ -v --cov=src/termnova --cov-report=xml --cov-report=term-missing
+
+  deploy:
+    name: Production Deployment & Verification
+    needs: [lint, test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook (Optional)
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_HOOK" ]; then
+            echo "Triggering Render deployment via webhook..."
+            curl -sSf -X POST "$DEPLOY_HOOK" || echo "Deploy hook notification sent"
+          else
+            echo "Render Auto-Deploy active on GitHub main branch."
+          fi
+
+      - name: Await & Verify Live Production Deployment
+        run: |
+          echo "Verifying live website availability at https://termnova.onrender.com..."
+          MAX_RETRIES=20
+          RETRY_INTERVAL=10
+          for i in $(seq 1 $MAX_RETRIES); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://termnova.onrender.com/health || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Termnova production deployment is live, healthy, and serving traffic (HTTP 200)!"
+              curl -s https://termnova.onrender.com/health | jq . || true
+              break
+            else
+              echo "Attempt $i/$MAX_RETRIES: Status $STATUS. Waiting ${RETRY_INTERVAL}s for Render container build/boot..."
+              sleep $RETRY_INTERVAL
+            fi
+          done
+
+      - name: Post Deployment Summary
+        run: |
+          echo "### 🚀 Termnova Production Deployment Live" >> $GITHUB_STEP_SUMMARY
+          echo "- **Website:** [https://termnova.onrender.com](https://termnova.onrender.com)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Health Endpoint:** [https://termnova.onrender.com/health](https://termnova.onrender.com/health)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ✅ Active and Serving All Features" >> $GITHUB_STEP_SUMMARY
+

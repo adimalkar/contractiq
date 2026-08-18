@@ -106,6 +106,10 @@ function switchView(viewName) {
       breadcrumb: 'Contract Studio',
       title: 'Contract Analysis & Q&A',
     },
+    graph: {
+      breadcrumb: 'Document Map',
+      title: 'Contract Knowledge Graph & Topology',
+    },
     compare: {
       breadcrumb: 'Clause Diff',
       title: 'Clause Redline & Side-by-Side Diff',
@@ -127,7 +131,9 @@ function switchView(viewName) {
   if (titleEl) titleEl.textContent = info.title;
 
   // Trigger view-specific data refresh
-  if (viewName === 'documents' && window.loadDocumentsList) {
+  if (viewName === 'graph' && window.initGraphView) {
+    window.initGraphView();
+  } else if (viewName === 'documents' && window.loadDocumentsList) {
     window.loadDocumentsList();
   } else if (viewName === 'analytics' && window.loadAnalyticsData) {
     window.loadAnalyticsData();

@@ -79,6 +79,23 @@ class Document(Base):
         cascade="all, delete-orphan",
         order_by="Chunk.chunk_index",
     )
+    entities: Mapped[list["DocumentEntity"]] = relationship(
+        "DocumentEntity",
+        back_populates="document",
+        cascade="all, delete-orphan",
+    )
+    outbound_relationships: Mapped[list["DocumentRelationship"]] = relationship(
+        "DocumentRelationship",
+        foreign_keys="DocumentRelationship.source_document_id",
+        back_populates="source_document",
+        cascade="all, delete-orphan",
+    )
+    inbound_relationships: Mapped[list["DocumentRelationship"]] = relationship(
+        "DocumentRelationship",
+        foreign_keys="DocumentRelationship.target_document_id",
+        back_populates="target_document",
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self) -> str:
         return f"<Document(id={self.id}, filename='{self.filename}', status='{self.processing_status}')>"
@@ -230,4 +247,159 @@ class QueryLog(Base):
         return (
             f"<QueryLog(id={self.id}, query='{self.query_text[:30]}...', "
             f"confidence={self.confidence_score})>"
+        )
+
+
+class EntityNode(Base):
+    """Named entity extracted from contracts (companies, people, jurisdictions, products)."""
+
+    __tablename__ = "entity_nodes"
+    __table_args__ = (
+        UniqueConstraint("normalized_name", "entity_type", name="uq_entity_name_type"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    entity_type: Mapped[str] = mapped_column(
+        String(50), nullable=False
+    )  # company, person, jurisdiction, product, department
+    name: Mapped[str] = mapped_column(String(500), nullable=False)
+    normalized_name: Mapped[str] = mapped_column(String(500), nullable=False, index=True)
+    aliases: Mapped[list[str]] = mapped_column(
+        ARRAY(String),
+        default=list,
+        server_default="{}",
+        nullable=False,
+    )
+    metadata_: Mapped[dict[str, Any]] = mapped_column(
+        "metadata",
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    document_links: Mapped[list["DocumentEntity"]] = relationship(
+        "DocumentEntity",
+        back_populates="entity",
+        cascade="all, delete-orphan",
+    )
+
+    def __repr__(self) -> str:
+        return f"<EntityNode(id={self.id}, name='{self.name}', type='{self.entity_type}')>"
+
+
+class DocumentEntity(Base):
+    """Junction mapping which entities appear in which documents with specific roles."""
+
+    __tablename__ = "document_entities"
+
+    document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    entity_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("entity_nodes.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    role: Mapped[str] = mapped_column(
+        String(100), nullable=False
+    )  # party_a, party_b, guarantor, beneficiary, governing_jurisdiction, counterparty
+    first_mention_page: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    entity: Mapped["EntityNode"] = relationship(
+        "EntityNode",
+        back_populates="document_links",
+    )
+    document: Mapped["Document"] = relationship(
+        "Document",
+        back_populates="entities",
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<DocumentEntity(doc_id={self.document_id}, "
+            f"entity_id={self.entity_id}, role='{self.role}')>"
+        )
+
+
+class DocumentRelationship(Base):
+    """Directed edge between two contracts."""
+
+    __tablename__ = "document_relationships"
+    __table_args__ = (
+        UniqueConstraint(
+            "source_document_id",
+            "target_document_id",
+            "relationship_type",
+            name="uq_doc_rel",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    source_document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    target_document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    relationship_type: Mapped[str] = mapped_column(
+        String(50), nullable=False
+    )  # amends, supersedes, references, parent_sow, renewal_of, addendum_to, annex_to
+    metadata_: Mapped[dict[str, Any]] = mapped_column(
+        "metadata",
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    source_document: Mapped["Document"] = relationship(
+        "Document",
+        foreign_keys=[source_document_id],
+        back_populates="outbound_relationships",
+    )
+    target_document: Mapped["Document"] = relationship(
+        "Document",
+        foreign_keys=[target_document_id],
+        back_populates="inbound_relationships",
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<DocumentRelationship(src={self.source_document_id}, "
+            f"tgt={self.target_document_id}, type='{self.relationship_type}')>"
         )

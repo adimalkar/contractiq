@@ -3,16 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Termnova — Enterprise AI Contract Intelligence</title>
-  <meta name="description" content="Production-grade AI contract intelligence platform with hybrid RAG, LangGraph agents, clause diffing, and responsible AI guardrails.">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Termnova — AI Contract Intelligence, Knowledge Graph & Clause Diffing</title>
+  <meta name="title" content="Termnova — AI Contract Intelligence, Knowledge Graph & Clause Diffing">
+  <meta name="description" content="Termnova is an enterprise AI contract intelligence platform. Analyze agreements with hybrid RAG, visualize contract knowledge graph topology, redline clauses, and query legal documents with verifiable page citations.">
+  <meta name="keywords" content="termnova, contractiq, AI contract intelligence, contract analysis, contract knowledge graph, legal AI, clause redlining, contract visualizer, legal RAG, enterprise contract management, legal tech, open source contract AI">
+  <meta name="author" content="Aditya Malkar">
+  <meta name="google-site-verification" content="googlea9b1c46662ccadc3">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://termnova.onrender.com/">
+
+  <!-- Open Graph / Facebook / LinkedIn / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://termnova.onrender.com/">
+  <meta property="og:title" content="Termnova — AI Contract Intelligence & Knowledge Graph">
+  <meta property="og:description" content="Production-grade AI contract intelligence platform with hybrid RAG, LangGraph agents, multi-contract knowledge graph topology, and semantic clause redlining.">
+  <meta property="og:image" content="https://termnova.onrender.com/static/assets/favicon.jpg">
+  <meta property="og:site_name" content="Termnova">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://termnova.onrender.com/">
+  <meta name="twitter:title" content="Termnova — AI Contract Intelligence & Knowledge Graph">
+  <meta name="twitter:description" content="Production AI contract intelligence with LangGraph agents, interactive document topology maps, and semantic clause redlining.">
+  <meta name="twitter:image" content="https://termnova.onrender.com/static/assets/favicon.jpg">
+
+  <!-- Mobile & PWA Configuration -->
+  <meta name="theme-color" content="#1E40AF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Termnova">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="icon" type="image/jpeg" href="/static/assets/favicon.jpg">
   <link rel="apple-touch-icon" href="/static/assets/favicon.jpg">
+
+  <!-- Typography & Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/styles.css">
-  <!-- Chart.js for interactive analytics -->
+  <link rel="stylesheet" href="/static/css/graph.css">
+
+  <!-- Schema.org JSON-LD Structured Data for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://termnova.onrender.com/#webapp",
+        "name": "Termnova",
+        "url": "https://termnova.onrender.com/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All Platforms, Web Browser",
+        "description": "Production-grade AI contract intelligence platform with hybrid vector & BM25 RAG, LangGraph multi-step agents, interactive contract knowledge graph visualizer, and clause redlining.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Verifiable AI Contract Q&A with direct page citation drawer",
+          "Interactive Contract Knowledge Graph & Topology Visualizer",
+          "Side-by-Side Clause Redline & Side-by-Side Difference Detection",
+          "Hybrid Reciprocal Rank Fusion (BM25 + Dense Vectors)",
+          "Zero-retention AI guardrails with PII and secret redaction"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Aditya Malkar",
+          "url": "https://github.com/adimalkar"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://termnova.onrender.com/#organization",
+        "name": "Termnova",
+        "url": "https://termnova.onrender.com/",
+        "logo": "https://termnova.onrender.com/static/assets/favicon.jpg",
+        "sameAs": [
+          "https://github.com/adimalkar/termnova"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://termnova.onrender.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Termnova?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Termnova is an open, enterprise-grade AI contract intelligence engine featuring hybrid RAG, interactive knowledge graph visualization, clause diffing, and security guardrails."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Termnova visualize contract knowledge graphs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Termnova uses AI entity extraction and PostgreSQL graph topology to build real-time D3.js force-directed network graphs, mapping parent MSAs, child SOWs, amendments, counterparties, and governing jurisdictions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is confidential contract data safe with Termnova?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Termnova enforces strict zero-data-retention AI guardrails, real-time PII/secret redaction, TLS 1.3 encryption, and guarantees uploaded documents are never used for model training."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What document formats does Termnova support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Termnova supports PDF, DOCX, TXT, and Markdown legal agreements including MSAs, SOWs, NDAs, Amendments, Vendor Agreements, and Commercial Leases."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body class="dark-theme">
   <div class="app-layout">
@@ -40,6 +159,18 @@
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
           <span>Contract Studio</span>
+        </button>
+
+        <button class="nav-item" data-view="graph" id="nav-graph">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="18" cy="18" r="3"></circle>
+            <circle cx="18" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <line x1="8.59" y1="8.59" x2="15.42" y2="15.42"></line>
+            <line x1="8.59" y1="15.42" x2="15.42" y2="8.59"></line>
+          </svg>
+          <span>Document Map</span>
         </button>
 
         <button class="nav-item" data-view="compare" id="nav-compare">
@@ -561,6 +692,154 @@
         </div>
       </section>
 
+      <!-- ════ VIEW: Document Map & Topology (Knowledge Graph) ════ -->
+      <section class="view-panel" id="view-graph">
+        <div class="graph-view-panel">
+          <!-- Toolbar -->
+          <div class="graph-toolbar">
+            <div class="graph-toolbar-left">
+              <div class="view-mode-toggle">
+                <button class="view-mode-btn active" id="btn-mode-graph">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <circle cx="18" cy="18" r="3"></circle>
+                    <circle cx="18" cy="6" r="3"></circle>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <line x1="8.59" y1="8.59" x2="15.42" y2="15.42"></line>
+                    <line x1="8.59" y1="15.42" x2="15.42" y2="8.59"></line>
+                  </svg>
+                  <span>Force Graph</span>
+                </button>
+                <button class="view-mode-btn" id="btn-mode-stack">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="7" y1="12" x2="21" y2="12"></line>
+                    <line x1="11" y1="18" x2="21" y2="18"></line>
+                  </svg>
+                  <span>Document Stack</span>
+                </button>
+              </div>
+
+              <input type="text" class="graph-search-input" id="graph-search-input" placeholder="Search contracts or parties...">
+
+              <div class="filter-group">
+                <span class="filter-pill active pill-msa" data-type="msa">MSA</span>
+                <span class="filter-pill active pill-sow" data-type="sow">SOW</span>
+                <span class="filter-pill active pill-nda" data-type="nda">NDA</span>
+                <span class="filter-pill active pill-amend" data-type="amendment">Amendments</span>
+                <span class="filter-pill active pill-entity" data-type="entity">Parties / Entities</span>
+              </div>
+            </div>
+
+            <div class="graph-toolbar-right">
+              <span class="badge badge-subtle" id="graph-node-count-badge">0 Contracts</span>
+              <button class="btn btn-secondary btn-sm" id="btn-export-graph-svg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export SVG</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- D3 Force Graph Canvas -->
+          <div class="graph-canvas-container" id="graph-canvas-container">
+            <svg id="graph-svg"></svg>
+            <div class="graph-floating-controls">
+              <button class="graph-ctrl-btn" id="btn-graph-zoom-in" title="Zoom In">+</button>
+              <button class="graph-ctrl-btn" id="btn-graph-zoom-out" title="Zoom Out">&minus;</button>
+              <button class="graph-ctrl-btn" id="btn-graph-zoom-reset" title="Reset View">&#x21bb;</button>
+            </div>
+          </div>
+
+          <!-- Document Stack View (Hierarchical Cards) -->
+          <div id="stack-container" style="display: none; height: 100%; overflow-y: auto;"></div>
+
+          <!-- Node Detail Drawer -->
+          <aside class="graph-drawer" id="graph-node-drawer">
+            <div class="graph-drawer-header">
+              <div>
+                <span class="badge badge-accent" id="graph-drawer-type-badge">CONTRACT</span>
+                <h3 id="graph-drawer-title" style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-top: 6px;">Document</h3>
+              </div>
+              <button class="btn-icon" id="btn-close-graph-drawer" title="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="graph-drawer-body">
+              <div class="node-meta-grid">
+                <div class="node-meta-card">
+                  <div class="node-meta-label">Effective Date</div>
+                  <div class="node-meta-value" id="graph-drawer-eff-date">N/A</div>
+                </div>
+                <div class="node-meta-card">
+                  <div class="node-meta-label">Expiration Date</div>
+                  <div class="node-meta-value" id="graph-drawer-exp-date">N/A</div>
+                </div>
+                <div class="node-meta-card">
+                  <div class="node-meta-label">Governing Law</div>
+                  <div class="node-meta-value" id="graph-drawer-gov-law">N/A</div>
+                </div>
+                <div class="node-meta-card">
+                  <div class="node-meta-label">Contract Value</div>
+                  <div class="node-meta-value" id="graph-drawer-value">N/A</div>
+                </div>
+              </div>
+
+              <div class="parties-list-box">
+                <label style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Extracted Parties & Entities</label>
+                <div class="party-badge-row" id="graph-drawer-parties">
+                  <span class="text-muted" style="font-size:0.75rem">No parties extracted</span>
+                </div>
+              </div>
+
+              <button class="btn btn-primary" id="btn-graph-query-contract" style="margin-top: 10px; width: 100%;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Query Contract in Studio</span>
+              </button>
+            </div>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- ════ SEO SEMANTIC CRAWL CONTENT & CAPABILITIES INDEX ════ -->
+      <section class="sr-only" aria-label="Termnova AI Contract Intelligence Capabilities">
+        <h1>Termnova — Enterprise AI Contract Intelligence, Knowledge Graph & Clause Diffing</h1>
+        <p>Termnova is an advanced, production-grade legal intelligence platform. Built for corporate legal teams, law firms, procurement managers, and contract administrators to analyze agreements, uncover risks, detect clause modifications, and map multi-contract relationships.</p>
+        
+        <h2>Core Capabilities & Features</h2>
+        <ul>
+          <li><strong>Contract Studio & Hybrid RAG:</strong> Natural language query answering with reciprocal rank fusion (BM25 + Dense Vectors) and verbatim page-level source citations.</li>
+          <li><strong>Document Map & Contract Knowledge Graph:</strong> AI-powered entity extraction mapping parent Master Services Agreements (MSAs), Statements of Work (SOWs), Amendments, counterparty entities, and governing jurisdictions with D3.js force layouts.</li>
+          <li><strong>Clause Redline & Side-by-Side Diff:</strong> Semantic difference highlighting detecting modifications in financial terms, liability caps, indemnification clauses, and termination windows.</li>
+          <li><strong>Document Vault & Vector Repository:</strong> Secure multi-format ingestion supporting PDF, DOCX, TXT, and Markdown files with pgvector partition isolation.</li>
+          <li><strong>Enterprise Guardrails & Safety:</strong> Real-time PII redaction, API secret scrubbing, and zero AI model training retention guarantee.</li>
+        </ul>
+
+        <h2>Frequently Asked Questions</h2>
+        <article>
+          <h3>What is Termnova?</h3>
+          <p>Termnova is an open enterprise AI contract intelligence platform engineered with LangGraph multi-step reasoning agents, hybrid RAG, and PostgreSQL graph topology.</p>
+        </article>
+        <article>
+          <h3>How does Termnova protect confidential legal documents?</h3>
+          <p>All contract data is processed with zero-retention policies. No customer contract data is ever used to train third-party foundation models. Real-time guardrails sanitize sensitive PII and API keys.</p>
+        </article>
+        <article>
+          <h3>What contract types are supported?</h3>
+          <p>Termnova analyzes MSAs, SOWs, NDAs, Amendments, Addenda, Commercial Leases, Vendor Agreements, and Employment Contracts.</p>
+        </article>
+      </section>
+
     </main>
 
     <!-- ──── Source Inspector Drawer ──── -->
@@ -676,6 +955,7 @@
   <script src="/static/js/app.js"></script>
   <script src="/static/js/ws.js"></script>
   <script src="/static/js/chat.js"></script>
+  <script src="/static/js/graph.js"></script>
   <script src="/static/js/compare.js"></script>
   <script src="/static/js/documents.js"></script>
   <script src="/static/js/analytics.js"></script>
