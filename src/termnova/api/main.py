@@ -15,6 +15,7 @@ from termnova.api.middleware import setup_middleware
 from termnova.api.routes import (
     analytics_router,
     documents_router,
+    graph_router,
     health_router,
     query_router,
 )
@@ -78,6 +79,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health_router)
     app.include_router(query_router)
     app.include_router(documents_router)
+    app.include_router(graph_router)
     app.include_router(analytics_router)
     app.include_router(compare_router)
     app.include_router(ws_router)

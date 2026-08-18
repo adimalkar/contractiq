@@ -1,0 +1,383 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Termnova — Contract Knowledge Graph & Topology Styles
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.graph-view-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ──── Graph Toolbar Header ──── */
+.graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-hairline);
+  gap: 16px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.graph-toolbar-left,
+.graph-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-mode-toggle {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 2px;
+}
+
+.view-mode-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.view-mode-btn.active {
+  background: var(--brand-blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.graph-search-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  color: #fff;
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  min-width: 200px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.graph-search-input:focus {
+  border-color: var(--brand-blue);
+}
+
+/* Filter pills */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.filter-pill.active {
+  border-color: var(--border-subtle);
+  color: #fff;
+}
+
+.filter-pill.active.pill-msa { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: #3b82f6; }
+.filter-pill.active.pill-sow { background: rgba(34, 197, 94, 0.2); color: #4ade80; border-color: #22c55e; }
+.filter-pill.active.pill-nda { background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: #a855f7; }
+.filter-pill.active.pill-amend { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: #f59e0b; }
+.filter-pill.active.pill-entity { background: rgba(99, 102, 241, 0.2); color: #818cf8; border-color: #6366f1; }
+
+/* ──── Canvas Container ──── */
+.graph-canvas-container {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(circle at center, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%), #0b0f19;
+  overflow: hidden;
+}
+
+#graph-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+#graph-svg:active {
+  cursor: grabbing;
+}
+
+/* Floating Zoom Controls */
+.graph-floating-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.graph-ctrl-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.graph-ctrl-btn:hover {
+  background: var(--bg-card);
+  color: #fff;
+}
+
+/* Graph Node & Edge SVG Elements */
+.graph-link {
+  stroke: rgba(148, 163, 184, 0.25);
+  stroke-width: 1.5px;
+  transition: stroke 200ms ease;
+}
+
+.graph-link.highlighted {
+  stroke: var(--brand-blue-light);
+  stroke-width: 2.5px;
+}
+
+.graph-link-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  fill: var(--text-muted);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.graph-node {
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.graph-node circle.node-base {
+  stroke-width: 2px;
+  transition: all 150ms ease;
+}
+
+.graph-node:hover circle.node-base {
+  stroke: #fff;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+}
+
+.graph-node.selected circle.node-base {
+  stroke: #fff;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 14px var(--brand-blue));
+}
+
+.graph-node-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: #e2e8f0;
+  text-anchor: middle;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* ──── Node Colors by Type ──── */
+.node-type-msa { fill: #3b82f6; stroke: #60a5fa; }
+.node-type-sow { fill: #22c55e; stroke: #4ade80; }
+.node-type-nda { fill: #a855f7; stroke: #c084fc; }
+.node-type-amendment { fill: #f59e0b; stroke: #fbbf24; }
+.node-type-lease { fill: #ef4444; stroke: #f87171; }
+.node-type-vendor { fill: #ec4899; stroke: #f472b6; }
+.node-type-company { fill: #6366f1; stroke: #818cf8; }
+.node-type-jurisdiction { fill: #14b8a6; stroke: #2dd4bf; }
+.node-type-person { fill: #8b5cf6; stroke: #a78bfa; }
+.node-type-other { fill: #64748b; stroke: #94a3b8; }
+
+/* ──── Node Detail Drawer ──── */
+.graph-drawer {
+  position: absolute;
+  top: 0;
+  right: -420px;
+  width: 400px;
+  height: 100%;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-subtle);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+  transition: right 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.graph-drawer.open {
+  right: 0;
+}
+
+.graph-drawer-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.graph-drawer-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.node-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.node-meta-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 10px 12px;
+}
+
+.node-meta-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.node-meta-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 3px;
+}
+
+.parties-list-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 12px;
+}
+
+.party-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.party-badge {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ──── Document Stack View (Hierarchical Cards) ──── */
+.stack-view-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg-card);
+}
+
+.stack-tree-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stack-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+}
+
+.stack-card:hover {
+  border-color: var(--border-subtle);
+  transform: translateX(4px);
+}
+
+.stack-card.root-card {
+  border-left: 4px solid var(--brand-blue);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, var(--bg-surface) 100%);
+}
+
+.stack-card.child-card {
+  margin-left: 36px;
+  border-left: 3px solid var(--color-success);
+  position: relative;
+}
+
+.stack-card.child-card::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: var(--border-hairline);
+}
+
+.stack-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.stack-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stack-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
