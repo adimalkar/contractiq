@@ -61,3 +61,12 @@ async def test_html_seo_metadata(api_client: AsyncClient):
     assert '"@type": "WebApplication"' in html
     assert '"@type": "FAQPage"' in html
     assert "Termnova — Enterprise AI Contract Intelligence" in html
+
+
+@pytest.mark.integration
+@pytest.mark.asyncio
+async def test_google_verification_endpoint(api_client: AsyncClient):
+    """Verify /googlea9b1c46662ccadc3.html is served directly for search console ownership."""
+    resp = await api_client.get("/googlea9b1c46662ccadc3.html")
+    assert resp.status_code == 200
+    assert "google-site-verification: googlea9b1c46662ccadc3.html" in resp.text

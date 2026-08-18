@@ -124,6 +124,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 return FileResponse(str(fav_path), media_type="image/jpeg")
             return JSONResponse({"error": "favicon not found"}, status_code=404)
 
+        @app.get("/googlea9b1c46662ccadc3.html", include_in_schema=False)
+        async def serve_google_verification() -> FileResponse:
+            g_path = static_dir / "googlea9b1c46662ccadc3.html"
+            if g_path.exists():
+                return FileResponse(str(g_path), media_type="text/html")
+            return JSONResponse({"error": "verification file not found"}, status_code=404)
+
     # Global Exception Handlers
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
