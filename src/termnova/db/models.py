@@ -403,3 +403,143 @@ class DocumentRelationship(Base):
             f"<DocumentRelationship(src={self.source_document_id}, "
             f"tgt={self.target_document_id}, type='{self.relationship_type}')>"
         )
+
+
+class Workspace(Base):
+    """Shared collaborative workspace scoped to specific documents for multi-user team RAG."""
+
+    __tablename__ = "workspaces"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    document_scope: Mapped[list[str]] = mapped_column(
+        JSONB,
+        default=list,
+        server_default="[]",
+        nullable=False,
+    )  # List of stringified document UUIDs in scope
+    is_archived: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    created_by: Mapped[str] = mapped_column(String(100), default="Team Member", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    members: Mapped[list["WorkspaceMember"]] = relationship(
+        "WorkspaceMember",
+        back_populates="workspace",
+        cascade="all, delete-orphan",
+    )
+    messages: Mapped[list["WorkspaceMessage"]] = relationship(
+        "WorkspaceMessage",
+        back_populates="workspace",
+        cascade="all, delete-orphan",
+        order_by="WorkspaceMessage.created_at",
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<Workspace(id={self.id}, name='{self.name}', scope_count={len(self.document_scope)})>"
+        )
+
+
+class WorkspaceMember(Base):
+    """Team members collaborating within a scoped workspace."""
+
+    __tablename__ = "workspace_members"
+
+    workspace_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("workspaces.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    user_name: Mapped[str] = mapped_column(String(100), primary_key=True)
+    role: Mapped[str] = mapped_column(
+        String(20), default="editor", nullable=False
+    )  # owner, editor, viewer
+    last_read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    joined_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    workspace: Mapped["Workspace"] = relationship("Workspace", back_populates="members")
+
+    def __repr__(self) -> str:
+        return f"<WorkspaceMember(ws={self.workspace_id}, user='{self.user_name}', role='{self.role}')>"
+
+
+class WorkspaceMessage(Base):
+    """Individual human message, AI response, or system event in a workspace."""
+
+    __tablename__ = "workspace_messages"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    workspace_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("workspaces.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    user_name: Mapped[str | None] = mapped_column(
+        String(100), nullable=True
+    )  # Null for AI responses
+    message_type: Mapped[str] = mapped_column(
+        String(20), default="human", nullable=False
+    )  # human, ai_response, system
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    citations: Mapped[list[dict[str, Any]]] = mapped_column(
+        JSONB,
+        default=list,
+        server_default="[]",
+        nullable=False,
+    )
+    parent_message_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("workspace_messages.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    is_pinned: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    reactions: Mapped[dict[str, list[str]]] = mapped_column(
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )  # e.g. {"👍": ["Alice", "Bob"], "⚠️": ["Charlie"]}
+    query_log_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("query_log.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    workspace: Mapped["Workspace"] = relationship("Workspace", back_populates="messages")
+
+    def __repr__(self) -> str:
+        return (
+            f"<WorkspaceMessage(id={self.id}, type='{self.message_type}', user='{self.user_name}')>"
+        )

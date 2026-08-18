@@ -130,9 +130,15 @@ class ContractRepository:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_all_chunks(self) -> list[tuple[Chunk, str]]:
-        """Fetch all chunks with their associated document filename."""
+    async def get_all_chunks(
+        self, document_ids: list[uuid.UUID] | None = None
+    ) -> list[tuple[Chunk, str]]:
+        """Fetch all chunks with their associated document filename, optionally scoped to specific document IDs."""
         stmt = select(Chunk, Document.filename).join(Document, Chunk.document_id == Document.id)
+        if document_ids is not None:
+            if not document_ids:
+                return []
+            stmt = stmt.where(Chunk.document_id.in_(document_ids))
         result = await self.session.execute(stmt)
         return list(result.all())
 
@@ -141,6 +147,7 @@ class ContractRepository:
         query_embedding: list[float],
         top_k: int = 10,
         threshold: float = 0.0,
+        document_ids: list[uuid.UUID] | None = None,
     ) -> list[tuple[Chunk, str, float]]:
         """Perform semantic search using cosine similarity over chunk embeddings.
 
@@ -149,12 +156,17 @@ class ContractRepository:
         if not query_embedding:
             return []
 
-        # Query all chunks that have embeddings
+        # Query chunks that have embeddings, optionally scoped to document_ids
         stmt = (
             select(Chunk, Document.filename)
             .join(Document, Chunk.document_id == Document.id)
             .where(Chunk.embedding.isnot(None))
         )
+        if document_ids is not None:
+            if not document_ids:
+                return []
+            stmt = stmt.where(Chunk.document_id.in_(document_ids))
+
         result = await self.session.execute(stmt)
         rows = list(result.all())
 
