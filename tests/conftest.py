@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from termnova.api.main import create_app
 from termnova.config import Settings
 from termnova.db.connection import _create_async_engine
-from termnova.db.models import (
+from termnova.db.models import (  # noqa: F401
     Base,
     Chunk,
     Conversation,

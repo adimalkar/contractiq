@@ -96,6 +96,34 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 return FileResponse(str(index_path))
             return JSONResponse({"message": "Termnova API operational. Web Dashboard building."})
 
+        @app.get("/robots.txt", include_in_schema=False)
+        async def serve_robots_txt() -> FileResponse:
+            robots_path = static_dir / "robots.txt"
+            if robots_path.exists():
+                return FileResponse(str(robots_path), media_type="text/plain")
+            return FileResponse(str(static_dir / "robots.txt"), media_type="text/plain")
+
+        @app.get("/sitemap.xml", include_in_schema=False)
+        async def serve_sitemap_xml() -> FileResponse:
+            sitemap_path = static_dir / "sitemap.xml"
+            if sitemap_path.exists():
+                return FileResponse(str(sitemap_path), media_type="application/xml")
+            return JSONResponse({"error": "sitemap not found"}, status_code=404)
+
+        @app.get("/site.webmanifest", include_in_schema=False)
+        async def serve_webmanifest() -> FileResponse:
+            manifest_path = static_dir / "site.webmanifest"
+            if manifest_path.exists():
+                return FileResponse(str(manifest_path), media_type="application/manifest+json")
+            return JSONResponse({"error": "manifest not found"}, status_code=404)
+
+        @app.get("/favicon.ico", include_in_schema=False)
+        async def serve_favicon() -> FileResponse:
+            fav_path = static_dir / "assets" / "favicon.jpg"
+            if fav_path.exists():
+                return FileResponse(str(fav_path), media_type="image/jpeg")
+            return JSONResponse({"error": "favicon not found"}, status_code=404)
+
     # Global Exception Handlers
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):

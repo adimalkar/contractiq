@@ -1,0 +1,9 @@
+# Termnova AI Contract Intelligence robots.txt
+User-agent: *
+Allow: /
+Allow: /static/
+Disallow: /api/
+Disallow: /metrics
+
+Sitemap: https://termnova.onrender.com/sitemap.xml
+Host: https://termnova.onrender.com
