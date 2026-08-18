@@ -317,10 +317,15 @@ async def patch_workspace_message(
     service = WorkspaceService(session)
 
     if payload.is_pinned is not None:
-        msg = await service.toggle_pin_message(message_id, is_pinned=payload.is_pinned)
+        msg = await service.toggle_pin_message(
+            message_id=message_id, workspace_id=workspace_id, is_pinned=payload.is_pinned
+        )
     elif payload.reaction and payload.user_name:
         msg = await service.toggle_reaction(
-            message_id, reaction=payload.reaction, user_name=payload.user_name
+            message_id=message_id,
+            workspace_id=workspace_id,
+            reaction=payload.reaction,
+            user_name=payload.user_name,
         )
     else:
         raise HTTPException(
@@ -328,7 +333,7 @@ async def patch_workspace_message(
         )
 
     if not msg:
-        raise HTTPException(status_code=404, detail="Message not found")
+        raise HTTPException(status_code=404, detail="Message not found in this workspace")
 
     resp = _to_message_response(msg)
 

@@ -215,7 +215,8 @@
       try {
         const res = await fetch("/api/v1/documents/");
         if (res.ok) {
-          this.availableDocs = await res.json();
+          const data = await res.json();
+          this.availableDocs = Array.isArray(data) ? data : data.documents || [];
         }
       } catch (err) {
         console.warn("Could not load documents for workspace scope:", err);
@@ -498,7 +499,7 @@
         if (users && users.length > 0) {
           const isUserReacted = users.includes(this.currentUserName);
           reactionsHtml += `
-            <button class="ws-reaction-pill ${isUserReacted ? "reacted" : ""}" data-msg-id="${msg.id}" data-emoji="${emoji}" title="${users.join(", ")}">
+            <button class="ws-reaction-pill ${isUserReacted ? "reacted" : ""}" data-msg-id="${msg.id}" data-emoji="${emoji}" title="${this.escapeHtml(users.join(", "))}">
               <span>${emoji}</span>
               <span>${users.length}</span>
             </button>
@@ -662,7 +663,7 @@
           (p) => `
         <div class="ws-pinned-card" id="pinned-${p.id}">
           <div class="ws-pinned-card-top">
-            <span>📌 ${p.message_type === "ai_response" ? "AI Finding" : p.user_name || "Note"}</span>
+            <span>📌 ${p.message_type === "ai_response" ? "AI Finding" : this.escapeHtml(p.user_name || "Note")}</span>
             <button class="ws-btn-icon-action" onclick="window.WorkspaceApp.togglePinMessage('${p.id}', false)" title="Unpin">✕</button>
           </div>
           <div class="ws-pinned-snippet">${this.escapeHtml(p.content)}</div>

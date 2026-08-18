@@ -65,22 +65,22 @@ class ScopedRAGExecutor:
             parent_message_id=parent_message_id,
         )
 
-        # 3. Check for empty scope if documents were configured but invalid
-        if not doc_uuids and workspace.document_scope:
+        # 3. Check for empty scope - isolate deal room queries to attached contracts
+        if not doc_uuids:
             ai_msg = await self.workspace_service.add_message(
                 workspace_id=workspace.id,
-                content="No valid documents found in this workspace's document scope. Please attach agreements to query.",
+                content="No valid documents are attached to this workspace deal room. Please assign contract documents to this room to query them.",
                 user_name=None,
                 message_type="ai_response",
                 parent_message_id=parent_message_id,
             )
             return human_msg, ai_msg
 
-        # 4. Scoped Hybrid Retrieval
+        # 4. Scoped Hybrid Retrieval strictly isolated to attached documents
         retrieved = await self.retriever.retrieve(
             query=query,
             top_k=top_k * 2,
-            document_ids=doc_uuids if workspace.document_scope else None,
+            document_ids=doc_uuids,
         )
 
         # 5. Relevance Grading

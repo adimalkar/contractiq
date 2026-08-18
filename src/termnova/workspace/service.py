@@ -282,10 +282,13 @@ class WorkspaceService:
         return list(result.scalars().all())
 
     async def toggle_pin_message(
-        self, message_id: uuid.UUID, is_pinned: bool
+        self, message_id: uuid.UUID, workspace_id: uuid.UUID, is_pinned: bool
     ) -> WorkspaceMessage | None:
-        """Pin or unpin a message."""
-        stmt = select(WorkspaceMessage).where(WorkspaceMessage.id == message_id)
+        """Pin or unpin a message strictly within its workspace boundary."""
+        stmt = select(WorkspaceMessage).where(
+            WorkspaceMessage.id == message_id,
+            WorkspaceMessage.workspace_id == workspace_id,
+        )
         msg = (await self.session.execute(stmt)).scalars().first()
         if not msg:
             return None
@@ -296,10 +299,17 @@ class WorkspaceService:
         return msg
 
     async def toggle_reaction(
-        self, message_id: uuid.UUID, reaction: str, user_name: str
+        self,
+        message_id: uuid.UUID,
+        workspace_id: uuid.UUID,
+        reaction: str,
+        user_name: str,
     ) -> WorkspaceMessage | None:
-        """Add or remove an emoji reaction on a message."""
-        stmt = select(WorkspaceMessage).where(WorkspaceMessage.id == message_id)
+        """Add or remove an emoji reaction on a message strictly within its workspace boundary."""
+        stmt = select(WorkspaceMessage).where(
+            WorkspaceMessage.id == message_id,
+            WorkspaceMessage.workspace_id == workspace_id,
+        )
         msg = (await self.session.execute(stmt)).scalars().first()
         if not msg:
             return None

@@ -1,5 +1,7 @@
 """Unit tests for WorkspaceService business operations and member management."""
 
+import uuid
+
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -66,17 +68,34 @@ async def test_workspace_message_pins_and_reactions(test_db_session: AsyncSessio
     assert msg.is_pinned is False
 
     # Pin message
-    pinned_msg = await service.toggle_pin_message(msg.id, is_pinned=True)
+    pinned_msg = await service.toggle_pin_message(msg.id, workspace_id=ws.id, is_pinned=True)
     assert pinned_msg.is_pinned is True
+
+    # Mutating with wrong workspace_id must return None
+    other_ws_id = uuid.uuid4()
+    isolated_pin = await service.toggle_pin_message(
+        msg.id, workspace_id=other_ws_id, is_pinned=False
+    )
+    assert isolated_pin is None
 
     pinned_list = await service.get_pinned_messages(ws.id)
     assert len(pinned_list) == 1
     assert pinned_list[0].id == msg.id
 
     # Toggle reaction
-    updated = await service.toggle_reaction(msg.id, reaction="👍", user_name="Bob")
+    updated = await service.toggle_reaction(
+        msg.id, workspace_id=ws.id, reaction="👍", user_name="Bob"
+    )
     assert "Bob" in updated.reactions["👍"]
 
+    # Toggle reaction with wrong workspace_id must return None
+    isolated_reaction = await service.toggle_reaction(
+        msg.id, workspace_id=other_ws_id, reaction="👍", user_name="Bob"
+    )
+    assert isolated_reaction is None
+
     # Toggle again to remove
-    updated_again = await service.toggle_reaction(msg.id, reaction="👍", user_name="Bob")
+    updated_again = await service.toggle_reaction(
+        msg.id, workspace_id=ws.id, reaction="👍", user_name="Bob"
+    )
     assert "👍" not in updated_again.reactions or "Bob" not in updated_again.reactions.get("👍", [])
