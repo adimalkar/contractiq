@@ -14,6 +14,9 @@ from termnova.db.models import (
     DocumentRelationship,
     EntityNode,
     QueryLog,
+    Workspace,
+    WorkspaceMember,
+    WorkspaceMessage,
 )
 from termnova.db.repository import ContractRepository
 
@@ -26,6 +29,9 @@ __all__ = [
     "EntityNode",
     "DocumentEntity",
     "DocumentRelationship",
+    "Workspace",
+    "WorkspaceMember",
+    "WorkspaceMessage",
     "ContractRepository",
     "create_async_engine",
     "AsyncSessionFactory",

@@ -106,6 +106,10 @@ function switchView(viewName) {
       breadcrumb: 'Contract Studio',
       title: 'Contract Analysis & Q&A',
     },
+    workspace: {
+      breadcrumb: 'Team Workspace',
+      title: 'Collaborative RAG & Shared Deal Rooms',
+    },
     graph: {
       breadcrumb: 'Document Map',
       title: 'Contract Knowledge Graph & Topology',
@@ -131,7 +135,9 @@ function switchView(viewName) {
   if (titleEl) titleEl.textContent = info.title;
 
   // Trigger view-specific data refresh
-  if (viewName === 'graph' && window.initGraphView) {
+  if (viewName === 'workspace' && window.WorkspaceApp) {
+    window.WorkspaceApp.init();
+  } else if (viewName === 'graph' && window.initGraphView) {
     window.initGraphView();
   } else if (viewName === 'documents' && window.loadDocumentsList) {
     window.loadDocumentsList();
@@ -281,4 +287,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial health check & stats
   checkSystemHealth();
   updateVaultStats();
+
+  // Support URL hash routing (e.g., #workspace, #graph, #compare, #documents, #analytics)
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const hashViewMap = {
+    workspace: 'workspace',
+    team: 'workspace',
+    map: 'graph',
+    graph: 'graph',
+    diff: 'compare',
+    compare: 'compare',
+    vault: 'documents',
+    documents: 'documents',
+    analytics: 'analytics',
+    chat: 'chat',
+  };
+  if (hash && hashViewMap[hash]) {
+    switchView(hashViewMap[hash]);
+  }
 });

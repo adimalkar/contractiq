@@ -73,11 +73,16 @@ class HybridRetriever:
         query: str,
         top_k: int | None = None,
         threshold: float | None = None,
+        document_ids: list[uuid.UUID] | None = None,
     ) -> list[RetrievedChunk]:
-        """Execute hybrid search and merge rankings with Reciprocal Rank Fusion."""
+        """Execute hybrid search and merge rankings with Reciprocal Rank Fusion, optionally scoped to document_ids."""
         k = top_k or self.settings.TOP_K_RETRIEVAL
         thresh = threshold if threshold is not None else self.settings.RELEVANCE_THRESHOLD
         rrf_k = self.settings.RRF_K
+
+        # If document_ids is an empty list, immediately return empty results
+        if document_ids is not None and len(document_ids) == 0:
+            return []
 
         # 1. Semantic Vector Search
         query_embedding = self.embedder.embed_query(query)
@@ -85,6 +90,7 @@ class HybridRetriever:
             query_embedding,
             top_k=k * 2,
             threshold=-1.0,
+            document_ids=document_ids,
         )
 
         # Build semantic ranking dictionary: chunk_id -> (rank_1_indexed, score, chunk, filename)
@@ -99,7 +105,18 @@ class HybridRetriever:
             }
 
         # 2. BM25 Keyword Search
-        bm25_index, bm25_chunks = await self._ensure_bm25_index()
+        if document_ids is not None:
+            # Dynamically build BM25 over scoped chunks
+            scoped_chunks = await self.repository.get_all_chunks(document_ids=document_ids)
+            if scoped_chunks:
+                corpus = [_simple_tokenize(chunk.content) for chunk, _ in scoped_chunks]
+                bm25_index = BM25Okapi(corpus, k1=self.settings.BM25_K1, b=self.settings.BM25_B)
+                bm25_chunks = scoped_chunks
+            else:
+                bm25_index, bm25_chunks = None, []
+        else:
+            bm25_index, bm25_chunks = await self._ensure_bm25_index()
+
         bm25_ranks: dict[uuid.UUID, dict[str, Any]] = {}
 
         if bm25_index is not None and bm25_chunks:

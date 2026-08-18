@@ -18,6 +18,9 @@ from termnova.db.models import (  # noqa: F401
     DocumentRelationship,
     EntityNode,
     QueryLog,
+    Workspace,
+    WorkspaceMember,
+    WorkspaceMessage,
 )
 from termnova.pipeline import ChunkData, PageContent, ProcessedDocument, Section
 from termnova.pipeline.embedder import EmbeddingService
@@ -167,6 +170,9 @@ async def api_client(
     test_settings: Settings, test_engine: AsyncEngine
 ) -> AsyncGenerator[AsyncClient, None]:
     """Provide async HTTP client bound to the test FastAPI application."""
+    from termnova.db.connection import init_db
+
+    await init_db(test_settings)
     app = create_app(test_settings)
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:

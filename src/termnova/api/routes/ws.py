@@ -70,20 +70,62 @@ async def websocket_query_endpoint(websocket: WebSocket):
 
 @router.websocket("/ws/notifications")
 async def websocket_notifications_endpoint(websocket: WebSocket):
-    """Push notifications channel for ingestion and system events."""
+    """Push notifications and collaborative workspace channel."""
     client_id = f"notif_{uuid.uuid4().hex[:8]}"
     await ws_manager.connect(websocket, client_id)
 
     try:
         await ws_manager.send_personal_message(
-            {"event": "connected", "message": "Subscribed to Termnova push notifications"},
+            {
+                "event": "connected",
+                "client_id": client_id,
+                "message": "Subscribed to Termnova real-time events",
+            },
             client_id,
         )
         while True:
-            # Keep connection open waiting for client ping/messages
-            data = await websocket.receive_text()
-            if data == "ping":
+            raw_text = await websocket.receive_text()
+            if raw_text == "ping":
                 await websocket.send_text("pong")
+                continue
+
+            try:
+                msg = json.loads(raw_text)
+                action = msg.get("action")
+
+                if action == "join_workspace":
+                    ws_id = msg.get("workspace_id")
+                    if ws_id:
+                        await ws_manager.join_channel(client_id, str(ws_id))
+                        await ws_manager.send_personal_message(
+                            {"event": "workspace_joined", "workspace_id": str(ws_id)},
+                            client_id,
+                        )
+
+                elif action == "leave_workspace":
+                    ws_id = msg.get("workspace_id")
+                    if ws_id:
+                        await ws_manager.leave_channel(client_id, str(ws_id))
+                        await ws_manager.send_personal_message(
+                            {"event": "workspace_left", "workspace_id": str(ws_id)},
+                            client_id,
+                        )
+
+                elif action == "typing":
+                    ws_id = msg.get("workspace_id")
+                    user_name = msg.get("user_name", "Team Member")
+                    if ws_id:
+                        await ws_manager.broadcast_to_channel(
+                            str(ws_id),
+                            {
+                                "event": "user_typing",
+                                "data": {"workspace_id": str(ws_id), "user_name": user_name},
+                            },
+                        )
+
+            except Exception as e:
+                logger.debug("Error processing WebSocket notification payload", error=str(e))
+
     except WebSocketDisconnect:
         ws_manager.disconnect(client_id)
         logger.info("WebSocket notifications client disconnected", client_id=client_id)
