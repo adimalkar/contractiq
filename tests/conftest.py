@@ -9,7 +9,16 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from termnova.api.main import create_app
 from termnova.config import Settings
 from termnova.db.connection import _create_async_engine
-from termnova.db.models import Base
+from termnova.db.models import (
+    Base,
+    Chunk,
+    Conversation,
+    Document,
+    DocumentEntity,
+    DocumentRelationship,
+    EntityNode,
+    QueryLog,
+)
 from termnova.pipeline import ChunkData, PageContent, ProcessedDocument, Section
 from termnova.pipeline.embedder import EmbeddingService
 
