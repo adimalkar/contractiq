@@ -141,20 +141,24 @@ class GraphBuilder:
         # Example: SOW referencing MSA
         for target_doc in other_docs:
             target_fn = target_doc.filename.lower()
+            target_stem = target_fn.rsplit(".", 1)[0]
             target_type = (target_doc.metadata_ or {}).get("contract_type", "other")
 
-            # Check if current is amendment to target
-            if "amendment" in doc_fn and (
-                target_fn.split(".")[0] in doc_fn or target_type in ["msa", "lease"]
-            ):
-                rel = await self._add_relationship_if_missing(
-                    source_id=doc.id,
-                    target_id=target_doc.id,
-                    rel_type="amends",
-                    metadata={"auto_detected": True, "rule": "filename_amendment_match"},
+            # Check if current is amendment to target (requires filename stem match or shared counterparties)
+            if "amendment" in doc_fn:
+                stem_match = len(target_stem) > 3 and target_stem in doc_fn
+                shared_parties = target_type in ["msa", "lease"] and await self._share_parties(
+                    doc.id, target_doc.id
                 )
-                if rel:
-                    created_relationships.append(rel)
+                if stem_match or shared_parties:
+                    rel = await self._add_relationship_if_missing(
+                        source_id=doc.id,
+                        target_id=target_doc.id,
+                        rel_type="amends",
+                        metadata={"auto_detected": True, "rule": "amendment_match"},
+                    )
+                    if rel:
+                        created_relationships.append(rel)
 
             # Check if current is SOW belonging to parent MSA
             elif doc_type == "sow" and target_type == "msa":
@@ -172,9 +176,25 @@ class GraphBuilder:
         return created_relationships
 
     async def _share_parties(self, doc_a_id: uuid.UUID, doc_b_id: uuid.UUID) -> bool:
-        """Check if two documents share at least one counterparty entity."""
-        stmt_a = select(DocumentEntity.entity_id).where(DocumentEntity.document_id == doc_a_id)
-        stmt_b = select(DocumentEntity.entity_id).where(DocumentEntity.document_id == doc_b_id)
+        """Check if two documents share at least one actual counterparty (excluding governing jurisdictions)."""
+        stmt_a = (
+            select(DocumentEntity.entity_id)
+            .join(EntityNode, DocumentEntity.entity_id == EntityNode.id)
+            .where(
+                DocumentEntity.document_id == doc_a_id,
+                DocumentEntity.role != "governing_jurisdiction",
+                EntityNode.entity_type != "jurisdiction",
+            )
+        )
+        stmt_b = (
+            select(DocumentEntity.entity_id)
+            .join(EntityNode, DocumentEntity.entity_id == EntityNode.id)
+            .where(
+                DocumentEntity.document_id == doc_b_id,
+                DocumentEntity.role != "governing_jurisdiction",
+                EntityNode.entity_type != "jurisdiction",
+            )
+        )
         res_a = set((await self.session.execute(stmt_a)).scalars().all())
         res_b = set((await self.session.execute(stmt_b)).scalars().all())
         return len(res_a.intersection(res_b)) > 0

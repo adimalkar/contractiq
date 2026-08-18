@@ -17,16 +17,32 @@ let graphState = {
   zoom: null,
 };
 
+// ──── Utility: HTML Escaping for XSS Prevention ────
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // ──── Initialize Graph Component ────
+let isToolbarInitialized = false;
+
 async function initGraphView() {
   const container = document.getElementById('graph-canvas-container');
   if (!container) return;
 
-  setupGraphToolbar();
+  if (!isToolbarInitialized) {
+    setupGraphToolbar();
+    isToolbarInitialized = true;
+  }
   await loadGraphData();
 }
 
-// ──── Toolbar & Filter Event Listeners ────
+// ──── Persistent Toolbar & Filter Event Listeners ────
 function setupGraphToolbar() {
   // View mode switcher
   const btnGraphMode = document.getElementById('btn-mode-graph');
@@ -83,7 +99,21 @@ function setupGraphToolbar() {
     });
   }
 
-  // Zoom buttons
+  // Export SVG
+  const btnExport = document.getElementById('btn-export-graph-svg');
+  if (btnExport) {
+    btnExport.addEventListener('click', exportGraphSVG);
+  }
+
+  // Close drawer
+  const btnCloseDrawer = document.getElementById('btn-close-graph-drawer');
+  if (btnCloseDrawer) {
+    btnCloseDrawer.addEventListener('click', closeGraphDrawer);
+  }
+}
+
+// ──── Floating Canvas Zoom Controls (Rebound on Canvas Re-render) ────
+function setupFloatingControls() {
   const btnZoomIn = document.getElementById('btn-graph-zoom-in');
   const btnZoomOut = document.getElementById('btn-graph-zoom-out');
   const btnZoomReset = document.getElementById('btn-graph-zoom-reset');
@@ -110,18 +140,6 @@ function setupGraphToolbar() {
         graphState.svg.transition().duration(400).call(graphState.zoom.transform, d3.zoomIdentity);
       }
     });
-  }
-
-  // Export SVG
-  const btnExport = document.getElementById('btn-export-graph-svg');
-  if (btnExport) {
-    btnExport.addEventListener('click', exportGraphSVG);
-  }
-
-  // Close drawer
-  const btnCloseDrawer = document.getElementById('btn-close-graph-drawer');
-  if (btnCloseDrawer) {
-    btnCloseDrawer.addEventListener('click', closeGraphDrawer);
   }
 }
 
@@ -171,8 +189,8 @@ function renderD3ForceGraph(data) {
     </div>
   `;
 
-  // Re-bind floating controls
-  setupGraphToolbar();
+  // Re-bind only floating controls
+  setupFloatingControls();
 
   const svg = d3.select('#graph-svg')
     .attr('width', '100%')
@@ -446,15 +464,22 @@ function renderDocumentStackView(stackData, container) {
   const root = stackData.stack;
   if (!root) return;
 
+  const rootFilenameEsc = escapeHtml(root.filename);
+  const rootTitleEsc = escapeHtml(root.title || root.filename);
+  const rootContractTypeEsc = escapeHtml((root.contract_type || 'msa').toLowerCase());
+  const rootEffDateEsc = escapeHtml(root.effective_date || 'N/A');
+  const rootExpDateEsc = escapeHtml(root.expiration_date || 'N/A');
+  const rootPartiesEsc = escapeHtml((root.parties || []).join(', ') || 'N/A');
+
   container.innerHTML = `
     <div class="stack-view-container">
       <div class="stack-tree-wrapper">
         <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff;">Document Stack: ${root.filename}</h3>
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff;">Document Stack: ${rootFilenameEsc}</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted);">${stackData.total_descendants} Linked Agreements • Total Value: ${stackData.total_value_usd ? `$${stackData.total_value_usd.toLocaleString()}` : 'N/A'}</p>
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="loadGraphData('${root.document_id}')">
+          <button class="btn btn-secondary btn-sm" onclick="loadGraphData('${encodeURIComponent(root.document_id)}')">
             <span>Center Force Graph</span>
           </button>
         </div>
@@ -462,13 +487,13 @@ function renderDocumentStackView(stackData, container) {
         <!-- Root Card -->
         <div class="stack-card root-card">
           <div class="stack-card-header">
-            <span class="type-tag tag-${root.contract_type || 'msa'}">${(root.contract_type || 'MSA').toUpperCase()}</span>
-            <span class="stack-card-title">${root.title || root.filename}</span>
+            <span class="type-tag tag-${rootContractTypeEsc}">${rootContractTypeEsc.toUpperCase()}</span>
+            <span class="stack-card-title">${rootTitleEsc}</span>
           </div>
           <div class="stack-card-meta">
-            <span>Effective: ${root.effective_date || 'N/A'}</span>
-            <span>Expiration: ${root.expiration_date || 'N/A'}</span>
-            <span>Parties: ${root.parties.join(', ') || 'N/A'}</span>
+            <span>Effective: ${rootEffDateEsc}</span>
+            <span>Expiration: ${rootExpDateEsc}</span>
+            <span>Parties: ${rootPartiesEsc}</span>
           </div>
         </div>
 
@@ -478,19 +503,26 @@ function renderDocumentStackView(stackData, container) {
             root.children && root.children.length > 0
               ? root.children
                   .map(
-                    (child) => `
+                    (child) => {
+                      const childTitleEsc = escapeHtml(child.title || child.filename);
+                      const childTypeEsc = escapeHtml((child.contract_type || 'sow').toLowerCase());
+                      const childEffEsc = escapeHtml(child.effective_date || 'N/A');
+                      const childExpEsc = escapeHtml(child.expiration_date || 'N/A');
+                      const childPartiesEsc = escapeHtml((child.parties || []).join(', ') || 'N/A');
+                      return `
                 <div class="stack-card child-card">
                   <div class="stack-card-header">
-                    <span class="type-tag tag-${child.contract_type || 'sow'}">${(child.contract_type || 'SOW').toUpperCase()}</span>
-                    <span class="stack-card-title">${child.title || child.filename}</span>
+                    <span class="type-tag tag-${childTypeEsc}">${childTypeEsc.toUpperCase()}</span>
+                    <span class="stack-card-title">${childTitleEsc}</span>
                   </div>
                   <div class="stack-card-meta">
-                    <span>Effective: ${child.effective_date || 'N/A'}</span>
-                    <span>Expiration: ${child.expiration_date || 'N/A'}</span>
-                    <span>Parties: ${child.parties.join(', ') || 'N/A'}</span>
+                    <span>Effective: ${childEffEsc}</span>
+                    <span>Expiration: ${childExpEsc}</span>
+                    <span>Parties: ${childPartiesEsc}</span>
                   </div>
                 </div>
-              `
+              `;
+                    }
                   )
                   .join('')
               : '<div class="text-muted" style="margin-left: 36px; font-size: 0.82rem;">No child SOWs or Amendments linked to this agreement yet.</div>'
