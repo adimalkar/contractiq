@@ -110,6 +110,10 @@ function switchView(viewName) {
       breadcrumb: 'Team Workspace',
       title: 'Collaborative RAG & Shared Deal Rooms',
     },
+    inbox: {
+      breadcrumb: 'Contract Inbox',
+      title: 'Automated Contract Intake & Triage Pipeline',
+    },
     graph: {
       breadcrumb: 'Document Map',
       title: 'Contract Knowledge Graph & Topology',
@@ -137,6 +141,8 @@ function switchView(viewName) {
   // Trigger view-specific data refresh
   if (viewName === 'workspace' && window.WorkspaceApp) {
     window.WorkspaceApp.init();
+  } else if (viewName === 'inbox' && window.inboxApp) {
+    window.inboxApp.loadData();
   } else if (viewName === 'graph' && window.initGraphView) {
     window.initGraphView();
   } else if (viewName === 'documents' && window.loadDocumentsList) {

@@ -18,6 +18,8 @@ from termnova.db.models import (  # noqa: F401
     DocumentRelationship,
     EntityNode,
     QueryLog,
+    TriageResult,
+    TriageRule,
     Workspace,
     WorkspaceMember,
     WorkspaceMessage,

@@ -543,3 +543,130 @@ class WorkspaceMessage(Base):
         return (
             f"<WorkspaceMessage(id={self.id}, type='{self.message_type}', user='{self.user_name}')>"
         )
+
+
+class TriageResult(Base):
+    """AI-powered classification, urgency scoring, and routing result for an incoming contract."""
+
+    __tablename__ = "triage_results"
+    __table_args__ = (UniqueConstraint("document_id", name="uq_triage_per_document"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    organization_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
+
+    # Classification
+    contract_type_detected: Mapped[str] = mapped_column(String(50), nullable=False)
+    type_confidence: Mapped[float] = mapped_column(Float, default=1.0, nullable=False)
+
+    # Urgency
+    urgency_score: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    urgency_factors: Mapped[dict[str, Any]] = mapped_column(
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )
+
+    # Summary
+    summary_bullets: Mapped[list[str]] = mapped_column(
+        JSONB,
+        default=list,
+        server_default="[]",
+        nullable=False,
+    )
+    action_required: Mapped[str] = mapped_column(Text, default="Standard review", nullable=False)
+
+    # Routing & Tags
+    suggested_assignee: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    auto_tags: Mapped[list[str]] = mapped_column(
+        JSONB,
+        default=list,
+        server_default="[]",
+        nullable=False,
+    )
+
+    # Status tracking
+    inbox_status: Mapped[str] = mapped_column(
+        String(20), default="unreviewed", nullable=False
+    )  # unreviewed, in_progress, assigned, completed, archived
+    assigned_to: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    acknowledged_by: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    acknowledged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    triaged_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    document: Mapped["Document"] = relationship("Document", lazy="joined")
+
+    def __repr__(self) -> str:
+        return f"<TriageResult(doc={self.document_id}, type='{self.contract_type_detected}', urgency={self.urgency_score}, status='{self.inbox_status}')>"
+
+
+class TriageRule(Base):
+    """Organization-configurable routing rules evaluated against triage results."""
+
+    __tablename__ = "triage_rules"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    organization_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    condition: Mapped[dict[str, Any]] = mapped_column(
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )
+    action: Mapped[dict[str, Any]] = mapped_column(
+        JSONB,
+        default=dict,
+        server_default="{}",
+        nullable=False,
+    )
+    priority: Mapped[int] = mapped_column(Integer, default=100, nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    def __repr__(self) -> str:
+        return f"<TriageRule(id={self.id}, name='{self.name}', priority={self.priority}, active={self.is_active})>"
