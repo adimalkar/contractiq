@@ -17,7 +17,9 @@ from termnova.api.routes import (
     documents_router,
     graph_router,
     health_router,
+    inbox_router,
     query_router,
+    triage_rules_router,
     workspaces_router,
 )
 from termnova.api.routes.compare import router as compare_router
@@ -80,6 +82,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health_router)
     app.include_router(query_router)
     app.include_router(documents_router)
+    app.include_router(inbox_router)
+    app.include_router(triage_rules_router)
     app.include_router(graph_router)
     app.include_router(workspaces_router)
     app.include_router(analytics_router)

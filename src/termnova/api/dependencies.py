@@ -28,6 +28,7 @@ def get_embedder_service(settings: Settings = Depends(get_settings)) -> Embeddin
 # Alias for dependency injection
 get_embedder = get_embedder_service
 get_db = get_db_session
+get_settings_dep = get_settings
 
 
 async def get_repository(session: AsyncSession = Depends(get_db_session)) -> ContractRepository:

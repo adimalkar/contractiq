@@ -126,6 +126,24 @@ class IngestionPipeline:
                     error=str(graph_err),
                 )
 
+            # Automatically run contract classification, urgency scoring, and triage routing
+            try:
+                from termnova.triage.orchestrator import TriageOrchestrator
+
+                full_text = " ".join([c.content for c in chunks[:10]])
+                triage_orchestrator = TriageOrchestrator(self.session, self.settings)
+                await triage_orchestrator.triage_document(
+                    document_id=doc.id,
+                    document_text=full_text,
+                    filename=doc.filename,
+                )
+            except Exception as triage_err:
+                logger.warning(
+                    "Triage classification non-fatal warning",
+                    filename=path.name,
+                    error=str(triage_err),
+                )
+
             await self.session.commit()
             logger.info(
                 "Document successfully ingested", filename=path.name, chunks=len(chunk_records)
