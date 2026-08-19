@@ -68,6 +68,15 @@ async def test_engine(test_settings: Settings) -> AsyncGenerator[AsyncEngine, No
     await engine.dispose()
 
 
+@pytest.fixture(autouse=True)
+async def clean_db_tables(test_engine: AsyncEngine) -> AsyncGenerator[None, None]:
+    """Ensure clean table state for every test to guarantee test isolation."""
+    async with test_engine.begin() as conn:
+        for table in reversed(Base.metadata.sorted_tables):
+            await conn.execute(table.delete())
+    yield
+
+
 @pytest.fixture
 async def test_session(test_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
     """Yield an isolated transaction per test."""

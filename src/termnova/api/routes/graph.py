@@ -7,7 +7,7 @@ import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from termnova.api.dependencies import get_db_session, get_settings
+from termnova.api.dependencies import get_db, get_settings
 from termnova.config import Settings
 from termnova.db.models import Document
 from termnova.graph.builder import GraphBuilder
@@ -32,7 +32,7 @@ async def visualize_graph(
     include_entities: bool = Query(
         True, description="Include extracted parties and jurisdictions as graph nodes"
     ),
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> GraphData:
     """Fetch D3.js force-directed graph dataset (nodes and relationship edges)."""
@@ -47,7 +47,7 @@ async def visualize_graph(
 @router.get("/stack/{doc_id}", response_model=DocumentStack)
 async def get_document_stack_view(
     doc_id: uuid.UUID,
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> DocumentStack:
     """Fetch hierarchical contract stack tree (e.g. MSA -> SOWs -> Amendments)."""
@@ -61,7 +61,7 @@ async def get_document_stack_view(
 @router.get("/documents/{doc_id}/relationships", response_model=list[DocumentRelationshipResponse])
 async def get_document_relationships(
     doc_id: uuid.UUID,
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> list[DocumentRelationshipResponse]:
     """Retrieve all direct cross-contract relationships connected to a document."""
@@ -83,7 +83,7 @@ async def list_graph_entities(
     search: str | None = Query(None, description="Fuzzy search entity name"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> EntityListResponse:
     """List extracted legal entities with associated contract counts."""
@@ -103,7 +103,7 @@ async def list_graph_entities(
 )
 async def create_contract_relationship(
     request: CreateRelationshipRequest,
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> DocumentRelationshipResponse:
     """Manually link two contracts with a directed relationship."""
@@ -139,7 +139,7 @@ async def create_contract_relationship(
 @router.delete("/relationships/{rel_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_contract_relationship(
     rel_id: uuid.UUID,
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> None:
     """Delete a contract relationship edge."""
@@ -153,7 +153,7 @@ async def delete_contract_relationship(
 @router.post("/auto-detect/{doc_id}")
 async def auto_detect_document_graph(
     doc_id: uuid.UUID,
-    session: AsyncSession = Depends(get_db_session),
+    session: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> dict[str, Any]:
     """Trigger AI extraction and relationship detection scan on a document."""

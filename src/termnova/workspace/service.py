@@ -64,7 +64,7 @@ class WorkspaceService:
     async def list_workspaces(
         self, user_name: str | None = None, include_archived: bool = False
     ) -> list[dict[str, Any]]:
-        """List all active workspaces with member counts, document counts, and message counts."""
+        """List all active workspaces with member counts, document counts, message counts, and unread counts."""
         stmt = select(Workspace)
         if not include_archived:
             stmt = stmt.where(Workspace.is_archived.is_(False))
@@ -85,15 +85,46 @@ class WorkspaceService:
             member_count = (await self.session.execute(m_count_stmt)).scalar() or 0
             message_count = (await self.session.execute(msg_count_stmt)).scalar() or 0
 
+            # Compute unread count for user_name if member
+            unread_count = 0
+            if user_name:
+                member_stmt = select(WorkspaceMember.last_read_at).where(
+                    WorkspaceMember.workspace_id == ws.id,
+                    WorkspaceMember.user_name == user_name,
+                )
+                last_read = (await self.session.execute(member_stmt)).scalar()
+                if last_read is not None:
+                    unread_stmt = select(func.count(WorkspaceMessage.id)).where(
+                        WorkspaceMessage.workspace_id == ws.id,
+                        WorkspaceMessage.created_at > last_read,
+                    )
+                    unread_count = (await self.session.execute(unread_stmt)).scalar() or 0
+                else:
+                    unread_count = message_count
+
             output.append(
                 {
                     "workspace": ws,
                     "member_count": member_count,
                     "message_count": message_count,
                     "document_count": len(ws.document_scope or []),
+                    "unread_count": unread_count,
                 }
             )
         return output
+
+    async def mark_workspace_read(self, workspace_id: uuid.UUID, user_name: str) -> None:
+        """Update last_read_at timestamp for a workspace member."""
+        stmt = (
+            update(WorkspaceMember)
+            .where(
+                WorkspaceMember.workspace_id == workspace_id,
+                WorkspaceMember.user_name == user_name,
+            )
+            .values(last_read_at=func.now())
+        )
+        await self.session.execute(stmt)
+        await self.session.commit()
 
     async def update_workspace(
         self,
@@ -256,13 +287,13 @@ class WorkspaceService:
         limit: int = 50,
         parent_id: uuid.UUID | None = None,
     ) -> list[WorkspaceMessage]:
-        """Fetch workspace message history."""
+        """Fetch workspace message history. By default, returns main thread messages."""
         stmt = select(WorkspaceMessage).where(WorkspaceMessage.workspace_id == workspace_id)
         if parent_id is not None:
             stmt = stmt.where(WorkspaceMessage.parent_message_id == parent_id)
         else:
-            # Main thread by default or all if parent_id is None
-            pass
+            # Main thread by default only returns root messages (parent_message_id is None)
+            stmt = stmt.where(WorkspaceMessage.parent_message_id.is_(None))
 
         stmt = stmt.order_by(WorkspaceMessage.created_at.asc()).limit(limit)
         result = await self.session.execute(stmt)

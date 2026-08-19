@@ -261,10 +261,18 @@ class EntityExtractor:
             entity = result.scalars().first()
 
             if not entity:
-                # Fuzzy check existing entities of same type
-                all_stmt = select(EntityNode).where(EntityNode.entity_type == party.entity_type)
-                all_res = await session.execute(all_stmt)
-                for candidate in all_res.scalars().all():
+                # Optimized candidate search: search by token prefix or substring instead of unbounded full table scan
+                tokens = [t for t in norm_name.split() if len(t) >= 3]
+                candidate_stmt = select(EntityNode).where(
+                    EntityNode.entity_type == party.entity_type
+                )
+                if tokens:
+                    candidate_stmt = candidate_stmt.where(
+                        EntityNode.normalized_name.ilike(f"%{tokens[0]}%")
+                    )
+                candidate_stmt = candidate_stmt.limit(25)
+                candidate_res = await session.execute(candidate_stmt)
+                for candidate in candidate_res.scalars().all():
                     if self.is_fuzzy_match(candidate.name, party.name):
                         entity = candidate
                         if party.name not in entity.aliases:

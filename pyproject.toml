@@ -20,6 +20,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
     # Async database & ORM
     "sqlalchemy>=2.0.28",
+    "alembic>=1.13.0",
     "asyncpg>=0.29.0",
     "psycopg[binary,pool]>=3.1.18",
     "pgvector>=0.3.0",

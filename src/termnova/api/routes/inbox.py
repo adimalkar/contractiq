@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from termnova.api.dependencies import get_db, get_settings_dep
+from termnova.api.ws_manager import ws_manager
 from termnova.config import Settings
 from termnova.db.models import Chunk, Document
 from termnova.triage.orchestrator import TriageOrchestrator
@@ -107,7 +108,9 @@ async def assign_contract(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Document {doc_id} not found in triage inbox",
         )
-    return TriageResultResponse.model_validate(triage)
+    resp = TriageResultResponse.model_validate(triage)
+    await ws_manager.broadcast({"event": "contract_assigned", "data": resp.model_dump(mode="json")})
+    return resp
 
 
 @router.post("/{doc_id}/acknowledge", response_model=TriageResultResponse)
@@ -124,7 +127,11 @@ async def acknowledge_contract(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Document {doc_id} not found in triage inbox",
         )
-    return TriageResultResponse.model_validate(triage)
+    resp = TriageResultResponse.model_validate(triage)
+    await ws_manager.broadcast(
+        {"event": "contract_acknowledged", "data": resp.model_dump(mode="json")}
+    )
+    return resp
 
 
 @router.post("/{doc_id}/complete", response_model=TriageResultResponse)
@@ -141,7 +148,11 @@ async def complete_contract(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Document {doc_id} not found in triage inbox",
         )
-    return TriageResultResponse.model_validate(triage)
+    resp = TriageResultResponse.model_validate(triage)
+    await ws_manager.broadcast(
+        {"event": "contract_completed", "data": resp.model_dump(mode="json")}
+    )
+    return resp
 
 
 @router.post("/{doc_id}/archive", response_model=TriageResultResponse)
@@ -157,7 +168,9 @@ async def archive_contract(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Document {doc_id} not found in triage inbox",
         )
-    return TriageResultResponse.model_validate(triage)
+    resp = TriageResultResponse.model_validate(triage)
+    await ws_manager.broadcast({"event": "contract_archived", "data": resp.model_dump(mode="json")})
+    return resp
 
 
 @router.patch("/{doc_id}/tags", response_model=TriageResultResponse)
@@ -176,7 +189,11 @@ async def modify_contract_tags(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Document {doc_id} not found in triage inbox",
         )
-    return TriageResultResponse.model_validate(triage)
+    resp = TriageResultResponse.model_validate(triage)
+    await ws_manager.broadcast(
+        {"event": "contract_tags_updated", "data": resp.model_dump(mode="json")}
+    )
+    return resp
 
 
 @router.post("/bulk-assign")
@@ -187,7 +204,18 @@ async def bulk_assign_contracts(
     """Bulk assign multiple contracts to a reviewer."""
     service = InboxService(db)
     count = await service.bulk_assign(payload.document_ids, assigned_to=payload.assigned_to)
-    return {"updated_count": count, "assigned_to": payload.assigned_to}
+    result = {"updated_count": count, "assigned_to": payload.assigned_to}
+    await ws_manager.broadcast(
+        {
+            "event": "contracts_bulk_assigned",
+            "data": {
+                "document_ids": [str(d) for d in payload.document_ids],
+                "assigned_to": payload.assigned_to,
+                "updated_count": count,
+            },
+        }
+    )
+    return result
 
 
 @router.post("/bulk-archive")
@@ -198,7 +226,17 @@ async def bulk_archive_contracts(
     """Bulk archive multiple contracts."""
     service = InboxService(db)
     count = await service.bulk_archive(payload.document_ids)
-    return {"archived_count": count}
+    result = {"archived_count": count}
+    await ws_manager.broadcast(
+        {
+            "event": "contracts_bulk_archived",
+            "data": {
+                "document_ids": [str(d) for d in payload.document_ids],
+                "archived_count": count,
+            },
+        }
+    )
+    return result
 
 
 @router.post("/{doc_id}/retriage", response_model=TriageResultResponse)
