@@ -326,26 +326,20 @@ async def upload_negotiation_version(
         import re
         from pathlib import Path
 
-        from termnova.db.connection import AsyncSessionFactory
         from termnova.pipeline.embedder import EmbeddingService
         from termnova.pipeline.ingestion import IngestionPipeline
 
         file_bytes = await file.read()
         raw_filename = Path(file.filename).name
         safe_filename = re.sub(r"[^a-zA-Z0-9._-]", "_", raw_filename)
-        upload_dir = Path("./data/uploads")
-        upload_dir.mkdir(parents=True, exist_ok=True)
-        file_path = upload_dir / f"{uuid.uuid4().hex[:8]}_{safe_filename}"
-        file_path.write_bytes(file_bytes)
+        dest_path = settings.upload_path / f"{uuid.uuid4().hex[:8]}_{safe_filename}"
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
+        dest_path.write_bytes(file_bytes)
 
-        factory = AsyncSessionFactory()
-        async with factory() as ingest_session:
-            embedder = EmbeddingService(settings)
-            pipeline = IngestionPipeline(
-                session=ingest_session, embedder=embedder, settings=settings
-            )
-            doc = await pipeline.ingest_file(file_path, force_reindex=True)
-            target_doc_id = doc.id
+        embedder = EmbeddingService(settings)
+        pipeline = IngestionPipeline(session=db, embedder=embedder, settings=settings)
+        doc = await pipeline.ingest_file(dest_path, force_reindex=True)
+        target_doc_id = doc.id
 
     if not target_doc_id:
         raise HTTPException(
