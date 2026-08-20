@@ -70,7 +70,7 @@ class IngestionPipeline:
             file_size_bytes=file_size,
             file_hash=file_hash,
         )
-        await self.session.commit()
+        await self.session.flush()
 
         try:
             logger.info("Parsing document structure", filename=path.name)
@@ -144,7 +144,7 @@ class IngestionPipeline:
                     error=str(triage_err),
                 )
 
-            await self.session.commit()
+            await self.session.flush()
             logger.info(
                 "Document successfully ingested", filename=path.name, chunks=len(chunk_records)
             )
@@ -157,7 +157,7 @@ class IngestionPipeline:
                 status="failed",
                 error_message=str(exc),
             )
-            await self.session.commit()
+            await self.session.flush()
             raise exc
 
     async def ingest_directory(
