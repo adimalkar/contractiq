@@ -143,6 +143,10 @@ function switchView(viewName) {
       breadcrumb: 'Clause Diff',
       title: 'Clause Redline & Side-by-Side Diff',
     },
+    negotiations: {
+      breadcrumb: 'Negotiations',
+      title: 'Negotiation Playbook & Version Redline Diff Tracker',
+    },
     documents: {
       breadcrumb: 'Document Vault',
       title: 'Document Repository & Vector Chunks',
@@ -166,6 +170,8 @@ function switchView(viewName) {
     window.WorkspaceApp.init();
   } else if (viewName === 'inbox' && window.inboxApp) {
     window.inboxApp.loadData();
+  } else if (viewName === 'negotiations' && window.NegotiationModule) {
+    window.NegotiationModule.loadTracks();
   } else if (viewName === 'graph' && window.initGraphView) {
     window.initGraphView();
   } else if (viewName === 'documents' && window.loadDocumentsList) {

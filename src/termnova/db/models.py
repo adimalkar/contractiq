@@ -670,3 +670,165 @@ class TriageRule(Base):
 
     def __repr__(self) -> str:
         return f"<TriageRule(id={self.id}, name='{self.name}', priority={self.priority}, active={self.is_active})>"
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Feature 4: Negotiation Playbook & Version Redline Diff Tracker
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+class NegotiationTrack(Base):
+    """Groups multiple versions and redline rounds of a contract negotiation."""
+
+    __tablename__ = "negotiation_tracks"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    organization_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
+    name: Mapped[str] = mapped_column(String(500), nullable=False)
+    counterparty: Mapped[str] = mapped_column(String(500), nullable=False)
+    contract_type: Mapped[str] = mapped_column(String(50), default="other", nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(20), default="active", nullable=False
+    )  # active, agreed, abandoned, paused
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    started_by: Mapped[str] = mapped_column(String(100), default="Legal Counsel", nullable=False)
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    versions: Mapped[list["NegotiationVersion"]] = relationship(
+        "NegotiationVersion",
+        back_populates="track",
+        cascade="all, delete-orphan",
+        order_by="NegotiationVersion.version_number",
+    )
+    changes: Mapped[list["NegotiationChange"]] = relationship(
+        "NegotiationChange",
+        back_populates="track",
+        cascade="all, delete-orphan",
+        order_by="NegotiationChange.created_at",
+    )
+
+    def __repr__(self) -> str:
+        return f"<NegotiationTrack(id={self.id}, name='{self.name}', counterparty='{self.counterparty}', status='{self.status}')>"
+
+
+class NegotiationVersion(Base):
+    """Individual round or version in a contract negotiation workflow."""
+
+    __tablename__ = "negotiation_versions"
+    __table_args__ = (UniqueConstraint("track_id", "version_number", name="uq_track_version"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    track_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("negotiation_tracks.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    version_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    source: Mapped[str] = mapped_column(
+        String(20), default="internal", nullable=False
+    )  # internal or counterparty
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)  # 0.0 to 1.0
+    risk_delta: Mapped[float | None] = mapped_column(Float, nullable=True)  # e.g. +0.15
+    uploaded_by: Mapped[str] = mapped_column(String(100), default="Legal Counsel", nullable=False)
+    uploaded_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    track: Mapped["NegotiationTrack"] = relationship("NegotiationTrack", back_populates="versions")
+    document: Mapped["Document"] = relationship("Document", lazy="joined")
+
+    def __repr__(self) -> str:
+        return f"<NegotiationVersion(track={self.track_id}, v={self.version_number}, source='{self.source}', risk={self.risk_score})>"
+
+
+class NegotiationChange(Base):
+    """Tracked clause-level modification and concession classification between versions."""
+
+    __tablename__ = "negotiation_changes"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    track_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("negotiation_tracks.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    from_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    to_version: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # Clause classification
+    clause_category: Mapped[str] = mapped_column(
+        String(50), default="other", nullable=False
+    )  # liability, indemnification, termination, payment, ip, confidentiality, governing_law, other
+    change_type: Mapped[str] = mapped_column(String(20), nullable=False)  # added, removed, modified
+    original_text: Mapped[str] = mapped_column(Text, nullable=False)
+    modified_text: Mapped[str] = mapped_column(Text, nullable=False)
+    diff_html: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Concession intelligence
+    risk_impact: Mapped[str] = mapped_column(
+        String(20), default="neutral", nullable=False
+    )  # increased_risk, decreased_risk, neutral
+    concession_party: Mapped[str | None] = mapped_column(
+        String(20), nullable=True
+    )  # us, counterparty, mutual, neutral
+    concession_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    significance: Mapped[str] = mapped_column(
+        String(10), default="medium", nullable=False
+    )  # low, medium, high, critical
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    track: Mapped["NegotiationTrack"] = relationship("NegotiationTrack", back_populates="changes")
+
+    def __repr__(self) -> str:
+        return f"<NegotiationChange(track={self.track_id}, v{self.from_version}->v{self.to_version}, cat='{self.clause_category}', party='{self.concession_party}')>"

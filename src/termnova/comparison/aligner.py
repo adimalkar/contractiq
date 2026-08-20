@@ -70,7 +70,16 @@ class ClauseAligner:
             if self.embedder:
                 v = np.array(self.embedder.embed_query(c.content), dtype=np.float32)
                 return v / (np.linalg.norm(v) or 1.0)
-            return np.ones(1536, dtype=np.float32)
+
+            import hashlib
+
+            vec = np.zeros(256, dtype=np.float32)
+            words = c.content.lower().split()
+            for w in words:
+                idx = int(hashlib.md5(w.encode("utf-8")).hexdigest(), 16) % 256
+                vec[idx] += 1.0
+            norm = float(np.linalg.norm(vec)) or 1.0
+            return vec / norm
 
         vecs_a = [get_vec(c) for c in chunks_a]
         vecs_b = [get_vec(c) for c in chunks_b]
