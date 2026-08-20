@@ -56,11 +56,16 @@ async def test_html_seo_metadata(api_client: AsyncClient):
     )
     assert 'rel="canonical" href="https://termnova.onrender.com/"' in html
     assert 'property="og:title"' in html
+    assert 'property="og:site_name" content="Termnova"' in html
+    assert 'name="application-name" content="Termnova"' in html
     assert 'name="twitter:card"' in html
     assert "application/ld+json" in html
+    assert '"@type": "WebSite"' in html
+    assert '"name": "Termnova"' in html
     assert '"@type": "WebApplication"' in html
     assert '"@type": "FAQPage"' in html
-    assert "Termnova — Enterprise AI Contract Intelligence" in html
+    assert 'id="mobile-header"' in html
+    assert 'id="btn-mobile-menu"' in html
 
 
 @pytest.mark.integration

@@ -732,3 +732,91 @@
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ──── Mobile & Tablet Responsiveness for Workspace ──── */
+@media screen and (max-width: 1024px) {
+  .workspace-view-container {
+    grid-template-columns: 240px 1fr;
+    height: 100%;
+  }
+
+  .ws-right-panel {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .workspace-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ws-sidebar {
+    height: auto;
+    max-height: 180px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
+
+  .ws-rooms-list {
+    max-height: 120px;
+    overflow-y: auto;
+  }
+
+  .ws-main-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ws-chat-header {
+    padding: 8px 12px;
+  }
+
+  #ws-active-title {
+    font-size: 1rem;
+  }
+
+  #ws-active-desc {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+
+  .ws-messages-feed {
+    padding: 10px;
+    flex: 1;
+  }
+
+  .ws-input-area {
+    padding: 8px 10px;
+  }
+
+  .ws-modal-box {
+    width: 95vw;
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ws-sidebar-header {
+    padding: 8px 10px;
+  }
+
+  .ws-input-mode-toggle {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .ws-mode-pill {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+}

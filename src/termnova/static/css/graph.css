@@ -381,3 +381,72 @@
   font-size: 0.78rem;
   color: var(--text-secondary);
 }
+
+/* ──── Mobile & Tablet Responsiveness for Knowledge Graph ──── */
+@media screen and (max-width: 1024px) {
+  .graph-drawer {
+    width: 100vw;
+    max-width: 100vw;
+    right: -100vw;
+  }
+
+  .graph-drawer.open {
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .graph-toolbar {
+    padding: 8px 12px;
+    gap: 8px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .graph-toolbar-left,
+  .graph-toolbar-right {
+    flex-shrink: 0;
+  }
+
+  .graph-search-input {
+    min-width: 140px;
+    font-size: 0.78rem;
+  }
+
+  .stack-view-container {
+    padding: 12px;
+  }
+
+  .stack-card {
+    padding: 12px 14px;
+  }
+
+  .stack-card.child-card {
+    margin-left: 16px;
+  }
+
+  .stack-card.child-card::before {
+    left: -10px;
+    width: 8px;
+  }
+
+  .node-meta-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .view-mode-btn span {
+    display: none;
+  }
+
+  .view-mode-btn {
+    padding: 6px 8px;
+  }
+
+  .node-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
