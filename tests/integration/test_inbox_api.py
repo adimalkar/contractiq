@@ -53,7 +53,14 @@ async def test_inbox_list_and_stats(api_client: AsyncClient, test_db_session: As
     unreviewed_items = res_status.json()["items"]
     assert all(item["inbox_status"] == "unreviewed" for item in unreviewed_items)
 
-    # 3. GET /api/v1/inbox/stats
+    # 3. Filter by tag
+    res_tag = await api_client.get("/api/v1/inbox/?tag=urgent")
+    assert res_tag.status_code == 200
+    tag_data = res_tag.json()
+    assert tag_data["total_count"] == 1
+    assert tag_data["items"][0]["contract_type"] == "msa"
+
+    # 4. GET /api/v1/inbox/stats
     res_stats = await api_client.get("/api/v1/inbox/stats")
     assert res_stats.status_code == 200
     stats = res_stats.json()

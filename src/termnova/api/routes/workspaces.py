@@ -48,7 +48,7 @@ def _to_workspace_response(
         updated_at=ws.updated_at,
         member_count=counts.get("member_count", 0),
         message_count=counts.get("message_count", 0),
-        unread_count=0,
+        unread_count=counts.get("unread_count", 0),
     )
 
 
@@ -90,11 +90,14 @@ async def create_workspace(
 @router.get("/", response_model=list[WorkspaceResponse])
 async def list_workspaces(
     include_archived: bool = Query(False, description="Include archived rooms"),
+    user_name: str | None = Query(
+        None, description="Optional user name to calculate unread message counts"
+    ),
     session: AsyncSession = Depends(get_db),
 ) -> list[WorkspaceResponse]:
-    """List all active team workspaces with stats."""
+    """List all active team workspaces with stats and unread counts."""
     service = WorkspaceService(session)
-    items = await service.list_workspaces(include_archived=include_archived)
+    items = await service.list_workspaces(user_name=user_name, include_archived=include_archived)
     return [
         _to_workspace_response(
             item["workspace"],
@@ -102,10 +105,25 @@ async def list_workspaces(
                 "member_count": item["member_count"],
                 "message_count": item["message_count"],
                 "document_count": item["document_count"],
+                "unread_count": item.get("unread_count", 0),
             },
         )
         for item in items
     ]
+
+
+@router.post("/{workspace_id}/read", status_code=status.HTTP_204_NO_CONTENT)
+async def mark_workspace_read(
+    workspace_id: uuid.UUID,
+    user_name: str = Query(..., description="User name to mark workspace read for"),
+    session: AsyncSession = Depends(get_db),
+) -> None:
+    """Mark all workspace messages as read for a member."""
+    service = WorkspaceService(session)
+    ws = await service.get_workspace(workspace_id)
+    if not ws:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    await service.mark_workspace_read(workspace_id=workspace_id, user_name=user_name)
 
 
 @router.get("/{workspace_id}", response_model=WorkspaceDetailResponse)

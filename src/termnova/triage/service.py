@@ -3,7 +3,7 @@
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import func, select, update
+from sqlalchemy import String, case, cast, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from termnova.db.models import Document, TriageResult, TriageRule
@@ -49,6 +49,11 @@ class InboxService:
         if contract_type and contract_type.lower() != "all":
             stmt = stmt.where(TriageResult.contract_type_detected == contract_type.lower())
 
+        # Tag filter (SQL level containment for accurate pagination & counts)
+        if tag and tag.strip():
+            clean_tag = tag.strip().lower()
+            stmt = stmt.where(cast(TriageResult.auto_tags, String).ilike(f'%"{clean_tag}"%'))
+
         # Assignee filter
         if assignee:
             if assignee.lower() == "unassigned":
@@ -84,10 +89,6 @@ class InboxService:
 
         items: list[InboxItemResponse] = []
         for t in results:
-            # In-memory tag filter if requested
-            if tag and tag.lower() not in [x.lower() for x in (t.auto_tags or [])]:
-                continue
-
             doc = t.document
             items.append(
                 InboxItemResponse(
@@ -117,48 +118,63 @@ class InboxService:
         return items, total_count, has_more
 
     async def get_inbox_stats(self) -> InboxStatsResponse:
-        """Compute live metric distribution and KPI counts across the inbox."""
-        stmt = select(TriageResult)
-        all_triages = list((await self.session.execute(stmt)).scalars().all())
+        """Compute metric distribution and KPI counts across the inbox via SQL aggregation."""
+        # 1. Total, Status, and Urgency aggregations in a single query
+        stats_stmt = select(
+            func.count(TriageResult.id).label("total_count"),
+            func.count(case((TriageResult.inbox_status == "unreviewed", 1))).label(
+                "unreviewed_count"
+            ),
+            func.count(case((TriageResult.inbox_status == "in_progress", 1))).label(
+                "in_progress_count"
+            ),
+            func.count(case((TriageResult.inbox_status == "assigned", 1))).label("assigned_count"),
+            func.count(case((TriageResult.inbox_status == "completed", 1))).label(
+                "completed_count"
+            ),
+            func.count(case((TriageResult.inbox_status == "archived", 1))).label("archived_count"),
+            func.count(case((TriageResult.urgency_score >= 75, 1))).label("high_urgency_count"),
+            func.count(
+                case(
+                    (
+                        (TriageResult.urgency_score >= 40) & (TriageResult.urgency_score < 75),
+                        1,
+                    )
+                )
+            ).label("medium_urgency_count"),
+            func.count(case((TriageResult.urgency_score < 40, 1))).label("low_urgency_count"),
+        )
+        row = (await self.session.execute(stats_stmt)).one()
 
-        stats = InboxStatsResponse()
-        stats.total_count = len(all_triages)
+        # 2. Type distribution grouped by contract_type_detected
+        type_stmt = select(
+            func.lower(TriageResult.contract_type_detected).label("ctype"),
+            func.count(TriageResult.id),
+        ).group_by(func.lower(TriageResult.contract_type_detected))
+        type_rows = (await self.session.execute(type_stmt)).all()
+        type_counts = {r[0] or "other": r[1] for r in type_rows}
 
-        type_counts: dict[str, int] = {}
+        # 3. Tag distribution (fetch only auto_tags column for lightweight extraction)
+        tag_stmt = select(TriageResult.auto_tags).where(TriageResult.auto_tags.is_not(None))
+        tag_rows = (await self.session.execute(tag_stmt)).scalars().all()
         tag_counts: dict[str, int] = {}
-
-        for t in all_triages:
-            status = t.inbox_status or "unreviewed"
-            if status == "unreviewed":
-                stats.unreviewed_count += 1
-            elif status == "in_progress":
-                stats.in_progress_count += 1
-            elif status == "assigned":
-                stats.assigned_count += 1
-            elif status == "completed":
-                stats.completed_count += 1
-            elif status == "archived":
-                stats.archived_count += 1
-
-            # Urgency buckets
-            if t.urgency_score >= 75:
-                stats.high_urgency_count += 1
-            elif t.urgency_score >= 40:
-                stats.medium_urgency_count += 1
-            else:
-                stats.low_urgency_count += 1
-
-            # Type distribution
-            ctype = (t.contract_type_detected or "other").lower()
-            type_counts[ctype] = type_counts.get(ctype, 0) + 1
-
-            # Tag distribution
-            for tag_item in t.auto_tags or []:
+        for tags in tag_rows:
+            for tag_item in tags or []:
                 tag_counts[tag_item] = tag_counts.get(tag_item, 0) + 1
 
-        stats.type_distribution = type_counts
-        stats.tag_distribution = tag_counts
-        return stats
+        return InboxStatsResponse(
+            total_count=row.total_count or 0,
+            unreviewed_count=row.unreviewed_count or 0,
+            in_progress_count=row.in_progress_count or 0,
+            assigned_count=row.assigned_count or 0,
+            completed_count=row.completed_count or 0,
+            archived_count=row.archived_count or 0,
+            high_urgency_count=row.high_urgency_count or 0,
+            medium_urgency_count=row.medium_urgency_count or 0,
+            low_urgency_count=row.low_urgency_count or 0,
+            type_distribution=type_counts,
+            tag_distribution=tag_counts,
+        )
 
     async def get_triage_by_document(self, document_id: uuid.UUID) -> TriageResult | None:
         """Fetch triage result for a single document."""

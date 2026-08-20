@@ -20,6 +20,24 @@ class InboxApp {
         console.log("Initializing Termnova InboxApp...");
         this.bindEvents();
         this.loadData();
+        if (window.wsClient && typeof window.wsClient.connectNotifications === "function") {
+            window.wsClient.connectNotifications((msg) => {
+                if (!msg || !msg.event) return;
+                const relevantEvents = [
+                    "contract_triaged",
+                    "contract_assigned",
+                    "contract_acknowledged",
+                    "contract_completed",
+                    "contract_archived",
+                    "contract_tags_updated",
+                    "contracts_bulk_assigned",
+                    "contracts_bulk_archived"
+                ];
+                if (relevantEvents.includes(msg.event)) {
+                    this.loadData();
+                }
+            });
+        }
     }
 
     bindEvents() {
