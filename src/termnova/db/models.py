@@ -96,6 +96,12 @@ class Document(Base):
         back_populates="target_document",
         cascade="all, delete-orphan",
     )
+    triage_result: Mapped["TriageResult | None"] = relationship(
+        "TriageResult",
+        uselist=False,
+        back_populates="document",
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self) -> str:
         return f"<Document(id={self.id}, filename='{self.filename}', status='{self.processing_status}')>"
@@ -626,7 +632,7 @@ class TriageResult(Base):
     )
 
     # Relationships
-    document: Mapped["Document"] = relationship("Document", lazy="joined")
+    document: Mapped["Document"] = relationship("Document", back_populates="triage_result")
 
     def __repr__(self) -> str:
         return f"<TriageResult(doc={self.document_id}, type='{self.contract_type_detected}', urgency={self.urgency_score}, status='{self.inbox_status}')>"

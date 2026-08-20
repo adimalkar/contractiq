@@ -18,6 +18,7 @@ from termnova.api.routes import (
     graph_router,
     health_router,
     inbox_router,
+    intelligence_router,
     negotiations_router,
     query_router,
     triage_rules_router,
@@ -86,6 +87,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(inbox_router)
     app.include_router(triage_rules_router)
     app.include_router(negotiations_router)
+    app.include_router(intelligence_router)
     app.include_router(graph_router)
     app.include_router(workspaces_router)
     app.include_router(analytics_router)
