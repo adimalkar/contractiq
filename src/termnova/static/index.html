@@ -7,6 +7,7 @@
   <!-- Primary SEO Meta Tags -->
   <title>Termnova — AI Contract Intelligence, Knowledge Graph & Clause Diffing</title>
   <meta name="title" content="Termnova — AI Contract Intelligence, Knowledge Graph & Clause Diffing">
+  <meta name="application-name" content="Termnova">
   <meta name="description" content="Termnova is an enterprise AI contract intelligence platform. Analyze agreements with hybrid RAG, visualize contract knowledge graph topology, redline clauses, and query legal documents with verifiable page citations.">
   <meta name="keywords" content="termnova, contractiq, AI contract intelligence, contract analysis, contract knowledge graph, legal AI, clause redlining, contract visualizer, legal RAG, enterprise contract management, legal tech, open source contract AI">
   <meta name="author" content="Aditya Malkar">
@@ -17,10 +18,10 @@
   <!-- Open Graph / Facebook / LinkedIn / Discord -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://termnova.onrender.com/">
+  <meta property="og:site_name" content="Termnova">
   <meta property="og:title" content="Termnova — AI Contract Intelligence & Knowledge Graph">
   <meta property="og:description" content="Production-grade AI contract intelligence platform with hybrid RAG, LangGraph agents, multi-contract knowledge graph topology, and semantic clause redlining.">
   <meta property="og:image" content="https://termnova.onrender.com/static/assets/favicon.jpg">
-  <meta property="og:site_name" content="Termnova">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter Cards -->
@@ -37,6 +38,8 @@
   <meta name="apple-mobile-web-app-title" content="Termnova">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="icon" type="image/jpeg" href="/static/assets/favicon.jpg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/static/assets/favicon.jpg">
 
   <!-- Typography & Stylesheets -->
@@ -53,6 +56,24 @@
   {
     "@context": "https://schema.org",
     "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://termnova.onrender.com/#website",
+        "name": "Termnova",
+        "alternateName": [
+          "Termnova AI",
+          "Termnova Contract Intelligence",
+          "Termnova - AI Contract Intelligence",
+          "termnova.onrender.com"
+        ],
+        "url": "https://termnova.onrender.com/",
+        "headline": "Termnova — AI Contract Intelligence Platform",
+        "description": "Production-grade AI contract intelligence platform with hybrid RAG, contract knowledge graph topology, review inbox, and semantic clause redlining.",
+        "publisher": {
+          "@id": "https://termnova.onrender.com/#organization"
+        },
+        "inLanguage": "en-US"
+      },
       {
         "@type": "WebApplication",
         "@id": "https://termnova.onrender.com/#webapp",
@@ -136,6 +157,9 @@
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body class="dark-theme">
+  <!-- Mobile Backdrop Overlay for Off-Canvas Sidebar -->
+  <div class="mobile-backdrop" id="mobile-sidebar-backdrop"></div>
+
   <div class="app-layout">
     
     <!-- ──── Left Sidebar Navigation ──── -->
@@ -274,6 +298,26 @@
     <!-- ──── Main Application Viewport ──── -->
     <main class="main-content">
       
+      <!-- Mobile Top App Bar (visible <= 1024px) -->
+      <div class="mobile-header" id="mobile-header">
+        <button class="btn-icon mobile-menu-btn" id="btn-mobile-menu" aria-label="Open Navigation Menu" title="Open Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="mobile-brand">
+          <div class="mobile-logo-box">
+            <img src="/static/assets/favicon.jpg" alt="Termnova Logo" class="mobile-logo-img">
+          </div>
+          <span class="mobile-brand-title">Term<span>nova</span></span>
+        </div>
+        <div class="mobile-header-actions">
+          <span class="mobile-view-pill" id="mobile-view-pill">Studio</span>
+        </div>
+      </div>
+
       <!-- Top Header Bar -->
       <header class="top-header">
         <div class="header-left">

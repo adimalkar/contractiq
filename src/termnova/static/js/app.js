@@ -86,9 +86,30 @@ function closeSourceDrawer() {
   }
 }
 
+// ──── Mobile Off-Canvas Sidebar Management ────
+function openMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('mobile-sidebar-backdrop');
+  if (sidebar) sidebar.classList.add('open');
+  if (backdrop) backdrop.classList.add('open');
+}
+
+function closeMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('mobile-sidebar-backdrop');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+}
+
+window.openMobileSidebar = openMobileSidebar;
+window.closeMobileSidebar = closeMobileSidebar;
+
 // ──── Navigation & View Switching ────
 function switchView(viewName) {
   AppState.activeView = viewName;
+
+  // Auto-close mobile sidebar if open
+  closeMobileSidebar();
 
   // Update nav buttons
   document.querySelectorAll('.nav-item').forEach((btn) => {
@@ -135,8 +156,10 @@ function switchView(viewName) {
   const info = titleMap[viewName] || titleMap.chat;
   const breadcrumbEl = document.getElementById('view-breadcrumb');
   const titleEl = document.getElementById('view-title');
+  const mobilePill = document.getElementById('mobile-view-pill');
   if (breadcrumbEl) breadcrumbEl.textContent = info.breadcrumb;
   if (titleEl) titleEl.textContent = info.title;
+  if (mobilePill) mobilePill.textContent = info.breadcrumb;
 
   // Trigger view-specific data refresh
   if (viewName === 'workspace' && window.WorkspaceApp) {
@@ -289,6 +312,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Mobile Menu & Backdrop listeners
+  const btnMobileMenu = document.getElementById('btn-mobile-menu');
+  const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
+  if (btnMobileMenu) {
+    btnMobileMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    });
+  }
+  if (mobileBackdrop) {
+    mobileBackdrop.addEventListener('click', closeMobileSidebar);
+  }
 
   // Initial health check & stats
   checkSystemHealth();

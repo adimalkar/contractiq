@@ -589,3 +589,137 @@
     from { opacity: 0; transform: translateY(-8px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ──── Mobile & Tablet Responsiveness for Inbox ──── */
+@media screen and (max-width: 1024px) {
+    .inbox-detail-drawer {
+        width: 100vw;
+        max-width: 100vw;
+        right: -100vw;
+    }
+
+    .inbox-detail-drawer.open {
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .inbox-view-container {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .inbox-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .inbox-stat-card {
+        padding: 0.75rem 0.85rem;
+    }
+
+    .inbox-stat-val {
+        font-size: 1.3rem;
+    }
+
+    .inbox-stat-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+    }
+
+    .inbox-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .inbox-search-box {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .inbox-status-tabs {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+    }
+
+    .inbox-tab-btn {
+        flex-shrink: 0;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.75rem;
+    }
+
+    .inbox-filters-group {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .inbox-select,
+    .inbox-btn-rules {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .inbox-item-card {
+        padding: 0.9rem 1rem;
+    }
+
+    .inbox-card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .inbox-card-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .inbox-bulk-bar {
+        left: 10px;
+        right: 10px;
+        transform: none;
+        width: calc(100% - 20px);
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .inbox-rules-modal-content {
+        width: 95vw;
+        max-width: 95vw;
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .inbox-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .inbox-card-title {
+        font-size: 0.95rem;
+    }
+
+    .drawer-title {
+        max-width: 220px;
+    }
+
+    .drawer-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .drawer-footer button {
+        width: 100%;
+    }
+}
