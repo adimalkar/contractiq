@@ -46,6 +46,17 @@ async def lifespan(app: FastAPI):
     # Initialize Database Connection Pool
     await init_db(settings)
 
+    # Automatically seed authentic commercial contracts if database has fewer than 10 contracts
+    if settings.APP_ENV != "test":
+        try:
+            from termnova.scripts.seed_real_contracts import seed_if_empty
+
+            seeded_count = await seed_if_empty(min_contracts=10)
+            if seeded_count > 0:
+                logger.info("startup_auto_seeded_contracts", count=seeded_count)
+        except Exception as exc:
+            logger.warning("startup_auto_seed_skipped", error=str(exc))
+
     yield
 
     logger.info("Shutting down Termnova backend services")

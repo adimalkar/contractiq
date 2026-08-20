@@ -1,0 +1,590 @@
+[
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Affiliate_Agreements/CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.pdf",
+    "clean_filename": "CreditcardscomInc_Affiliate_Agreement_2007.pdf",
+    "company": "Creditcardscom  Inc",
+    "contract_type": "partnership",
+    "effective_year": "2007",
+    "raw_title": "Affiliate Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Affiliate_Agreements/CybergyHoldingsInc_20140520_10-Q_EX-10.27_8605784_EX-10.27_Affiliate Agreement.pdf",
+    "clean_filename": "CybergyHoldingsInc_Affiliate_Agreement_2014.pdf",
+    "company": "Cybergy Holdings  Inc",
+    "contract_type": "partnership",
+    "effective_year": "2014",
+    "raw_title": "Affiliate Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Affiliate_Agreements/DigitalCinemaDestinationsCorp_20111220_S-1_EX-10.10_7346719_EX-10.10_Affiliate Agreement.pdf",
+    "clean_filename": "DigitalCinemaDestinationsCorp_Affiliate_Agreement_2011.pdf",
+    "company": "Digital Cinema Destinations  Corp",
+    "contract_type": "partnership",
+    "effective_year": "2011",
+    "raw_title": "Affiliate Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Affiliate_Agreements/LinkPlusCorp_20050802_8-K_EX-10_3240252_EX-10_Affiliate Agreement.pdf",
+    "clean_filename": "LinkPlusCorp_Affiliate_Agreement_2005.pdf",
+    "company": "Link Plus  Corp",
+    "contract_type": "partnership",
+    "effective_year": "2005",
+    "raw_title": "Affiliate Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Co_Branding/2ThemartComInc_19990826_10-12G_EX-10.10_6700288_EX-10.10_Co-Branding Agreement_ Agency Agreement.pdf",
+    "clean_filename": "2ThemartComInc__Agency_Agreement_1999.pdf",
+    "company": "2Themart Com  Inc",
+    "contract_type": "partnership",
+    "effective_year": "1999",
+    "raw_title": " Agency Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Co_Branding/DeltathreeInc_19991102_S-1A_EX-10.19_6227850_EX-10.19_Co-Branding Agreement_ Service Agreement.pdf",
+    "clean_filename": "DeltathreeInc__Service_Agreement_1999.pdf",
+    "company": "Deltathree  Inc",
+    "contract_type": "service",
+    "effective_year": "1999",
+    "raw_title": " Service Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Co_Branding/EbixInc_20010515_10-Q_EX-10.3_4049767_EX-10.3_Co-Branding Agreement.pdf",
+    "clean_filename": "EbixInc_Co_Branding_Agreement_2001.pdf",
+    "company": "Ebix  Inc",
+    "contract_type": "partnership",
+    "effective_year": "2001",
+    "raw_title": "Co-Branding Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Co_Branding/EdietsComInc_20001030_10QSB_EX-10.4_2606646_EX-10.4_Co-Branding Agreement.pdf",
+    "clean_filename": "EdietsComInc_Co_Branding_Agreement_2000.pdf",
+    "company": "Ediets Com  Inc",
+    "contract_type": "partnership",
+    "effective_year": "2000",
+    "raw_title": "Co-Branding Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_II/Commercial Contracts (Part II-A)/Agency Agreements/OLDAPIWIND-DOWNLTD_01_08_2016-EX-1.3-AGENCY AGREEMENT1.pdf",
+    "clean_filename": "OLDAPIWINDDOWNLTD_2016_EX_1.3_AGENCY_AGREEMENT1_2024.pdf",
+    "company": "OLDAPIWIND-DOWN LTD",
+    "contract_type": "commercial",
+    "effective_year": "2024",
+    "raw_title": "2016-EX-1.3-AGENCY AGREEMENT1",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 235483
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_II/Commercial Contracts (Part II-A)/Agency Agreements/OLDAPIWIND-DOWNLTD_01_08_2016-EX-1.3-AGENCY AGREEMENT2.pdf",
+    "clean_filename": "OLDAPIWINDDOWNLTD_2016_EX_1.3_AGENCY_AGREEMENT2_2024.pdf",
+    "company": "OLDAPIWIND-DOWN LTD",
+    "contract_type": "commercial",
+    "effective_year": "2024",
+    "raw_title": "2016-EX-1.3-AGENCY AGREEMENT2",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 99703
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_II/Commercial Contracts (Part II-A)/Development/BIOAMBERINC_04_10_2013-EX-10.34-DEVELOPMENT AGREEMENT (1).pdf",
+    "clean_filename": "BIOAMBERINC_2013_EX_10.34_DEVELOPMENT_AGREEMENT_(1)_2024.pdf",
+    "company": "BIOAMBER INC",
+    "contract_type": "commercial",
+    "effective_year": "2024",
+    "raw_title": "2013-EX-10.34-DEVELOPMENT AGREEMENT (1)",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 112177
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_II/Commercial Contracts (Part II-A)/Development/BIOAMBERINC_04_10_2013-EX-10.34-DEVELOPMENT AGREEMENT - First Amendment.pdf",
+    "clean_filename": "BIOAMBERINC_2013_EX_10.34_DEVELOPMENT_AGREEMENT___First_Amendment_2024.pdf",
+    "company": "BIOAMBER INC",
+    "contract_type": "commercial",
+    "effective_year": "2024",
+    "raw_title": "2013-EX-10.34-DEVELOPMENT AGREEMENT - First Amendment",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 59877
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Development/AimmuneTherapeuticsInc_20200205_8-K_EX-10.3_11967170_EX-10.3_Development Agreement.pdf",
+    "clean_filename": "AimmuneTherapeuticsInc_Development_Agreement_2020.pdf",
+    "company": "Aimmune Therapeutics  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2020",
+    "raw_title": "Development Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Development/ArcaUsTreasuryFund_20200207_N-2_EX-99.K5_11971930_EX-99.K5_Development Agreement.pdf",
+    "clean_filename": "ArcaUsTreasuryFund_Development_Agreement_2020.pdf",
+    "company": "Arca Us Treasury Fund",
+    "contract_type": "commercial",
+    "effective_year": "2020",
+    "raw_title": "Development Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Development/ClickstreamCorp_20200330_1-A_EX1A-6 MAT CTRCT_12089935_EX1A-6 MAT CTRCT_Development Agreement.pdf",
+    "clean_filename": "ClickstreamCorp_Development_Agreement_2020.pdf",
+    "company": "Clickstream  Corp",
+    "contract_type": "commercial",
+    "effective_year": "2020",
+    "raw_title": "Development Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Development/CnsPharmaceuticalsInc_20200326_8-K_EX-10.1_12079626_EX-10.1_Development Agreement.pdf",
+    "clean_filename": "CnsPharmaceuticalsInc_Development_Agreement_2020.pdf",
+    "company": "Cns Pharmaceuticals  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2020",
+    "raw_title": "Development Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)"
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Distributor/FuseMedicalInc_20190321_10-K_EX-10.43_11575454_EX-10.43_Distributor Agreement.pdf",
+    "clean_filename": "FuseMedicalInc_Distributor_Agreement_2019.pdf",
+    "company": "Fuse Medical  Inc",
+    "contract_type": "distributor",
+    "effective_year": "2019",
+    "raw_title": "Distributor Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 168013
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Distributor/GentechHoldingsInc_20190808_1-A_EX1A-6 MAT CTRCT_11776814_EX1A-6 MAT CTRCT_Distributor Agreement.pdf",
+    "clean_filename": "GentechHoldingsInc_Distributor_Agreement_2019.pdf",
+    "company": "Gentech Holdings  Inc",
+    "contract_type": "distributor",
+    "effective_year": "2019",
+    "raw_title": "Distributor Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 156725
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Distributor/ImineCorp_20180725_S-1_EX-10.5_11275970_EX-10.5_Distributor Agreement.pdf",
+    "clean_filename": "ImineCorp_Distributor_Agreement_2018.pdf",
+    "company": "Imine  Corp",
+    "contract_type": "distributor",
+    "effective_year": "2018",
+    "raw_title": "Distributor Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 147750
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Distributor/InnerscopeHearingTechnologiesInc_20181109_8-K_EX-10.6_11419704_EX-10.6_Distributor Agreement.pdf",
+    "clean_filename": "InnerscopeHearingTechnologiesInc_Distributor_Agreement_2018.pdf",
+    "company": "Innerscope Hearing Technologies  Inc",
+    "contract_type": "distributor",
+    "effective_year": "2018",
+    "raw_title": "Distributor Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 145957
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Endorsement/BerkshireHillsBancorpInc_20120809_10-Q_EX-10.16_7708169_EX-10.16_Endorsement Agreement.pdf",
+    "clean_filename": "BerkshireHillsBancorpInc_Endorsement_Agreement_2012.pdf",
+    "company": "Berkshire Hills Bancorp  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2012",
+    "raw_title": "Endorsement Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 91341
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Endorsement/BizzingoInc_20120322_8-K_EX-10.17_7504499_EX-10.17_Endorsement Agreement.pdf",
+    "clean_filename": "BizzingoInc_Endorsement_Agreement_2012.pdf",
+    "company": "Bizzingo  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2012",
+    "raw_title": "Endorsement Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 100024
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Endorsement/EcoScienceSolutionsInc_20171117_8-K_EX-10.1_10956472_EX-10.1_Endorsement Agreement.pdf",
+    "clean_filename": "EcoScienceSolutionsInc_Endorsement_Agreement_2017.pdf",
+    "company": "Eco Science Solutions  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2017",
+    "raw_title": "Endorsement Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 123193
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Endorsement/GridironBionutrientsInc_20171206_8-K_EX-10.1_10972555_EX-10.1_Endorsement Agreement.pdf",
+    "clean_filename": "GridironBionutrientsInc_Endorsement_Agreement_2017.pdf",
+    "company": "Gridiron Bionutrients  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2017",
+    "raw_title": "Endorsement Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 317514
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Franchise/PfHospitalityGroupInc_20150923_10-12G_EX-10.1_9266710_EX-10.1_Franchise Agreement1.pdf",
+    "clean_filename": "PfHospitalityGroupInc_Franchise_Agreement1_2015.pdf",
+    "company": "Pf Hospitality Group  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2015",
+    "raw_title": "Franchise Agreement1",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 373486
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Franchise/PfHospitalityGroupInc_20150923_10-12G_EX-10.1_9266710_EX-10.1_Franchise Agreement3.pdf",
+    "clean_filename": "PfHospitalityGroupInc_Franchise_Agreement3_2015.pdf",
+    "company": "Pf Hospitality Group  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2015",
+    "raw_title": "Franchise Agreement3",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 123560
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Franchise/RgcResourcesInc_20151216_8-K_EX-10.3_9372751_EX-10.3_Franchise Agreement.pdf",
+    "clean_filename": "RgcResourcesInc_Franchise_Agreement_2015.pdf",
+    "company": "Rgc Resources  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2015",
+    "raw_title": "Franchise Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 103990
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Franchise/SimplicityEsportsGamingCompany_20181130_8-K_EX-10.1_11444071_EX-10.1_Franchise Agreement.pdf",
+    "clean_filename": "SimplicityEsportsGamingCompany_Franchise_Agreement_2018.pdf",
+    "company": "Simplicity Esports Gaming Company",
+    "contract_type": "commercial",
+    "effective_year": "2018",
+    "raw_title": "Franchise Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 152483
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Hosting/Freecook_20180605_S-1_EX-10.3_11233807_EX-10.3_Hosting Agreement.pdf",
+    "clean_filename": "Freecook_Hosting_Agreement_2018.pdf",
+    "company": "Freecook",
+    "contract_type": "service",
+    "effective_year": "2018",
+    "raw_title": "Hosting Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 133030
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Hosting/PareteumCorp_20081001_8-K_EX-99.1_2654808_EX-99.1_Hosting Agreement.pdf",
+    "clean_filename": "PareteumCorp_Hosting_Agreement_2008.pdf",
+    "company": "Pareteum  Corp",
+    "contract_type": "service",
+    "effective_year": "2008",
+    "raw_title": "Hosting Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 278128
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Hosting/QuantumGroupIncFl_20090120_8-K_EX-99.2_3672910_EX-99.2_Hosting Agreement.pdf",
+    "clean_filename": "QuantumGroupIncFl_Hosting_Agreement_2009.pdf",
+    "company": "Quantum Group Inc Fl",
+    "contract_type": "service",
+    "effective_year": "2009",
+    "raw_title": "Hosting Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 430391
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Hosting/VitalibisInc_20180316_8-K_EX-10.2_11100168_EX-10.2_Hosting Agreement.pdf",
+    "clean_filename": "VitalibisInc_Hosting_Agreement_2018.pdf",
+    "company": "Vitalibis  Inc",
+    "contract_type": "service",
+    "effective_year": "2018",
+    "raw_title": "Hosting Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 232210
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/IP/ArmstrongFlooringInc_20190107_8-K_EX-10.2_11471795_EX-10.2_Intellectual Property Agreement.pdf",
+    "clean_filename": "ArmstrongFlooringInc_Intellectual_Property_Agreement_2019.pdf",
+    "company": "Armstrong Flooring  Inc",
+    "contract_type": "license",
+    "effective_year": "2019",
+    "raw_title": "Intellectual Property Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 616962
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/IP/CerenceInc_20191002_8-K_EX-10.4_11827494_EX-10.4_Intellectual Property Agreement.pdf",
+    "clean_filename": "CerenceInc_Intellectual_Property_Agreement_2019.pdf",
+    "company": "Cerence  Inc",
+    "contract_type": "license",
+    "effective_year": "2019",
+    "raw_title": "Intellectual Property Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 193486
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/IP/GarrettMotionInc_20181001_8-K_EX-2.4_11364532_EX-2.4_Intellectual Property Agreement.pdf",
+    "clean_filename": "GarrettMotionInc_Intellectual_Property_Agreement_2018.pdf",
+    "company": "Garrett Motion  Inc",
+    "contract_type": "license",
+    "effective_year": "2018",
+    "raw_title": "Intellectual Property Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 214178
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/IP/RareElementResourcesLtd_20171019_SC 13D_EX-99.4_10897534_EX-99.4_Intellectual Property Agreement.pdf",
+    "clean_filename": "RareElementResourcesLtd_Intellectual_Property_Agreement_2017.pdf",
+    "company": "Rare Element Resources  Ltd",
+    "contract_type": "license",
+    "effective_year": "2017",
+    "raw_title": "Intellectual Property Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 180502
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/License_Agreements/AlliedEsportsEntertainmentInc_20190815_8-K_EX-10.19_11788293_EX-10.19_Content License Agreement.pdf",
+    "clean_filename": "AlliedEsportsEntertainmentInc_Content_License_Agreement_2019.pdf",
+    "company": "Allied Esports Entertainment  Inc",
+    "contract_type": "license",
+    "effective_year": "2019",
+    "raw_title": "Content License Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 176502
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/License_Agreements/ArconicRolledProductsCorp_20191217_10-12B_EX-2.7_11923804_EX-2.7_Trademark License Agreement.pdf",
+    "clean_filename": "ArconicRolledProductsCorp_Trademark_License_Agreement_2019.pdf",
+    "company": "Arconic Rolled Products  Corp",
+    "contract_type": "license",
+    "effective_year": "2019",
+    "raw_title": "Trademark License Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 152678
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/License_Agreements/ArtaraTherapeuticsInc_20200110_8-K_EX-10.5_11943350_EX-10.5_License Agreement.pdf",
+    "clean_filename": "ArtaraTherapeuticsInc_License_Agreement_2020.pdf",
+    "company": "Artara Therapeutics  Inc",
+    "contract_type": "license",
+    "effective_year": "2020",
+    "raw_title": "License Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 227144
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/License_Agreements/ChinaRealEstateInformationCorp_20090929_F-1_EX-10.32_4771615_EX-10.32_Content License Agreement.pdf",
+    "clean_filename": "ChinaRealEstateInformationCorp_Content_License_Agreement_2009.pdf",
+    "company": "China Real Estate Information  Corp",
+    "contract_type": "license",
+    "effective_year": "2009",
+    "raw_title": "Content License Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 122551
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Maintenance/AtnInternationalInc_20191108_10-Q_EX-10.1_11878541_EX-10.1_Maintenance Agreement.pdf",
+    "clean_filename": "AtnInternationalInc_Maintenance_Agreement_2019.pdf",
+    "company": "Atn International  Inc",
+    "contract_type": "service",
+    "effective_year": "2019",
+    "raw_title": "Maintenance Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 477104
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Maintenance/AzulSa_20170303_F-1A_EX-10.3_9943903_EX-10.3_Maintenance Agreement1.pdf",
+    "clean_filename": "AzulSa_Maintenance_Agreement1_2017.pdf",
+    "company": "Azul Sa",
+    "contract_type": "service",
+    "effective_year": "2017",
+    "raw_title": "Maintenance Agreement1",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 824876
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Maintenance/AzulSa_20170303_F-1A_EX-10.3_9943903_EX-10.3_Maintenance Agreement2.pdf",
+    "clean_filename": "AzulSa_Maintenance_Agreement2_2017.pdf",
+    "company": "Azul Sa",
+    "contract_type": "service",
+    "effective_year": "2017",
+    "raw_title": "Maintenance Agreement2",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 193120
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Maintenance/BloomEnergyCorp_20180321_DRSA (on S-1)_EX-10_11240356_EX-10_Maintenance Agreement.pdf",
+    "clean_filename": "BloomEnergyCorp_Maintenance_Agreement_2018.pdf",
+    "company": "Bloom Energy  Corp",
+    "contract_type": "service",
+    "effective_year": "2018",
+    "raw_title": "Maintenance Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 366384
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Manufacturing/BellringBrandsInc_20190920_S-1_EX-10.12_11817081_EX-10.12_Manufacturing Agreement1.pdf",
+    "clean_filename": "BellringBrandsInc_Manufacturing_Agreement1_2019.pdf",
+    "company": "Bellring Brands  Inc",
+    "contract_type": "vendor",
+    "effective_year": "2019",
+    "raw_title": "Manufacturing Agreement1",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 206384
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Manufacturing/BellringBrandsInc_20190920_S-1_EX-10.12_11817081_EX-10.12_Manufacturing Agreement2.pdf",
+    "clean_filename": "BellringBrandsInc_Manufacturing_Agreement2_2019.pdf",
+    "company": "Bellring Brands  Inc",
+    "contract_type": "vendor",
+    "effective_year": "2019",
+    "raw_title": "Manufacturing Agreement2",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 116609
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Manufacturing/BellringBrandsInc_20190920_S-1_EX-10.12_11817081_EX-10.12_Manufacturing Agreement3.pdf",
+    "clean_filename": "BellringBrandsInc_Manufacturing_Agreement3_2019.pdf",
+    "company": "Bellring Brands  Inc",
+    "contract_type": "vendor",
+    "effective_year": "2019",
+    "raw_title": "Manufacturing Agreement3",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 126271
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Manufacturing/BellringBrandsInc_20190920_S-1_EX-10.12_11817081_EX-10.12_Manufacturing Agreement4.pdf",
+    "clean_filename": "BellringBrandsInc_Manufacturing_Agreement4_2019.pdf",
+    "company": "Bellring Brands  Inc",
+    "contract_type": "vendor",
+    "effective_year": "2019",
+    "raw_title": "Manufacturing Agreement4",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 116203
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Marketing/AudibleInc_20001113_10-Q_EX-10.32_2599586_EX-10.32_Co-Branding Agreement_ Marketing Agreement_ Investment Distribution Agreement.pdf",
+    "clean_filename": "AudibleInc__Investment_Distribution_Agreement_2000.pdf",
+    "company": "Audible  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2000",
+    "raw_title": " Investment Distribution Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 215150
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Marketing/CcRealEstateIncomeFundadv_20181205_POS 8C_EX-99.(H)(3)_11447739_EX-99.(H)(3)_Marketing Agreement.pdf",
+    "clean_filename": "CcRealEstateIncomeFundadv_Marketing_Agreement_2018.pdf",
+    "company": "Cc Real Estate Income Fundadv",
+    "contract_type": "nda",
+    "effective_year": "2018",
+    "raw_title": "Marketing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 211866
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Marketing/EmmisCommunicationsCorp_20191125_8-K_EX-10.6_11906433_EX-10.6_Marketing Agreement.pdf",
+    "clean_filename": "EmmisCommunicationsCorp_Marketing_Agreement_2019.pdf",
+    "company": "Emmis Communications  Corp",
+    "contract_type": "commercial",
+    "effective_year": "2019",
+    "raw_title": "Marketing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 140747
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Marketing/TodosMedicalLtd_20190328_20-F_EX-4.10_11587157_EX-4.10_Marketing Agreement_ Reseller Agreement.pdf",
+    "clean_filename": "TodosMedicalLtd__Reseller_Agreement_2019.pdf",
+    "company": "Todos Medical  Ltd",
+    "contract_type": "distributor",
+    "effective_year": "2019",
+    "raw_title": " Reseller Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 197615
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Outsourcing/FerroglobePlc_20150624_F-4A_EX-10.20_9154746_EX-10.20_Outsourcing Agreement.pdf",
+    "clean_filename": "FerroglobePlc_Outsourcing_Agreement_2015.pdf",
+    "company": "Ferroglobe Plc",
+    "contract_type": "commercial",
+    "effective_year": "2015",
+    "raw_title": "Outsourcing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 230276
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Outsourcing/ImperialGardenResortInc_20161028_DRS (on F-1)_EX-10.13_9963189_EX-10.13_Outsourcing Agreement.pdf",
+    "clean_filename": "ImperialGardenResortInc_Outsourcing_Agreement_2016.pdf",
+    "company": "Imperial Garden Resort  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2016",
+    "raw_title": "Outsourcing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 127411
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Outsourcing/ParatekPharmaceuticalsInc_20170505_10-KA_EX-10.29_10323872_EX-10.29_Outsourcing Agreement.pdf",
+    "clean_filename": "ParatekPharmaceuticalsInc_Outsourcing_Agreement_2017.pdf",
+    "company": "Paratek Pharmaceuticals  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2017",
+    "raw_title": "Outsourcing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 322773
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Outsourcing/PhotronicsInc_20171219_10-QA_EX-10.28_10982650_EX-10.28_Outsourcing Agreement.pdf",
+    "clean_filename": "PhotronicsInc_Outsourcing_Agreement_2017.pdf",
+    "company": "Photronics  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2017",
+    "raw_title": "Outsourcing Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 164768
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Promotion/DovaPharmaceuticalsInc_20181108_10-Q_EX-10.2_11414857_EX-10.2_Promotion Agreement.pdf",
+    "clean_filename": "DovaPharmaceuticalsInc_Promotion_Agreement_2018.pdf",
+    "company": "Dova Pharmaceuticals  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2018",
+    "raw_title": "Promotion Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 381686
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Promotion/ExactSciencesCorp_20180822_8-K_EX-10.1_11331629_EX-10.1_Promotion Agreement.pdf",
+    "clean_filename": "ExactSciencesCorp_Promotion_Agreement_2018.pdf",
+    "company": "Exact Sciences  Corp",
+    "contract_type": "commercial",
+    "effective_year": "2018",
+    "raw_title": "Promotion Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 387154
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Promotion/SigaTechnologiesInc_20190603_8-K_EX-10.1_11695818_EX-10.1_Promotion Agreement.pdf",
+    "clean_filename": "SigaTechnologiesInc_Promotion_Agreement_2019.pdf",
+    "company": "Siga Technologies  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2019",
+    "raw_title": "Promotion Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 409969
+  },
+  {
+    "original_cuad_path": "CUAD_v1/full_contract_pdf/Part_I/Promotion/VnueInc_20150914_8-K_EX-10.1_9259571_EX-10.1_Promotion Agreement.pdf",
+    "clean_filename": "VnueInc_Promotion_Agreement_2015.pdf",
+    "company": "Vnue  Inc",
+    "contract_type": "commercial",
+    "effective_year": "2015",
+    "raw_title": "Promotion Agreement",
+    "provenance": "SEC EDGAR / Atticus CUAD Dataset (CC-BY 4.0)",
+    "file_size_bytes": 120953
+  }
+]

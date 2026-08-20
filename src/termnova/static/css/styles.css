@@ -298,6 +298,11 @@ body {
 .tag-nda { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
 .tag-vendor { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
 .tag-lease { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+.tag-license { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+.tag-service { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; }
+.tag-distributor { background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+.tag-partnership { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.tag-commercial { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
 
 /* ──── Sidebar Footer ──── */
 .sidebar-footer {
