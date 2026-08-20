@@ -632,7 +632,9 @@ class TriageResult(Base):
     )
 
     # Relationships
-    document: Mapped["Document"] = relationship("Document", back_populates="triage_result")
+    document: Mapped["Document"] = relationship(
+        "Document", lazy="joined", back_populates="triage_result"
+    )
 
     def __repr__(self) -> str:
         return f"<TriageResult(doc={self.document_id}, type='{self.contract_type_detected}', urgency={self.urgency_score}, status='{self.inbox_status}')>"
