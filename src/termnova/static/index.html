@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="/static/css/graph.css">
   <link rel="stylesheet" href="/static/css/workspace.css">
   <link rel="stylesheet" href="/static/css/inbox.css">
+  <link rel="stylesheet" href="/static/css/negotiation.css">
 
   <!-- Schema.org JSON-LD Structured Data for Search Engines -->
   <script type="application/ld+json">
@@ -226,6 +227,15 @@
             <path d="M4 20h16"></path>
           </svg>
           <span>Clause Redline & Diff</span>
+        </button>
+
+        <button class="nav-item" data-view="negotiations" id="nav-negotiations">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+            <path d="M16 16l4 4"></path>
+          </svg>
+          <span>Negotiation Tracker</span>
         </button>
 
         <button class="nav-item" data-view="documents" id="nav-documents">
@@ -754,6 +764,66 @@
               <div id="alignments-list" class="alignments-grid"></div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ──── VIEW: NEGOTIATION PLAYBOOK & VERSION REDLINE TRACKER ──── -->
+      <section class="view-panel" id="view-negotiations">
+        <div class="neg-view-container">
+          <!-- Top Bar -->
+          <div class="neg-top-bar">
+            <div class="neg-track-selector-group">
+              <span class="neg-track-label">Deal Track:</span>
+              <select id="neg-track-select" class="neg-select"></select>
+            </div>
+            <div class="neg-actions-group">
+              <button id="btn-neg-new-track" class="btn-neg-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>New Track</span>
+              </button>
+              <button id="btn-neg-upload-version" class="btn-neg-secondary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>Add Version Round</span>
+              </button>
+              <button id="btn-neg-refresh" class="btn-neg-secondary" title="Refresh negotiation data">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Header Summary Banner -->
+          <div id="neg-track-header" class="neg-track-header"></div>
+
+          <!-- Sub-Navigation Tabs -->
+          <div class="neg-nav-tabs">
+            <button class="neg-tab-btn active" data-tab="timeline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              <span>Version Timeline</span>
+            </button>
+            <button class="neg-tab-btn" data-tab="concessions">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <span>Concession Ledger</span>
+            </button>
+            <button class="neg-tab-btn" data-tab="risk">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>Risk Trajectory</span>
+            </button>
+            <button class="neg-tab-btn" data-tab="diff">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>Clause Diff</span>
+            </button>
+            <button class="neg-tab-btn" data-tab="summary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>AI Executive Summary</span>
+            </button>
+          </div>
+
+          <!-- Tab Panes -->
+          <div id="neg-tab-timeline" class="neg-tab-pane"></div>
+          <div id="neg-tab-concessions" class="neg-tab-pane" style="display: none;"></div>
+          <div id="neg-tab-risk" class="neg-tab-pane" style="display: none;"></div>
+          <div id="neg-tab-diff" class="neg-tab-pane" style="display: none;"></div>
+          <div id="neg-tab-summary" class="neg-tab-pane" style="display: none;"></div>
         </div>
       </section>
 
@@ -1348,6 +1418,85 @@
     </div>
   </div>
 
+  <!-- Negotiation Modals -->
+  <!-- 1. Create Negotiation Track Modal -->
+  <div id="neg-create-track-modal" class="neg-modal">
+    <div class="neg-modal-content">
+      <div class="neg-modal-header">
+        <h3>Create Negotiation Track</h3>
+        <button class="btn-icon neg-modal-close">&times;</button>
+      </div>
+      <form id="neg-create-track-form">
+        <div class="neg-form-group">
+          <label>Deal / Track Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Acme Corp MSA Q3 2026">
+        </div>
+        <div class="neg-form-group">
+          <label>Counterparty Organization *</label>
+          <input type="text" name="counterparty" required placeholder="e.g. Acme Corporation">
+        </div>
+        <div class="neg-form-group">
+          <label>Contract Type</label>
+          <select name="contract_type">
+            <option value="msa">Master Services Agreement (MSA)</option>
+            <option value="sow">Statement of Work (SOW)</option>
+            <option value="nda">Non-Disclosure Agreement (NDA)</option>
+            <option value="vendor">Vendor / Supplier Agreement</option>
+            <option value="lease">Commercial Lease</option>
+            <option value="other" selected>Other Agreement</option>
+          </select>
+        </div>
+        <div class="neg-form-group">
+          <label>Lead Legal Counsel</label>
+          <input type="text" name="started_by" value="Legal Counsel" placeholder="e.g. Sarah Chen">
+        </div>
+        <div class="neg-form-group">
+          <label>Negotiation Goals & Strategy Notes</label>
+          <textarea name="notes" rows="3" placeholder="Key goals, concessions boundaries, liability limits..."></textarea>
+        </div>
+        <div class="neg-modal-footer">
+          <button type="button" class="btn-neg-secondary neg-modal-close">Cancel</button>
+          <button type="submit" class="btn-neg-primary">Create Track</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Upload Version Round Modal -->
+  <div id="neg-upload-version-modal" class="neg-modal">
+    <div class="neg-modal-content">
+      <div class="neg-modal-header">
+        <h3>Add Version Round</h3>
+        <button class="btn-icon neg-modal-close">&times;</button>
+      </div>
+      <form id="neg-upload-version-form">
+        <div class="neg-form-group">
+          <label>Contract Document File (PDF, DOCX, TXT) *</label>
+          <input type="file" name="file" required accept=".pdf,.docx,.doc,.txt,.md">
+        </div>
+        <div class="neg-form-group">
+          <label>Version Origin / Source *</label>
+          <select name="source">
+            <option value="internal">Our Proposal / Draft (Internal)</option>
+            <option value="counterparty">Counterparty Redline (External)</option>
+          </select>
+        </div>
+        <div class="neg-form-group">
+          <label>Uploaded / Handled By</label>
+          <input type="text" name="uploaded_by" value="Legal Counsel">
+        </div>
+        <div class="neg-form-group">
+          <label>Round Notes / Executive Commentary</label>
+          <textarea name="notes" rows="2" placeholder="e.g. Counterparty pushed back on 12-month liability cap and Net 30..."></textarea>
+        </div>
+        <div class="neg-modal-footer">
+          <button type="button" class="btn-neg-secondary neg-modal-close">Cancel</button>
+          <button type="submit" class="btn-neg-primary">Upload & Process Round</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Alert Hub -->
   <div class="toast-hub" id="toast-hub"></div>
 
@@ -1357,6 +1506,7 @@
   <script src="/static/js/chat.js"></script>
   <script src="/static/js/workspace.js"></script>
   <script src="/static/js/inbox.js"></script>
+  <script src="/static/js/negotiation.js"></script>
   <script src="/static/js/graph.js"></script>
   <script src="/static/js/compare.js"></script>
   <script src="/static/js/documents.js"></script>
