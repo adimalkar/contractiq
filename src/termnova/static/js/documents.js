@@ -14,7 +14,7 @@ window.loadDocumentsList = async function () {
       docCountPill.textContent = data.total_count || 0;
     }
 
-    renderSidebarVault(AppState.documents);
+    window.renderSidebarVault(AppState.documents);
 
     if (!AppState.documents.length) {
       tbody.innerHTML = `
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-function renderSidebarVault(docs) {
+window.renderSidebarVault = function(docs) {
   const vaultList = document.getElementById('sidebar-vault-list');
   if (!vaultList) return;
 
