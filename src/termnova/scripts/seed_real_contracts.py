@@ -16,7 +16,22 @@ from termnova.pipeline.ingestion import IngestionPipeline
 
 logger = structlog.get_logger(__name__)
 
-CONTRACTS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "contracts"
+
+def get_contracts_dir() -> Path:
+    """Resolve contracts directory across container, local dev, and package paths."""
+    candidates = [
+        Path(__file__).resolve().parent.parent.parent.parent / "data" / "contracts",
+        Path("/app/data/contracts"),
+        Path.cwd() / "data" / "contracts",
+        Path(__file__).resolve().parents[2] / "data" / "contracts",
+    ]
+    for c in candidates:
+        if c.exists() and (any(c.glob("*.pdf")) or any(c.glob("*.txt"))):
+            return c
+    return candidates[0]
+
+
+CONTRACTS_DIR = get_contracts_dir()
 
 
 async def seed_real_contracts(
@@ -26,7 +41,7 @@ async def seed_real_contracts(
     session: AsyncSession | None = None,
 ) -> dict[str, int]:
     """Index real commercial contracts from the dataset directory into PostgreSQL."""
-    target_dir = contracts_dir or CONTRACTS_DIR
+    target_dir = contracts_dir or get_contracts_dir()
     settings = get_settings()
 
     if not target_dir.exists():

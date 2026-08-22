@@ -19,7 +19,15 @@ window.loadDocumentsList = async function () {
     if (!AppState.documents.length) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="empty-state">No contracts uploaded yet. Drag and drop a PDF/DOCX agreement above.</td>
+          <td colspan="7" class="empty-state" style="padding: 2.5rem 1rem; text-align: center;">
+            <div style="font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem;">No contracts in repository yet</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              Drag & drop a contract above, or initialize the vault with 60 authentic enterprise agreements (CUAD / SEC EDGAR).
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-empty-seed" onclick="window.seedRealContracts()">
+              📥 Ingest 60 Real Enterprise Contracts
+            </button>
+          </td>
         </tr>
       `;
       return;
@@ -99,6 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnBrowse && fileInput) {
     btnBrowse.addEventListener('click', () => fileInput.click());
+  }
+
+  const btnSeedDocs = document.getElementById('btn-seed-contracts');
+
+  if (btnSeedDocs) {
+    btnSeedDocs.addEventListener('click', () => window.seedRealContracts());
   }
 
   if (btnRefreshDocs) {
@@ -248,7 +262,32 @@ function renderSidebarVault(docs) {
     });
   });
 }
-window.renderSidebarVault = renderSidebarVault;
+window.seedRealContracts = async function () {
+  const seedBtn = document.getElementById('btn-seed-contracts');
+  const emptySeedBtn = document.getElementById('btn-empty-seed');
+  const activeBtn = seedBtn || emptySeedBtn;
+
+  if (activeBtn) {
+    activeBtn.disabled = true;
+    activeBtn.innerHTML = '⏳ Ingesting authentic contracts...';
+  }
+  showToast('Indexing authentic commercial contract dataset (CUAD/SEC EDGAR)...', 'info');
+
+  try {
+    const res = await apiRequest('/api/v1/documents/seed?limit=60', { method: 'POST' });
+    showToast(res.message || 'Successfully seeded enterprise contracts!', 'success');
+    await window.loadDocumentsList();
+    if (window.loadAnalytics) window.loadAnalytics();
+    if (window.loadInboxContracts) window.loadInboxContracts();
+  } catch (err) {
+    showToast(`Seeding failed: ${err.message}`, 'error');
+  } finally {
+    if (activeBtn) {
+      activeBtn.disabled = false;
+      activeBtn.innerHTML = '📥 Ingest 60 Real Contracts';
+    }
+  }
+};
 
   // Load documents on initial start
   window.loadDocumentsList();

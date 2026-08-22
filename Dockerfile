@@ -34,6 +34,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application source & configurations
 COPY src/ /app/src/
 COPY db/ /app/db/
+COPY data/ /app/data/
 COPY pyproject.toml README.md /app/
 
 # Install the termnova package in editable mode without reinstalling dependencies
@@ -41,7 +42,7 @@ RUN pip install --no-deps -e .
 
 # Create non-root user and runtime directories
 RUN useradd -m -u 1000 appuser && \
-    mkdir -p /app/data/uploads /app/data/eval && \
+    mkdir -p /app/data/uploads /app/data/eval /app/data/contracts && \
     chown -R appuser:appuser /app
 
 USER appuser

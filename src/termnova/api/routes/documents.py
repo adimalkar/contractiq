@@ -178,3 +178,27 @@ async def delete_contract(
             detail=f"Document {document_id} not found for deletion.",
         )
     return None
+
+
+@router.post("/seed", summary="Ingest authentic commercial contracts dataset into database")
+async def seed_documents(
+    limit: int = Query(30, ge=1, le=100, description="Number of contracts to index"),
+    force: bool = Query(False, description="Force re-indexing of already existing files"),
+    session: AsyncSession = Depends(get_db_session),
+) -> dict:
+    """Trigger on-demand batch seeding of authentic commercial enterprise contracts."""
+    from termnova.scripts.seed_real_contracts import seed_real_contracts
+
+    try:
+        stats = await seed_real_contracts(limit=limit, force_reindex=force, session=session)
+        return {
+            "status": "success",
+            "message": f"Indexed {stats['indexed']} authentic enterprise contracts ({stats['skipped']} skipped, {stats['failed']} failed).",
+            "stats": stats,
+        }
+    except Exception as exc:
+        logger.error("seed_documents_endpoint_error", error=str(exc))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to seed contracts: {str(exc)}",
+        ) from exc

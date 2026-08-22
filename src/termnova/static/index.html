@@ -46,12 +46,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <link rel="stylesheet" href="/static/css/graph.css">
-  <link rel="stylesheet" href="/static/css/workspace.css">
-  <link rel="stylesheet" href="/static/css/inbox.css">
-  <link rel="stylesheet" href="/static/css/negotiation.css">
-  <link rel="stylesheet" href="/static/css/intelligence.css">
+  <link rel="stylesheet" href="/static/css/styles.css?v=0.3.0">
+  <link rel="stylesheet" href="/static/css/graph.css?v=0.3.0">
+  <link rel="stylesheet" href="/static/css/workspace.css?v=0.3.0">
+  <link rel="stylesheet" href="/static/css/inbox.css?v=0.3.0">
+  <link rel="stylesheet" href="/static/css/negotiation.css?v=0.3.0">
+  <link rel="stylesheet" href="/static/css/intelligence.css?v=0.3.0">
 
   <!-- Schema.org JSON-LD Structured Data for Search Engines -->
   <script type="application/ld+json">
@@ -988,14 +988,24 @@
                 <h3>Indexed Document Repository</h3>
                 <p>Manage and inspect chunk vectors and metadata</p>
               </div>
-              <button class="btn btn-secondary btn-sm" id="btn-refresh-docs">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="23 4 23 10 17 10"></polyline>
-                  <polyline points="1 20 1 14 7 14"></polyline>
-                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                </svg>
-                <span>Refresh List</span>
-              </button>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" id="btn-seed-contracts" title="Ingest authentic commercial contracts dataset">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Ingest 60 Real Contracts</span>
+                </button>
+                <button class="btn btn-secondary btn-sm" id="btn-refresh-docs">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <polyline points="1 20 1 14 7 14"></polyline>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                  </svg>
+                  <span>Refresh List</span>
+                </button>
+              </div>
             </div>
 
             <div class="table-responsive">
@@ -1630,16 +1640,16 @@
   <div class="toast-hub" id="toast-hub"></div>
 
   <!-- Scripts -->
-  <script src="/static/js/app.js"></script>
-  <script src="/static/js/ws.js"></script>
-  <script src="/static/js/chat.js"></script>
-  <script src="/static/js/workspace.js"></script>
-  <script src="/static/js/inbox.js"></script>
-  <script src="/static/js/negotiation.js"></script>
-  <script src="/static/js/intelligence.js"></script>
-  <script src="/static/js/graph.js"></script>
-  <script src="/static/js/compare.js"></script>
-  <script src="/static/js/documents.js"></script>
-  <script src="/static/js/analytics.js"></script>
+  <script src="/static/js/app.js?v=0.3.0"></script>
+  <script src="/static/js/ws.js?v=0.3.0"></script>
+  <script src="/static/js/chat.js?v=0.3.0"></script>
+  <script src="/static/js/workspace.js?v=0.3.0"></script>
+  <script src="/static/js/inbox.js?v=0.3.0"></script>
+  <script src="/static/js/negotiation.js?v=0.3.0"></script>
+  <script src="/static/js/intelligence.js?v=0.3.0"></script>
+  <script src="/static/js/graph.js?v=0.3.0"></script>
+  <script src="/static/js/compare.js?v=0.3.0"></script>
+  <script src="/static/js/documents.js?v=0.3.0"></script>
+  <script src="/static/js/analytics.js?v=0.3.0"></script>
 </body>
 </html>
