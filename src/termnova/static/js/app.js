@@ -147,6 +147,10 @@ function switchView(viewName) {
       breadcrumb: 'Negotiations',
       title: 'Negotiation Playbook & Version Redline Diff Tracker',
     },
+    intelligence: {
+      breadcrumb: 'Intelligence',
+      title: 'Portfolio Intelligence & Clause Heatmap Analytics',
+    },
     documents: {
       breadcrumb: 'Document Vault',
       title: 'Document Repository & Vector Chunks',
@@ -172,6 +176,8 @@ function switchView(viewName) {
     window.inboxApp.loadData();
   } else if (viewName === 'negotiations' && window.NegotiationModule) {
     window.NegotiationModule.loadTracks();
+  } else if (viewName === 'intelligence' && window.IntelligenceApp) {
+    window.IntelligenceApp.init();
   } else if (viewName === 'graph' && window.initGraphView) {
     window.initGraphView();
   } else if (viewName === 'documents' && window.loadDocumentsList) {

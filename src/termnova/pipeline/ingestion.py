@@ -144,6 +144,20 @@ class IngestionPipeline:
                     error=str(triage_err),
                 )
 
+            # Invalidate intelligence cache so portfolio views refresh
+            try:
+                import redis.asyncio as aioredis
+
+                from termnova.intelligence.cache import IntelligenceCache
+
+                r_client = aioredis.from_url(self.settings.REDIS_URL, decode_responses=True)
+                await IntelligenceCache.invalidate_org(None, r_client)
+                await r_client.aclose()
+            except Exception as cache_err:
+                logger.debug(
+                    "Non-fatal intelligence cache invalidation notice", error=str(cache_err)
+                )
+
             await self.session.flush()
             logger.info(
                 "Document successfully ingested", filename=path.name, chunks=len(chunk_records)
