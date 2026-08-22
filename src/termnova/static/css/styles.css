@@ -896,6 +896,7 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -995,10 +996,13 @@ body {
   align-items: flex-end;
 }
 
-.select-wrapper {
+.select-wrapper,
+.select-action {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
+  justify-content: flex-end;
 }
 
 .select-wrapper label {
@@ -1017,6 +1021,9 @@ body {
   font-size: 0.86rem;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .custom-select:focus {
