@@ -14,6 +14,8 @@ window.loadDocumentsList = async function () {
       docCountPill.textContent = data.total_count || 0;
     }
 
+    renderSidebarVault(AppState.documents);
+
     if (!AppState.documents.length) {
       tbody.innerHTML = `
         <tr>
@@ -175,6 +177,78 @@ document.addEventListener('DOMContentLoaded', () => {
       progressContainer.style.display = 'none';
     }
   }
+
+function renderSidebarVault(docs) {
+  const vaultList = document.getElementById('sidebar-vault-list');
+  if (!vaultList) return;
+
+  if (!docs || docs.length === 0) {
+    vaultList.innerHTML = `
+      <div style="padding: 0.5rem 0.75rem; font-size: 0.75rem; color: var(--text-muted);">
+        No contracts indexed.
+      </div>
+    `;
+    return;
+  }
+
+  vaultList.innerHTML = docs.slice(0, 15).map((d) => {
+    const fnLower = (d.filename || '').toLowerCase();
+    let tag = 'COMMERCIAL';
+    let tagClass = 'tag-commercial';
+
+    if (fnLower.includes('msa') || fnLower.includes('master')) {
+      tag = 'MSA';
+      tagClass = 'tag-msa';
+    } else if (fnLower.includes('sow') || fnLower.includes('statement')) {
+      tag = 'SOW';
+      tagClass = 'tag-sow';
+    } else if (fnLower.includes('nda') || fnLower.includes('confidential')) {
+      tag = 'NDA';
+      tagClass = 'tag-nda';
+    } else if (fnLower.includes('lease') || fnLower.includes('estate')) {
+      tag = 'LEASE';
+      tagClass = 'tag-lease';
+    } else if (fnLower.includes('vendor') || fnLower.includes('supply') || fnLower.includes('manufacturing')) {
+      tag = 'VENDOR';
+      tagClass = 'tag-vendor';
+    } else if (fnLower.includes('license') || fnLower.includes('software') || fnLower.includes('ip')) {
+      tag = 'LICENSE';
+      tagClass = 'tag-license';
+    } else if (fnLower.includes('distributor') || fnLower.includes('reseller')) {
+      tag = 'DISTRIB';
+      tagClass = 'tag-distributor';
+    } else if (fnLower.includes('service') || fnLower.includes('hosting') || fnLower.includes('maintenance')) {
+      tag = 'SERVICE';
+      tagClass = 'tag-service';
+    } else if (fnLower.includes('affiliate') || fnLower.includes('co_branding') || fnLower.includes('partner')) {
+      tag = 'PARTNER';
+      tagClass = 'tag-partnership';
+    }
+
+    return `
+      <div class="vault-item" data-doc-id="${d.id}" data-doc="${d.filename}" title="${d.filename}">
+        <span class="type-tag ${tagClass}">${tag}</span>
+        <span class="vault-item-name">${d.filename}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Attach click handler to switch to chat / ask AI about this document
+  vaultList.querySelectorAll('.vault-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const docName = item.getAttribute('data-doc');
+      const input = document.getElementById('chat-input');
+      if (input) {
+        input.value = `Analyze key clauses, liability limits, and termination rights in ${docName}`;
+        input.focus();
+      }
+      if (window.switchView) {
+        window.switchView('chat');
+      }
+    });
+  });
+}
+window.renderSidebarVault = renderSidebarVault;
 
   // Load documents on initial start
   window.loadDocumentsList();
