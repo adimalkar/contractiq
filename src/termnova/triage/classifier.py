@@ -247,8 +247,12 @@ class ContractClassifier:
         text_snippet: str,
     ) -> list[str]:
         """Produce 3-5 concise bullet points summarizing the contract."""
+        clean_fn = re.sub(r"^[0-9a-fA-F]{8}_", "", filename)
+        clean_fn = re.sub(r"_\d{4}_EX_\d+[\.\d]*_", " ", clean_fn)
+        clean_fn = clean_fn.replace("__", " ").replace("_", " ").strip()
+
         bullets = [
-            f"Document classified as **{contract_type.upper()}** ({filename})",
+            f"Agreement classified as **{contract_type.upper()}** ({clean_fn})",
         ]
 
         if detected_value:

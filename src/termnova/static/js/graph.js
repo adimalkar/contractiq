@@ -284,10 +284,14 @@ function renderD3ForceGraph(data) {
     .attr('r', (d) => (d.node_type === 'company' || d.node_type === 'jurisdiction' ? 12 : 18));
 
   // Label text
+  const formatTitle = window.formatContractTitle || ((t) => t);
   node.append('text')
     .attr('class', 'graph-node-label')
     .attr('dy', 30)
-    .text((d) => (d.label.length > 22 ? `${d.label.slice(0, 20)}…` : d.label));
+    .text((d) => {
+      const lbl = (d.node_type === 'company' || d.node_type === 'jurisdiction') ? d.label : formatTitle(d.label);
+      return lbl.length > 24 ? `${lbl.slice(0, 22)}…` : lbl;
+    });
 
   // Tick update
   simulation.on('tick', () => {

@@ -24,8 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const docs = data.documents || [];
 
       if (docASelect && docBSelect) {
+        const formatTitle = window.formatContractTitle || ((t) => t);
         const optionsHtml = docs
-          .map((d) => `<option value="${d.id}">${d.filename} (${d.page_count || 1} pages)</option>`)
+          .map((d) => `<option value="${d.id}">${formatTitle(d.filename)} (${d.page_count || 1} pages)</option>`)
           .join("");
 
         docASelect.innerHTML = `<option value="">-- Select Base Contract A --</option>${optionsHtml}`;

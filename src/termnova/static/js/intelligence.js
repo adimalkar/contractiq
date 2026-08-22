@@ -144,8 +144,9 @@ const IntelligenceApp = (function () {
         const select = document.getElementById('benchmark-doc-select');
         if (!select) return;
 
+        const formatTitle = window.formatContractTitle || ((t) => t);
         select.innerHTML = state.documentsList
-            .map((d) => `<option value="${d.id}">${d.filename}</option>`)
+            .map((d) => `<option value="${d.id}">${formatTitle(d.filename)}</option>`)
             .join('');
 
         select.value = state.selectedDocId;
@@ -217,16 +218,19 @@ const IntelligenceApp = (function () {
                     <tbody>
         `;
 
+        const formatTitle = window.formatContractTitle || ((t) => t);
+
         data.rows.forEach(row => {
+            const cleanTitle = formatTitle(row.filename);
             tableHtml += `
                 <tr>
                     <td class="doc-cell">
                         <div class="doc-cell-content">
-                            <span class="doc-name" title="${row.filename}">${row.filename}</span>
+                            <span class="doc-name" title="${row.filename}">${cleanTitle}</span>
                             <div class="doc-meta">
                                 <span>${(row.contract_type || 'msa').toUpperCase()}</span>
                                 <span>•</span>
-                                <span>${row.counterparty || 'Counterparty'}</span>
+                                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #64748b;">${row.filename}</span>
                             </div>
                         </div>
                     </td>

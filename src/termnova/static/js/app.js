@@ -8,6 +8,44 @@ const AppState = {
   activeDrawerCitation: null,
 };
 
+// ──── Formatting Utilities ────
+function formatContractTitle(filename) {
+  if (!filename) return "Untitled Agreement";
+  let clean = String(filename);
+  // Strip 8-char hex prefix e.g. 486a120c_ or uuid prefixes
+  clean = clean.replace(/^[0-9a-fA-F]{8}_/, '');
+  clean = clean.replace(/^[0-9a-fA-F-]{36}_/, '');
+  // Strip file extension
+  clean = clean.replace(/\.[^/.]+$/, '');
+  // Strip SEC EDGAR exhibit tags e.g. 2013_EX_10.34_DEVELOPMENT_AGREEMENT
+  clean = clean.replace(/_\d{4}_EX_\d+[\.\d]*_/i, ' ');
+  // Clean double/triple underscores
+  clean = clean.replace(/_+/g, ' ');
+  // Insert space before camelCase capitals e.g. AlliedEsportsEntertainmentInc -> Allied Esports Entertainment Inc
+  clean = clean.replace(/([a-z])([A-Z])/g, '$1 $2');
+  clean = clean.replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+  // Format common suffixes
+  clean = clean.replace(/\bInc\b/g, 'Inc.').replace(/\bCorp\b/g, 'Corp.').replace(/\bLtd\b/g, 'Ltd.').replace(/\bLlc\b/g, 'LLC');
+  clean = clean.replace(/\s+/g, ' ').trim();
+  return clean || filename;
+}
+window.formatContractTitle = formatContractTitle;
+
+function formatMarkdownText(text) {
+  if (!text) return "";
+  let s = String(text);
+  // Remove raw hex prefixes inside parenthetical filename references e.g. (486a120c_AlliedEsports...)
+  s = s.replace(/\([0-9a-fA-F]{8}_([^)]+)\)/g, '($1)');
+  // Clean double underscores
+  s = s.replace(/__+/g, ' ');
+  // Convert markdown **bold** to <strong>
+  s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Highlight dollar amounts
+  s = s.replace(/(\$[\d,]+(?:\.\d{2})?(?:\s*(?:USD|million|k))?)/gi, '<span class="value-highlight">$1</span>');
+  return s;
+}
+window.formatMarkdownText = formatMarkdownText;
+
 // ──── API Fetch Wrapper ────
 async function apiRequest(endpoint, options = {}) {
   const defaultHeaders = {

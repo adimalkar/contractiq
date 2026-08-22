@@ -33,6 +33,8 @@ window.loadDocumentsList = async function () {
       return;
     }
 
+    const formatTitle = window.formatContractTitle || ((t) => t);
+
     tbody.innerHTML = AppState.documents.map((doc) => {
       const statusBadgeClass = 
         doc.processing_status === 'completed' ? 'badge-success' :
@@ -45,11 +47,13 @@ window.loadDocumentsList = async function () {
         minute: '2-digit',
       });
 
+      const cleanTitle = formatTitle(doc.filename);
+
       return `
         <tr>
           <td>
-            <div style="font-weight: 600; color: #fff;">${doc.filename}</div>
-            <div style="font-size: 0.75rem; color: var(--text-subtle);">${doc.id}</div>
+            <div style="font-weight: 600; color: #fff; line-height: 1.3;">${cleanTitle}</div>
+            <div style="font-size: 0.72rem; color: var(--text-subtle); font-family: var(--font-mono); margin-top: 2px;">${doc.filename}</div>
           </td>
           <td><span class="badge">${doc.file_type.toUpperCase()}</span></td>
           <td>${doc.page_count || 1}</td>
@@ -205,7 +209,17 @@ function renderSidebarVault(docs) {
     return;
   }
 
-  vaultList.innerHTML = docs.slice(0, 15).map((d) => {
+  const formatTitle = window.formatContractTitle || ((t) => t);
+
+  // Update header scope text if present
+  const scopeEl = document.querySelector('.header-scope, [id*="scope"]');
+  if (scopeEl) {
+    const iconSpan = scopeEl.querySelector('svg, span');
+    const iconHtml = iconSpan ? iconSpan.outerHTML : '📁';
+    scopeEl.innerHTML = `${iconHtml} Scope: All Contracts (${docs.length})`;
+  }
+
+  vaultList.innerHTML = docs.slice(0, 25).map((d) => {
     const fnLower = (d.filename || '').toLowerCase();
     let tag = 'COMMERCIAL';
     let tagClass = 'tag-commercial';
@@ -239,10 +253,12 @@ function renderSidebarVault(docs) {
       tagClass = 'tag-partnership';
     }
 
+    const cleanName = formatTitle(d.filename);
+
     return `
       <div class="vault-item" data-doc-id="${d.id}" data-doc="${d.filename}" title="${d.filename}">
         <span class="type-tag ${tagClass}">${tag}</span>
-        <span class="vault-item-name">${d.filename}</span>
+        <span class="vault-item-name">${cleanName}</span>
       </div>
     `;
   }).join('');

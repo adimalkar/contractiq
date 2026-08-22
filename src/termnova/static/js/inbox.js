@@ -239,7 +239,11 @@ class InboxApp {
             return `<span class="inbox-tag-pill ${tagClass}">#${this.escapeHtml(t)}</span>`;
         }).join("");
 
-        const bulletsHtml = (item.summary_bullets || []).slice(0, 2).map(b => `<li>${this.escapeHtml(b)}</li>`).join("");
+        const formatMd = window.formatMarkdownText || ((t) => this.escapeHtml(t));
+        const formatTitle = window.formatContractTitle || ((t) => t);
+        const cleanTitle = formatTitle(item.filename);
+
+        const bulletsHtml = (item.summary_bullets || []).slice(0, 3).map(b => `<li>${formatMd(b)}</li>`).join("");
 
         const timeStr = this.formatDate(item.triaged_at);
         const assigneeStr = item.assigned_to ? this.escapeHtml(item.assigned_to) : "<span style='color:#64748b; font-style:italic;'>Unassigned</span>";
@@ -249,9 +253,12 @@ class InboxApp {
                 <div class="inbox-card-top">
                     <div class="inbox-card-left">
                         <input type="checkbox" class="inbox-card-select" id="inbox-chk-${item.document_id}" ${isSelected ? 'checked' : ''}>
-                        <div class="inbox-card-title">
-                            ${this.escapeHtml(item.filename)}
-                            <span class="inbox-type-badge ${typeBadgeClass}">${this.escapeHtml(item.contract_type)}</span>
+                        <div class="inbox-card-title-group">
+                            <div class="inbox-card-title">
+                                <span>${this.escapeHtml(cleanTitle)}</span>
+                                <span class="inbox-type-badge ${typeBadgeClass}">${this.escapeHtml(item.contract_type)}</span>
+                            </div>
+                            <div class="inbox-card-subtitle">${this.escapeHtml(item.filename)}</div>
                         </div>
                     </div>
                     <div class="inbox-card-right">
@@ -264,7 +271,7 @@ class InboxApp {
 
                 <div class="inbox-card-body">
                     <div class="inbox-summary-preview">
-                        <strong>Action:</strong> ${this.escapeHtml(item.action_required || "Review agreement terms")}
+                        <strong>Action:</strong> ${formatMd(item.action_required || "Review agreement terms")}
                     </div>
                     ${bulletsHtml ? `<ul class="inbox-summary-bullets">${bulletsHtml}</ul>` : ''}
                 </div>
@@ -309,10 +316,19 @@ class InboxApp {
         const titleEl = document.getElementById("drawer-doc-title");
         const bodyEl = document.getElementById("drawer-content-body");
 
-        if (titleEl) titleEl.textContent = item.filename;
+        const formatMd = window.formatMarkdownText || ((t) => this.escapeHtml(t));
+        const formatTitle = window.formatContractTitle || ((t) => t);
+        const cleanTitle = formatTitle(item.filename);
+
+        if (titleEl) {
+            titleEl.innerHTML = `
+                <div>${this.escapeHtml(cleanTitle)}</div>
+                <div style="font-size: 0.72rem; color: #64748b; font-family: var(--font-mono); font-weight: normal; margin-top: 2px;">${this.escapeHtml(item.filename)}</div>
+            `;
+        }
 
         if (bodyEl) {
-            const bulletsHtml = (item.summary_bullets || []).map(b => `<li style="margin-bottom: 0.4rem;">${this.escapeHtml(b)}</li>`).join("");
+            const bulletsHtml = (item.summary_bullets || []).map(b => `<li style="margin-bottom: 0.5rem; line-height: 1.5;">${formatMd(b)}</li>`).join("");
             const factors = item.urgency_factors || {};
 
             bodyEl.innerHTML = `
@@ -350,15 +366,15 @@ class InboxApp {
 
                 <div class="drawer-section">
                     <div class="drawer-section-title">Executive AI Summary</div>
-                    <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
+                    <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
                         ${bulletsHtml}
                     </ul>
                 </div>
 
                 <div class="drawer-section">
                     <div class="drawer-section-title">Recommended Action</div>
-                    <div style="background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1; padding: 0.75rem; border-radius: 4px; font-size: 0.85rem; color: #e0e7ff;">
-                        💡 ${this.escapeHtml(item.action_required || "Standard Legal Review")}
+                    <div style="background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1; padding: 0.75rem; border-radius: 4px; font-size: 0.85rem; color: #e0e7ff; line-height: 1.5;">
+                        💡 ${formatMd(item.action_required || "Standard Legal Review")}
                     </div>
                 </div>
 
